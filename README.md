@@ -2,119 +2,197 @@
 ## Tree directory
 ```
 SteamProject/
-├── app/                              # Mã nguồn ứng dụng theo mô hình MVC
-│   ├── Controllers/                  # Tiếp nhận request, xử lý nghiệp vụ, gọi Model và View
-│   │   ├── AuthController.php        # Đăng ký, đăng nhập, đăng xuất, đổi mật khẩu
-│   │   ├── HomeController.php        # Trang chủ
-│   │   ├── ContactController.php     # Trang liên hệ phía client và quản lý liên hệ phía admin
-│   │   ├── SettingController.php     # Quản lý thông tin chung website: địa chỉ, SĐT, logo...
-│   │   ├── AboutController.php       # Trang giới thiệu và quản lý nội dung giới thiệu
-│   │   ├── FaqController.php         # Trang hỏi đáp và quản lý FAQ
-│   │   ├── ProductController.php    # Danh sách, tìm kiếm, chi tiết và quản lý sản phẩm
-│   │   ├── CartController.php       # Thêm/xóa/cập nhật sản phẩm trong giỏ hàng
-│   │   ├── OrderController.php      # Tạo đơn hàng, danh sách, chi tiết và cập nhật trạng thái
-│   │   ├── PostController.php       # Danh sách, tìm kiếm, chi tiết và quản lý bài viết
-│   │   ├── CommentController.php    # Tạo, duyệt và xóa bình luận/đánh giá
-│   │   └── UserController.php       # Admin quản lý thành viên: xem, khóa/mở khóa, reset mật khẩu
+│
+├── app/
 │   │
-│   ├── Models/                       # Truy vấn và thao tác dữ liệu MySQL thông qua PDO
+│   ├── Controllers/                 # PHP - Xử lý yêu cầu
+│   │   ├── HomeController.php
+│   │   ├── AuthController.php
+│   │   ├── UserController.php
+│   │   ├── ProductController.php
+│   │   ├── CartController.php
+│   │   ├── OrderController.php
+│   │   ├── NewsController.php
+│   │   ├── CommentController.php
+│   │   ├── ContactController.php
+│   │   ├── FAQController.php
+│   │   ├── AboutController.php
+│   │   │
+│   │   └── Admin/
+│   │       ├── DashboardController.php
+│   │       ├── UserController.php
+│   │       ├── ProductController.php
+│   │       ├── OrderController.php
+│   │       ├── NewsController.php
+│   │       ├── CommentController.php
+│   │       ├── ContactController.php
+│   │       ├── FAQController.php
+│   │       └── SettingController.php
+│   │
+│   ├── Models/                      # PHP - Làm việc với database
 │   │   ├── User.php
 │   │   ├── Product.php
+│   │   ├── Category.php
+│   │   ├── Cart.php
+│   │   ├── CartItem.php
 │   │   ├── Order.php
-│   │   ├── OrderItem.php             # Chi tiết từng sản phẩm trong đơn hàng
-│   │   ├── Post.php
+│   │   ├── OrderItem.php
+│   │   ├── News.php
 │   │   ├── Comment.php
 │   │   ├── Contact.php
-│   │   ├── Faq.php
+│   │   ├── FAQ.php
 │   │   └── Setting.php
 │   │
-│   └── Views/
-│       ├── layouts/
-│       │   ├── header.php            # Header và navbar phía client
-│       │   ├── footer.php            # Footer phía client
-│       │   ├── admin_header.php      # Header và sidebar TailAdmin
-│       │   └── admin_footer.php      # Footer TailAdmin
-│       │
-│       ├── client/
-│       │   ├── home/
-│       │   │   └── index.php
-│       │   ├── contact/
-│       │   │   └── index.php
-│       │   ├── about/
-│       │   │   └── index.php
-│       │   ├── faq/
-│       │   │   └── index.php
-│       │   ├── product/
-│       │   │   ├── index.php          # Danh sách và tìm kiếm sản phẩm
-│       │   │   ├── detail.php
-│       │   │   └── cart.php           # Có thể tách thành thư mục cart/ nếu giao diện phát triển
-│       │   ├── order/
-│       │   │   ├── checkout.php       # Trang xác nhận thông tin đặt hàng
-│       │   │   └── history.php        # Lịch sử đơn hàng của thành viên (nếu triển khai)
-│       │   ├── pricing/
-│       │   │   └── index.php          # Chỉ cần nếu bảng giá là trang riêng
-│       │   ├── post/
-│       │   │   ├── index.php
-│       │   │   └── detail.php
-│       │   └── auth/
-│       │       ├── login.php
-│       │       ├── register.php
-│       │       └── profile.php
-│       │
-│       └── admin/
-│           ├── dashboard.php
-│           ├── contacts/
-│           │   └── index.php
-│           ├── settings/
-│           │   └── index.php
-│           ├── faqs/
-│           │   ├── index.php
-│           │   ├── create.php
-│           │   └── edit.php
-│           ├── products/
-│           │   ├── index.php
-│           │   ├── create.php
-│           │   └── edit.php
-│           ├── orders/
-│           │   ├── index.php
-│           │   └── detail.php
-│           ├── posts/
-│           │   ├── index.php
-│           │   ├── create.php
-│           │   └── edit.php
-│           ├── comments/
-│           │   └── index.php
-│           └── users/
-│               └── index.php
-│
-├── config/
-│   ├── database.php                 # Khởi tạo kết nối PDO
-│   └── config.php                   # BASE_URL, UPLOAD_DIR và cấu hình chung
-│
-├── core/                             # Thành phần nền tảng tự viết; không phải PHP Framework bên thứ ba
-│   ├── Router.php                    # Ánh xạ URL đến Controller/action
-│   ├── Controller.php                # Controller cơ sở: render view, nạp model
-│   ├── Database.php                  # Helper truy vấn PDO và prepared statements
-│   ├── Auth.php                      # Kiểm tra đăng nhập và phân quyền
-│   ├── Validator.php                 # Kiểm tra dữ liệu đầu vào phía server
-│   ├── Csrf.php                      # Tạo và xác thực CSRF token
-│   └── Helpers.php                   # Escape HTML, upload ảnh, phân trang và tiện ích
-│
-├── public/                           # Document root; chỉ thư mục này được public trực tiếp
-│   ├── index.php                     # Single entry point
-│   ├── .htaccess                     # URL rewriting và quy tắc bảo vệ phù hợp
-│   ├── uploads/
+│   ├── Views/                       # Giao diện HTML + PHP
+│   │   │
+│   │   ├── layouts/
+│   │   │   ├── header.php
+│   │   │   ├── navbar.php
+│   │   │   ├── footer.php
+│   │   │   └── main.php
+│   │   │
+│   │   ├── home/
+│   │   │   └── index.php
+│   │   │
+│   │   ├── auth/
+│   │   │   ├── login.php
+│   │   │   └── register.php
+│   │   │
+│   │   ├── user/
+│   │   │   ├── profile.php
+│   │   │   └── change-password.php
+│   │   │
 │   │   ├── products/
-│   │   ├── posts/
-│   │   └── avatars/
-│   └── assets/
-│       ├── css/
-│       ├── js/
-│       ├── images/
-│       └── tailadmin/
+│   │   │   ├── index.php
+│   │   │   └── detail.php
+│   │   │
+│   │   ├── cart/
+│   │   │   └── index.php
+│   │   │
+│   │   ├── orders/
+│   │   │   ├── checkout.php
+│   │   │   ├── history.php
+│   │   │   └── detail.php
+│   │   │
+│   │   ├── news/
+│   │   │   ├── index.php
+│   │   │   └── detail.php
+│   │   │
+│   │   ├── about/
+│   │   │   └── index.php
+│   │   │
+│   │   ├── contact/
+│   │   │   └── index.php
+│   │   │
+│   │   ├── faq/
+│   │   │   └── index.php
+│   │   │
+│   │   └── admin/
+│   │       ├── layouts/
+│   │       │   ├── header.php
+│   │       │   ├── sidebar.php
+│   │       │   └── footer.php
+│   │       │
+│   │       ├── dashboard/
+│   │       │   └── index.php
+│   │       ├── users/
+│   │       │   └── index.php
+│   │       ├── products/
+│   │       │   ├── index.php
+│   │       │   ├── create.php
+│   │       │   └── edit.php
+│   │       ├── orders/
+│   │       │   └── index.php
+│   │       ├── news/
+│   │       │   ├── index.php
+│   │       │   ├── create.php
+│   │       │   └── edit.php
+│   │       ├── comments/
+│   │       │   └── index.php
+│   │       ├── contacts/
+│   │       │   └── index.php
+│   │       ├── faqs/
+│   │       │   └── index.php
+│   │       └── settings/
+│   │           └── index.php
+│   │
+│   ├── Core/                        # PHP - MVC tự xây dựng
+│   │   ├── Database.php
+│   │   ├── Router.php
+│   │   ├── Controller.php
+│   │   └── View.php
+│   │
+│   ├── Middleware/                  # PHP - Kiểm tra quyền
+│   │   ├── AuthMiddleware.php
+│   │   └── AdminMiddleware.php
+│   │
+│   └── Helpers/                     # PHP - Hàm dùng chung
+│       ├── Validator.php
+│       ├── Csrf.php
+│       ├── Upload.php
+│       ├── Pagination.php
+│       └── Security.php
 │
-├── database/
-│   └── schema.sql                    # Tạo database, bảng và dữ liệu mẫu
+├── config/                          # PHP - Cấu hình
+│   ├── database.php
+│   └── app.php
+│
+├── database/                        # SQL - Cơ sở dữ liệu
+│   ├── steamproject.sql
+│   ├── schema.sql
+│   └── seeders.sql
+│
+├── public/                          # Thư mục truy cập công khai
+│   │
+│   ├── index.php                    # PHP - Entry Point
+│   ├── .htaccess
+│   │
+│   ├── html/                        # HTML - Giao diện tĩnh
+│   │   ├── 404.html
+│   │   └── maintenance.html
+│   │
+│   ├── assets/
+│   │   │
+│   │   ├── css/                     # CSS - Giao diện
+│   │   │   ├── style.css
+│   │   │   ├── responsive.css
+│   │   │   ├── auth.css
+│   │   │   ├── product.css
+│   │   │   ├── cart.css
+│   │   │   └── admin.css
+│   │   │
+│   │   ├── js/                      # JS - Tương tác
+│   │   │   ├── main.js
+│   │   │   ├── auth.js
+│   │   │   ├── user.js
+│   │   │   ├── product.js
+│   │   │   ├── cart.js
+│   │   │   ├── checkout.js
+│   │   │   ├── comment.js
+│   │   │   └── admin.js
+│   │   │
+│   │   ├── images/                  # Hình ảnh giao diện
+│   │   │   ├── logo/
+│   │   │   ├── banners/
+│   │   │   ├── products/
+│   │   │   ├── news/
+│   │   │   └── avatars/
+│   │   │
+│   │   └── libraries/               # Thư viện frontend
+│   │       ├── bootstrap/
+│   │       ├── jquery/
+│   │       └── tailadmin/
+│   │
+│   └── uploads/                     # Hình ảnh upload lên server
+│       ├── products/
+│       ├── news/
+│       └── avatars/
+│
+├── routes/                          # PHP - Định tuyến
+│   └── web.php
+│
+├── storage/
+│   └── logs/
 │
 ├── .gitignore
 └── README.md
