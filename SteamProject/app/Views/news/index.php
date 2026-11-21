@@ -10,60 +10,34 @@
   <style>body{background:#1b2838;color:#c6d4df;font-family:Arial,Helvetica,sans-serif}a{color:#67c1f5}</style>
 </head>
 <body data-page="list">
-  <nav class="navbar navbar-expand-md navbar-dark darkNav">
-    <a class="navbar-brand" href="../home/index.php"><img class="logoBig" src="../../../public/assets/images/utils/logo_steam.svg" alt="Steam"></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="mainNav">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="nav-link" href="../home/index.php">Store</a></li>
-        <li class="nav-item active"><a class="nav-link" href="index.php">Community</a></li>
-        <li class="nav-item"><a class="nav-link" href="../about/index.php">About</a></li>
-        <li class="nav-item"><a class="nav-link" href="../contact/index.php">Support</a></li>
-      </ul>
-      <a class="btn btn-success" href="../auth/login.php">Sign in</a>
+  <header class="steamHeader">
+    <div class="headerTop">
+      <a class="btn-install" href="#">Install Steam</a>
+      <a href="../auth/login.php">sign in</a>
     </div>
-  </nav>
+    <div class="headerInner">
+      <a href="../home/index.php"><img class="logoBig" src="../../../public/assets/images/utils/logo_steam.svg" alt="Steam"></a>
+      <nav aria-label="Main">
+        <ul class="mainNav">
+          <li><a href="../home/index.php">Store</a></li>
+          <li class="active"><a href="index.php">Community</a></li>
+          <li><a href="../about/index.php">About</a></li>
+          <li><a href="../contact/index.php">Support</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
   <main class="container forumWrap">
-    <div class="crumbs"><a href="../home/index.php">Community</a> &gt; <span>Hub</span></div>
-
-    <header class="hubBanner">
-      <div class="hubIcon" aria-hidden="true"></div>
-      <div class="hubTitle"><h1 id="gameName">Hub</h1><p>Community Hub</p></div>
-      <div class="hubStats"><div><b>12,408</b>In-Game</div><div><b>48,230</b>Online</div></div>
-    </header>
-
-    <ul id="catTabs" class="catTabs" aria-label="Content types"></ul>
-
-    <div class="hubGrid">
-      <div class="hubMain">
-        <div class="toolbar">
-          <form class="searchBar" action="index.php" method="get" role="search">
-            <input id="type" name="type" type="hidden" value="">
-            <label class="sr-only" for="q">Search the hub</label>
-            <input id="q" name="q" type="search" class="form-control" placeholder="Search the hub" maxlength="100">
-            <button type="submit" class="btn btn-success">Search</button>
-          </form>
-          <div class="pageInfo"><span id="resultInfo" aria-live="polite"></span><span id="pagerTop" class="pager"></span></div>
-        </div>
-
-        <div id="hubContent"></div>
-
-        <div class="toolbar"><div class="pageInfo"><span id="pagerBottom" class="pager"></span></div></div>
+    <div class="hubHead">
+      <div class="hubHeadTop">
+        <h1 id="gameTitle">Hub</h1>
+        <a class="btn btn-storepage" href="../products/index.php">Store Page</a>
       </div>
-
-      <aside class="hubSide">
-        <button type="button" class="btn btn-success btn-block" data-toggle="modal" data-target="#postModal">Create a post</button>
-        <div class="sideBox"><h2>Community</h2>
-          <ul><li>Discussions, artwork and guides from players</li><li>News and announcements appear first</li></ul>
-        </div>
-        <div class="sideBox"><h2>Top contributors</h2>
-          <ul><li>pixel_pete <span class="mutedText">42 posts</span></li><li>gabe_fan <span class="mutedText">31 posts</span></li><li>modder99 <span class="mutedText">27 posts</span></li></ul>
-        </div>
-      </aside>
+      <ul id="catTabs" class="detailTabs" aria-label="Content types"></ul>
     </div>
+
+    <div id="hubContent"></div>
   </main>
 
   <div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-labelledby="postModalTitle" aria-hidden="true">
@@ -78,6 +52,8 @@
           <select id="postKind" class="form-control mb-2">
             <option value="Discussion">Discussion</option>
             <option value="Artwork">Artwork</option>
+            <option value="Screenshot">Screenshot</option>
+            <option value="Video">Video</option>
             <option value="Guide">Guide</option>
             <option value="Review">Review</option>
           </select>

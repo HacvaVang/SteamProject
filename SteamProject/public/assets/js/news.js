@@ -2,12 +2,13 @@
 
 /* Sample data for the frontend-only submission.
    Later replace with data from the News and Post models (MySQL). */
-var GAME = { name: "Starfall Odyssey" };
+var GAME = { name: "Critical Strike", price: "$14.99", inGame: "22,039", chat: "45,246",
+  desc: "Critical Strike is a co-op movement rhythm fighter. Pick a class, move to the beat and duel waves of enemies and bosses with your squad, with every dash, strike and dodge locked to the rhythm." };
 var TABS = [
-  { k: "All", l: "All" }, { k: "Discussion", l: "Discussions" }, { k: "Artwork", l: "Artwork" },
-  { k: "Guide", l: "Guides" }, { k: "Review", l: "Reviews" }, { k: "News", l: "News" }
+  { k: "All", l: "All" }, { k: "Discussion", l: "Discussions" }, { k: "Screenshot", l: "Screenshots" }, { k: "Artwork", l: "Artwork" },
+  { k: "Video", l: "Videos" }, { k: "News", l: "News" }, { k: "Guide", l: "Guides" }, { k: "Review", l: "Reviews" }
 ];
-var KIND_LABEL = { News: "NEWS", Discussion: "DISCUSSION", Artwork: "ARTWORK", Guide: "GUIDE", Review: "REVIEW" };
+var KIND_LABEL = { News: "NEWS", Discussion: "DISCUSSION", Artwork: "ARTWORK", Guide: "GUIDE", Review: "REVIEW", Screenshot: "SCREENSHOT", Video: "VIDEO" };
 
 function item(id, kind, title, date, author, replies, lastBy, lastDate, hue, body, extra) {
   var o = { id: id, kind: kind, title: title, date: date, author: author, replies: replies,
@@ -18,59 +19,142 @@ function item(id, kind, title, date, author, replies, lastBy, lastDate, hue, bod
 function sec(h, p, ul) { return { h: h, p: p, ul: ul || [] }; }
 
 var ITEMS = [
-  item(1, "News", "Autumn Sale starts this week", "2026-11-18", "Steam Team", 12, "pixel_pete", "2026-11-20", 200,
-    ["Thousands of games are discounted for the next seven days.", "Wishlisted games will show a banner on the store page so you never miss a deal.", "The sale ends next Thursday at 10 AM Pacific."]),
-  item(2, "News", "Library update adds custom collections", "2026-11-12", "Steam Team", 5, "gabe_fan", "2026-11-15", 260,
-    ["Organize your games with dynamic and manual collections.", "Dynamic collections update automatically based on filters such as tags and play time."]),
-  item(3, "News", "Community workshop highlights", "2026-11-05", "Community Team", 3, "modder99", "2026-11-09", 140,
-    ["The best player-made content from the past month.", "This month's picks include new maps, skins and quality-of-life mods."]),
+  item(1, "News", "Season 3: The Neon Siege is live", "2026-11-18", "Critical Strike Team", 12, "pixel_pete", "2026-11-20", 200,
+    ["Season 3 adds ten new songs, a new boss gauntlet and a ranked co-op ladder.", "Every wave now scales to your squad's combined combo, so teamwork matters more than ever.", "The season runs until the end of February."]),
+  item(2, "News", "New class: the Sentinel joins the roster", "2026-11-12", "Critical Strike Team", 5, "gabe_fan", "2026-11-15", 260,
+    ["The Sentinel is a shield-and-pulse support class built to protect teammates between beats.", "Perfect parries on the beat reflect projectiles and refill the squad's rhythm meter."]),
+  item(3, "News", "Community charts highlights", "2026-11-05", "Community Team", 3, "modder99", "2026-11-09", 140,
+    ["The best player-made charts and song packs from the past month.", "Thank you to every producer who shared their work with the community."]),
   item(4, "News", "Scheduled maintenance on Tuesday", "2026-10-29", "Support Team", 0, "Support Team", "2026-10-29", 30,
-    ["Store and community will be unavailable for a short time.", "Maintenance should take about 30 minutes. Downloads resume automatically afterwards."], { pinned: true }),
-  item(5, "News", "Improved download speeds in Asia", "2026-10-21", "Steam Team", 7, "saigon_gamer", "2026-10-25", 320,
-    ["New regional servers reduce latency for players in Southeast Asia.", "Most players will see faster downloads with no action required."]),
-  item(6, "News", "Privacy and security tips", "2026-10-07", "Support Team", 4, "safe_user", "2026-10-10", 0,
-    ["Keep your account safe with these simple steps.", "Use a unique password and enable two-factor authentication."]),
-  item(7, "News", "Controller support expanded", "2026-09-30", "Steam Team", 1, "padmaster", "2026-10-01", 230,
-    ["More controllers are now recognized out of the box.", "Open Settings, then Controller, to customize button layouts."]),
-  item(9, "Discussion", "Best loadout for the new ranked season?", "2026-11-20", "pixel_pete", 18, "gabe_fan", "2026-11-21", 210,
-    ["Curious what everyone is running this season.", "I have been trying the heavy shield build and it feels strong. Thoughts?"]),
+    ["Servers will be offline for a short time while we deploy the new matchmaking system.", "Maintenance should take about 30 minutes. Your progress and ranks are not affected."], { pinned: true }),
+  item(5, "News", "Improved audio sync for wireless headphones", "2026-10-21", "Critical Strike Team", 7, "saigon_gamer", "2026-10-25", 320,
+    ["A new latency calibration step helps wireless headphones stay on the beat.", "Run the calibration from Settings, then Audio, after installing the update."]),
+  item(6, "News", "Patch 1.4 notes: boss rebalance", "2026-10-07", "Critical Strike Team", 4, "safe_user", "2026-10-10", 0,
+    ["Boss health and phase timings were retuned for squads of one to four players.", "The Bass Titan's second phase now telegraphs its attacks one beat earlier."]),
+  item(7, "News", "Gamepad support expanded", "2026-09-30", "Critical Strike Team", 1, "padmaster", "2026-10-01", 230,
+    ["More controllers are now recognized out of the box.", "Open Settings, then Controller, to remap dash, strike and parry."]),
+  item(9, "Discussion", "Best class pairing for co-op waves 30 and up?", "2026-11-20", "pixel_pete", 18, "gabe_fan", "2026-11-21", 210,
+    ["Curious what everyone is running at the high waves.", "My squad is trying Sentinel plus Blademaster and it feels very stable. Thoughts?"]),
   item(10, "Discussion", "Looking for co-op partners (SEA servers)", "2026-11-19", "saigon_gamer", 9, "modder99", "2026-11-20", 150,
-    ["Looking for chill players to run missions in the evenings.", "I am on the Southeast Asia servers, voice chat optional."]),
-  item(11, "Discussion", "Game crashes on launch after the update", "2026-11-17", "safe_user", 6, "Support Team", "2026-11-18", 10,
-    ["Since the last patch the game crashes right after the logo.", "Verifying files did not help. Any fixes?"]),
-  item(12, "Artwork", "Nebula over the outer rim", "2026-11-20", "indie_lover", 14, "pixel_pete", "2026-11-21", 280,
-    ["Digital painting of the Outer Rim nebula, made in about eight hours."]),
-  item(13, "Artwork", "Pixel art starship", "2026-11-18", "padmaster", 6, "gabe_fan", "2026-11-19", 190,
-    ["A 64x64 pixel art version of the starter ship."]),
-  item(14, "Artwork", "Concept sketch: desert planet", "2026-11-14", "modder99", 3, "indie_lover", "2026-11-15", 40,
-    ["Early concept sketch for a desert planet map idea."]),
-  item(15, "Artwork", "Captain portrait", "2026-11-10", "gabe_fan", 11, "pixel_pete", "2026-11-12", 330,
-    ["Character study of the captain in charcoal style."]),
-  item(16, "Guide", "Beginner's guide to trading", "2026-11-16", "pixel_pete", 22, "safe_user", "2026-11-20", 120, 
-    ["Everything you need to start earning credits quickly.", "Buy low at mining stations, sell high at the core worlds, and always keep a fuel reserve."], { rating: 4.7, sections: [
-      sec("Getting started", ["Start at a mining station and buy ore while prices are low.", "Keep at least 20% of your fuel in reserve."], ["Check prices before every jump", "Never carry cargo you cannot defend"]),
-      sec("Best trade routes", ["The Outer Rim to Core World loop pays best for beginners."], ["Ore: mining stations to core refineries", "Food: farm moons to hub stations"]),
-      sec("Common mistakes", ["Overloading the cargo hold slows your ship and burns more fuel."])] }),
+    ["Looking for chill players to run boss rush in the evenings.", "I am on the Southeast Asia servers, voice chat optional."]),
+  item(11, "Discussion", "Audio desync after the latest update", "2026-11-17", "safe_user", 6, "Support Team", "2026-11-18", 10,
+    ["Since the last patch the hit sounds drift behind the beat on my wired headset.", "I already ran the calibration. Any other fixes?"]),
+  item(12, "Artwork", "Blademaster under neon rain", "2026-11-20", "indie_lover", 14, "pixel_pete", "2026-11-21", 280,
+    ["Digital painting of the Blademaster mid-dash, made in about eight hours."]),
+  item(13, "Artwork", "Pixel art Medic class", "2026-11-18", "padmaster", 6, "gabe_fan", "2026-11-19", 190,
+    ["A 64x64 pixel art version of the Medic idle animation."]),
+  item(14, "Artwork", "Concept sketch: Bass Titan boss", "2026-11-14", "modder99", 3, "indie_lover", "2026-11-15", 40,
+    ["Early concept sketch for a boss built around a giant speaker stack."]),
+  item(15, "Artwork", "Gunslinger poster", "2026-11-10", "gabe_fan", 11, "pixel_pete", "2026-11-12", 330,
+    ["Poster-style portrait of the Gunslinger with a halftone background."]),
+  item(16, "Guide", "Movement guide: dashes, slides and cancels", "2026-11-16", "pixel_pete", 22, "safe_user", "2026-11-20", 120,
+    ["Everything you need to move cleanly and keep your combo alive.", "Good movement is mostly timing: dash on the beat, slide on the off-beat and cancel into attacks."],
+    { rating: 4.7, cat: "Movement", sections: [
+      sec("Dash basics", ["Dash on the beat to gain a speed bonus and a short invulnerability window."], ["Tap early for a soft dash", "Tap exactly on the beat for a perfect dash"]),
+      sec("Slide cancels", ["Cancel a slide into an attack to keep your combo alive and reset the dash cooldown."], ["Slide, then strike on the next beat", "Use slides to pass under boss sweeps"]),
+      sec("Common mistakes", ["Dashing off the beat breaks your multiplier and leaves you exposed."])] }),
   item(17, "Guide", "Complete achievement guide", "2026-11-08", "gabe_fan", 15, "modder99", "2026-11-13", 60,
-    ["A checklist of every achievement with tips for the hard ones.", "Start with the story achievements, then move on to the collection ones."], { rating: 4.4, sections: [
-      sec("Story achievements", ["Finish the campaign once on any difficulty to unlock all of these."], ["First Contact", "Rim Runner", "The Last Signal"]),
-      sec("Collection achievements", ["Scan every planet type and visit each station at least once."]),
-      sec("Hard challenges", ["Use the shield build for the no-damage run and save before each boss."])] }),
-  item(18, "Guide", "Best controller settings", "2026-11-01", "padmaster", 8, "saigon_gamer", "2026-11-05", 250,
-    ["My recommended deadzone and sensitivity settings for gamepads."], { rating: 4.1, sections: [
-      sec("Deadzone", ["Set the inner deadzone to 8% to remove drift without losing precision."]),
-      sec("Sensitivity", ["Use a response curve of 1.4 on the right stick for aiming."], ["Turn off acceleration", "Lower sensitivity in menus"]),
-      sec("Button layout", ["Put boost on the left bumper and the scanner on the d-pad."])] }),
-  item(19, "Review", "Best space sim I have played in years", "2026-11-19", "pixel_pete", 7, "gabe_fan", "2026-11-20", 205,
-    ["Flying through the Outer Rim for the first time gave me chills. The trading loop is relaxing, combat is tight, and every system feels hand-made.", "After 140 hours I am still finding new routes and secrets. Easily worth the full price."],
+    ["A checklist of every achievement with tips for the hard ones.", "Start with the story achievements, then move on to combos and bosses."],
+    { rating: 4.4, cat: "Achievements", sections: [
+      sec("Combo achievements", ["Reach a 200 combo on any song, then a 500 combo on a hard song."], ["Perfect Streak", "Unbroken", "Metronome"]),
+      sec("Boss achievements", ["Defeat every boss without taking damage during its final phase."]),
+      sec("Co-op achievements", ["Finish a full wave set with four different classes in one squad."])] }),
+  item(18, "Guide", "Audio latency, keybinds and config files", "2026-11-01", "padmaster", 8, "saigon_gamer", "2026-11-05", 250,
+    ["How to set up your audio offset and controls so the game feels perfectly on beat.", "Most timing problems come from latency, not from your hands."],
+    { rating: 4.1, cat: "Modding or Config", sections: [
+      sec("Audio latency calibration", ["Run the calibration tool and apply the suggested offset in milliseconds."]),
+      sec("Keybinds", ["Put dash and strike on keys that sit under your strongest fingers."], ["Avoid keys that share a keyboard ghosting group", "Bind parry to a thumb button on gamepads"]),
+      sec("Config file", ["Advanced users can edit the config file to change the judgement window display."])] }),
+  item(19, "Review", "Best rhythm fighter I have played in years", "2026-11-19", "pixel_pete", 7, "gabe_fan", "2026-11-20", 205,
+    ["Landing a perfect dash into a combo feels incredible. The movement is tight, the songs are excellent and co-op boss fights are pure adrenaline.", "After 140 hours I am still finding new ways to chain moves on the beat. Easily worth the full price."],
     { recommended: true, hours: 142.5, helpful: 48, funny: 6, products: 187, reviews: 23 }),
-  item(20, "Review", "Good ideas, but the late game drags", "2026-11-15", "modder99", 4, "saigon_gamer", "2026-11-17", 35,
-    ["The first 30 hours are fantastic. Later the grind for upgrades slows everything down.", "Still recommended, especially if you enjoy modding. The workshop support is great."],
+  item(20, "Review", "Great ideas, but solo mode drags", "2026-11-15", "modder99", 4, "saigon_gamer", "2026-11-17", 35,
+    ["Co-op is fantastic, but solo waves feel repetitive after a while.", "Still recommended, especially if you like making custom charts. The producer tools are great."],
     { recommended: true, hours: 63.2, helpful: 19, funny: 2, products: 92, reviews: 11 }),
-  item(21, "Review", "Too many crashes since the last patch", "2026-11-12", "safe_user", 9, "Support Team", "2026-11-14", 5,
-    ["I wanted to like this, but the game crashes every 20 minutes after the latest update.", "I will change this review once the stability issues are fixed."],
-    { recommended: false, hours: 8.4, helpful: 31, funny: 1, products: 41, reviews: 3 })
+  item(21, "Review", "Too many desyncs since the last patch", "2026-11-12", "safe_user", 9, "Support Team", "2026-11-14", 5,
+    ["I wanted to like this, but hit sounds drift off the beat every few minutes after the latest update.", "I will change this review once the audio sync is fixed."],
+    { recommended: false, hours: 8.4, helpful: 31, funny: 1, products: 41, reviews: 3 }),
+  item(22, "Discussion", "Season 3 feedback thread", "2026-11-20", "Steve", 163, "Steve", "2026-11-20", 205,
+    ["Official thread for feedback on Season 3: the new songs, bosses and ranked ladder.", "Please keep bug reports in the dedicated tracking thread."], { pinned: true, sub: "General Discussions", ago: "20 Nov @ 1:14am" }),
+  item(23, "Discussion", "Support resources and bug tracking", "2026-11-18", "Rayman1103", 0, "Rayman1103", "2026-11-18", 120,
+    ["Use this thread to find support links and report bugs."], { pinned: true, locked: true, sub: "General Discussions", ago: "2 Jan, 2026 @ 12:35am" }),
+  item(24, "Discussion", "Is the Gunslinger too strong in Boss Rush?", "2026-11-21", "Purple Francis", 8, "pixel_pete", "2026-11-21", 300,
+    ["Ranged damage seems to trivialize the Bass Titan. Is this intended?"], { sub: "General Discussions", ago: "8 minutes ago" }),
+  item(25, "Discussion", "How do I import custom charts?", "2026-11-21", "unkindled1", 17, "gabe_fan", "2026-11-21", 20,
+    ["I exported a chart from the editor but it does not show up in the song list."], { sub: "Charts and Modding Help", ago: "9 minutes ago" }),
+  item(26, "Discussion", "Anyone up for ranked duels tonight?", "2026-11-21", "Isaaa", 2, "modder99", "2026-11-21", 170,
+    ["Looking for a duel partner, any skill level."], { sub: "Community Servers/Groups", ago: "5 hours ago" }),
+  item(27, "Discussion", "Trading 3 rare skins for tokens", "2026-11-20", "mazilla3", 5, "safe_user", "2026-11-21", 90,
+    ["Offering three rare class skins. Send offers in the comments."], { sub: "Trading", ago: "2 hours ago" }),
+  item(28, "Screenshot", "Perfect combo on Neon Pulse", "2026-11-20", "21notorious", 230, "pixel_pete", "2026-11-21", 35,
+    ["A 612 combo, no misses."], { likes: 472 }),
+  item(29, "Screenshot", "Boss phase three at 180 BPM", "2026-11-19", "MoeDe", 189, "gabe_fan", "2026-11-20", 215,
+    ["The Bass Titan's last phase is brutal."], { likes: 294 }),
+  item(30, "Screenshot", "Four-player squad on wave 40", "2026-11-18", "DimacAkiyama", 97, "modder99", "2026-11-19", 5,
+    ["Blademaster, Gunslinger, Sentinel and Medic all alive."], { likes: 218 }),
+  item(31, "Screenshot", "Duel arena at sunset", "2026-11-15", "indie_lover", 44, "padmaster", "2026-11-17", 25,
+    ["Golden hour in the ranked duel arena."], { likes: 131 }),
+  item(32, "Screenshot", "Victory screen, all S ranks", "2026-11-11", "padmaster", 21, "safe_user", "2026-11-13", 275,
+    ["Squad clear with an S rank for everyone."], { likes: 87 }),
+  item(33, "Video", "Neon Pulse perfect run, Blademaster solo", "2026-11-19", "PS_FatCat", 41, "pixel_pete", "2026-11-20", 160,
+    ["A full perfect run of Neon Pulse with commentary on every dash."], { likes: 640 }),
+  item(34, "Video", "Co-op boss rush highlights, week 46", "2026-11-14", "Andrei", 12, "gabe_fan", "2026-11-16", 340,
+    ["Best moments from this week's co-op boss rush runs."], { likes: 205 }),
+  item(35, "Video", "Patch 1.4 changes explained", "2026-11-09", "saigon_gamer", 18, "modder99", "2026-11-12", 100,
+    ["Everything that changed in the last patch in five minutes."], { likes: 156 }),
+  item(36, "Guide", "Co-op strategy for four-player squads", "2026-11-07", "modder99", 12, "gabe_fan", "2026-11-10", 130,
+    ["Split roles before the wave starts and keep voice chat open.", "Call out boss telegraphs one beat early so everyone dodges together."], { rating: 4.5, cat: "Co-op" }),
+  item(37, "Guide", "Class tier overview and playstyles", "2026-11-03", "indie_lover", 6, "pixel_pete", "2026-11-05", 300,
+    ["A short look at the strengths of the Blademaster, Gunslinger, Sentinel and Medic.", "Pick the class that matches how you like to move, not just the one with the best damage."], { rating: 4.0, cat: "Classes" }),
+  item(38, "Guide", "Secret rooms and hidden songs", "2026-10-28", "safe_user", 9, "saigon_gamer", "2026-10-30", 75,
+    ["Every hidden room and unlockable song, with the steps to reach them.", "Check the map edges after finishing the main story."], { rating: 4.8, cat: "Secrets" }),
+  item(39, "Guide", "Solo survival tips", "2026-10-25", "gabe_fan", 10, "padmaster", "2026-10-27", 190,
+    ["How to survive waves alone without a healer.", "Use slides to avoid damage and save your parry for elite enemies."], { rating: 4.2, cat: "Solo" }),
+  item(40, "Guide", "Enemy types and how to counter them", "2026-10-22", "modder99", 14, "pixel_pete", "2026-10-24", 15,
+    ["A quick reference to every enemy type and its attack pattern.", "Most enemies attack on strong beats, so watch the rhythm to read them."], { rating: 4.6, cat: "Enemy" }),
+  item(41, "Guide", "Boss fight breakdowns", "2026-10-18", "pixel_pete", 19, "safe_user", "2026-10-21", 335,
+    ["Phase-by-phase strategies for every boss in the game.", "Learn each boss's telegraph before trying for a perfect run."], { rating: 4.9, cat: "Bosses" }),
+  item(42, "Guide", "Gameplay basics for new players", "2026-10-15", "indie_lover", 24, "gabe_fan", "2026-10-19", 175,
+    ["The basic loop: move, strike, parry and keep your combo alive.", "Start on the easy songs to learn how the judgement windows feel."], { rating: 4.3, cat: "Gameplay" }),
+  item(43, "Guide", "Combo and multiplier mechanics", "2026-10-12", "padmaster", 11, "modder99", "2026-10-14", 55,
+    ["How combos, multipliers and critical windows are calculated.", "A perfect hit on a strong beat counts double toward the multiplier."], { rating: 4.4, cat: "Mechanic" }),
+  item(44, "Guide", "Arena maps and hazards", "2026-10-09", "saigon_gamer", 5, "pixel_pete", "2026-10-11", 105,
+    ["A tour of the arenas with the hazards to watch for.", "Some hazards pulse with the beat and can be used against enemies."], { rating: 3.9, cat: "Map" }),
+  item(45, "Guide", "Song list and difficulty ratings", "2026-10-05", "gabe_fan", 16, "indie_lover", "2026-10-08", 245,
+    ["All songs sorted by BPM and difficulty.", "Great for picking your next practice track."], { rating: 4.6, cat: "Songs" }),
+  item(46, "Guide", "Producer guide: making your first chart", "2026-10-01", "modder99", 13, "padmaster", "2026-10-04", 85,
+    ["How to use the chart editor to place notes on beat.", "Start with a simple song and add enemy patterns once the rhythm feels right."], { rating: 4.7, cat: "Producer" }),
+  item(47, "Guide", "The story so far: lore explained", "2026-09-28", "safe_user", 7, "gabe_fan", "2026-09-30", 310,
+    ["A summary of the world and the story behind the beat-powered war.", "Contains spoilers for the main campaign."], { rating: 4.1, cat: "Story or Lore" }),
+  item(48, "Guide", "Game modes: wave survival, boss rush and duel", "2026-09-24", "indie_lover", 9, "modder99", "2026-09-26", 145,
+    ["What each game mode offers and which one to start with.", "Wave survival is best for learning, boss rush for practice and duel for competition."], { rating: 4.2, cat: "Gamemode" }),
+  item(49, "Guide", "How to master the relentless combos of the Dancer", "2026-11-21", "pixel_pete", 14, "gabe_fan", "2026-11-21", 320,
+    ["One of the strongest classes in the game in the hands of a master, yet unbelievably fragile if played wrong.",
+     "The Dancer embodies the philosophy Critical Strike strives towards: a relentless and unyielding barrage of attacks that scales off the BPM and intensity of the song, and the player's accuracy, to chain multiple fast-moving, precise movement skills."],
+    { rating: 4.8, cat: "Classes" }),
+  item(50, "Guide", "Co-op: the importance of staying together", "2026-11-20", "modder99", 9, "safe_user", "2026-11-21", 140,
+    ["A lot of special enemies in the game punish you for being singled out.",
+     "Even if you play an assassin, it is important to keep some line of sight with your teammates so you are not caught out and killed. On higher difficulties, one mistake could spell disaster for the whole team."],
+    { rating: 4.5, cat: "Co-op" }),
+  item(51, "Guide", "Advanced movement tech", "2026-11-20", "gabe_fan", 11, "pixel_pete", "2026-11-21", 190,
+    ["The game allows bunny hopping and air strafing, similar to other Source engine games."],
+    { rating: 4.6, cat: "Movement" }),
+  item(52, "Guide", "Secret track in Dark Carnival", "2026-11-19", "safe_user", 17, "modder99", "2026-11-21", 285,
+    ["A hidden song called MopeMope is tucked away in the map Dark Carnival."],
+    { rating: 4.9, cats: ["Gameplay", "Mechanic", "Map", "Secrets"], sections: [
+      sec("Finding the jukebox", ["If you are savvy enough, you can find a jukebox in the backstage area of Dark Carnival, hidden away in one of the randomized rooms."]),
+      sec("The music disc", ["Find the music disc that spawns somewhere on the main stage and insert it into the jukebox to play the hidden song."]),
+      sec("The song: MopeMope", ["MopeMope has a unique rhythm of slow lulls and high intensity. It suits an erratic, almost insane playstyle that swings from extreme brutality to extreme pacifism."])] })
 ];
+
+var EXTRA = {
+  9: { sub: "General Discussions", ago: "7 minutes ago" }, 10: { sub: "Community Servers/Groups", ago: "46 minutes ago" },
+  11: { sub: "Beta Feedback", ago: "2 hours ago" }
+};
+ITEMS.forEach(function (i) {
+  i.likes = i.likes || i.replies * 37 + 20;
+  Object.assign(i, EXTRA[i.id] || {});
+});
 
 var PAGE_SIZE = 8;
 var SEED_COMMENTS = [
@@ -115,155 +199,593 @@ function buildPost(name, role, date, paragraphs) {
   return post;
 }
 
-/* ---------- Hub page ---------- */
-var state = { type: "All", q: "", page: 1 };
+/* ---------- Hub page (modeled on a Steam community hub) ---------- */
+var state = { type: "All", q: "", page: 1, sort: "", sub: "", cat: "", browse: "", rec: "" };
+var SUBS = ["General Discussions", "Community Servers/Groups", "Charts and Modding Help", "Beta Feedback", "Trading", "Events & Announcements"];
+var GUIDE_CATS = ["Classes", "Co-op", "Solo", "Enemy", "Bosses", "Gameplay", "Mechanic", "Map", "Movement", "Songs", "Producer", "Modding or Config", "Story or Lore", "Gamemode", "Secrets", "Achievements"];
+var MEDIA_SORTS = [["popular", "Most Popular (All Time)"], ["recent", "Most Recent"]];
+var MAG = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>';
+var BUBBLE = '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true"><path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"/></svg>';
 
-function url(p, type) {
+function link(over) {
+  var s2 = Object.assign({}, state, { page: 1 }, over);
   var sp = new URLSearchParams();
-  if (state.q) { sp.set("q", state.q); }
-  if (type && type !== "All") { sp.set("type", type); }
-  if (p > 1) { sp.set("page", p); }
-  var s = sp.toString();
-  return "index.php" + (s ? "?" + s : "");
-}
-
-function rowsNode(items) {
-  var list = el("div", "topicList");
-  var head = el("div", "topicHead");
-  head.appendChild(el("div", "", "Topic"));
-  head.appendChild(el("div", "colReplies", "Replies"));
-  head.appendChild(el("div", "colLast", "Last post"));
-  list.appendChild(head);
-  if (!items.length) { list.appendChild(el("div", "emptyRow", "Nothing here yet.")); }
-  items.forEach(function (a) {
-    var row = el("div", "topicRow");
-    var main = el("div", "topicMain");
-    var icon = el("div", "topicIcon");
-    icon.style.background = gradient(a.hue);
-    var text = el("div");
-    var line = el("div");
-    if (a.pinned) { line.appendChild(el("span", "badge badge-pin", "PINNED")); }
-    line.appendChild(el("span", "badge badge-kind", KIND_LABEL[a.kind]));
-    var link = el("a", "topicTitle", a.title);
-    link.href = detailUrl(a);
-    line.appendChild(link);
-    text.appendChild(line);
-    var sub = "by " + a.author + " on " + a.date;
-    if (a.kind === "Review") { sub = (a.recommended ? "Recommended" : "Not recommended") + " | " + a.hours.toFixed(1) + " hrs | " + sub; }
-    text.appendChild(el("div", "topicSub", sub));
-    main.appendChild(icon);
-    main.appendChild(text);
-    var last = el("div", "colLast");
-    last.appendChild(el("div", "", a.lastBy));
-    last.appendChild(el("div", "when", a.lastDate));
-    row.appendChild(main);
-    row.appendChild(el("div", "colReplies", String(a.replies)));
-    row.appendChild(last);
-    list.appendChild(row);
+  ["type", "q", "sort", "sub", "cat", "browse", "rec"].forEach(function (k) {
+    if (s2[k] && !(k === "type" && s2[k] === "All")) { sp.set(k, s2[k]); }
   });
-  return list;
+  if (s2.page > 1) { sp.set("page", s2.page); }
+  var qs = sp.toString();
+  return "index.php" + (qs ? "?" + qs : "");
 }
+function tabUrl(k) { return "index.php" + (k === "All" ? "" : "?type=" + k); }
+function go(over) { window.location.href = link(over); }
 
-function gridNode(items) {
-  var grid = el("div", "artGrid");
-  if (!items.length) { grid.appendChild(el("div", "emptyRow", "Nothing here yet.")); }
-  items.forEach(function (a) {
-    var card = el("a", "artCard");
-    card.href = detailUrl(a);
-    var thumb = el("div", "artThumb");
-    thumb.style.background = gradient(a.hue);
-    var meta = el("div", "artMeta", a.title);
-    meta.appendChild(el("small", "", "by " + a.author + " | " + a.replies + " replies"));
-    card.appendChild(thumb);
-    card.appendChild(meta);
-    grid.appendChild(card);
+function icon(svg, cls) {
+  var sp = el("span", "ic" + (cls ? " " + cls : ""));
+  sp.innerHTML = svg; /* static trusted markup, no user input */
+  return sp;
+}
+function counts(a) {
+  var c = el("div", "counts");
+  var l = el("span", "likeCount");
+  l.appendChild(icon(THUMB, "blue"));
+  l.appendChild(document.createTextNode(" " + a.likes.toLocaleString("en-US")));
+  var b = el("span", "cmtCount");
+  b.appendChild(icon(BUBBLE));
+  b.appendChild(document.createTextNode(" " + a.replies));
+  c.appendChild(l);
+  c.appendChild(b);
+  return c;
+}
+function miniAvatar(name) {
+  var av = el("div", "miniAv", name.charAt(0).toUpperCase());
+  av.style.background = gradient(hueOf(name));
+  return av;
+}
+function selectNode(opts, cur, cb, disabled) {
+  var sel = el("select", "dsel");
+  opts.forEach(function (o) {
+    var op = el("option", "", o[1]);
+    op.value = o[0];
+    if (o[0] === cur) { op.selected = true; }
+    sel.appendChild(op);
   });
-  return grid;
+  sel.addEventListener("change", function () { cb(sel.value); });
+  if (disabled) { sel.disabled = true; }
+  return sel;
 }
-
-function section(title, type, node) {
+function searchForm(placeholder, cls) {
+  var f = el("form", "dsearch" + (cls ? " " + cls : ""));
+  f.setAttribute("role", "search");
+  var i = el("input");
+  i.type = "search"; i.maxLength = 100; i.placeholder = placeholder; i.value = state.q;
+  i.setAttribute("aria-label", placeholder);
+  var b = el("button");
+  b.type = "submit"; b.setAttribute("aria-label", "Search");
+  b.innerHTML = MAG;
+  f.appendChild(i);
+  f.appendChild(b);
+  f.addEventListener("submit", function (e) { e.preventDefault(); go({ q: i.value.trim().slice(0, 100) }); });
+  return f;
+}
+function openPost(kind) {
+  var sel = document.getElementById("postKind");
+  sel.value = kind;
+  sel.dispatchEvent(new Event("change"));
+  if (window.jQuery) { window.jQuery("#postModal").modal("show"); }
+}
+function actionButton(label, kind) {
+  var b = el("button", "btn btn-dlink", label);
+  b.type = "button";
+  b.addEventListener("click", function () { openPost(kind); });
+  return b;
+}
+function mediaToolbar(sorts, extraLabel, extraKind) {
+  var bar = el("div", "dbar");
+  bar.appendChild(el("span", "dlabel", "SHOW"));
+  bar.appendChild(selectNode(sorts, state.sort || sorts[0][0], function (v) { go({ sort: v }); }));
+  bar.appendChild(searchForm("Search"));
+  if (extraLabel) { bar.appendChild(actionButton(extraLabel, extraKind)); }
+  return bar;
+}
+function sortItems(arr, mode) {
+  var a = arr.slice();
+  if (mode === "recent") { a.sort(byDate); }
+  else if (mode === "helpful") { a.sort(function (x, y) { return (y.helpful || 0) - (x.helpful || 0); }); }
+  else if (mode === "top") { a.sort(function (x, y) { return (y.rating || 0) - (x.rating || 0); }); }
+  else { a.sort(function (x, y) { return y.likes - x.likes; }); }
+  return a;
+}
+function matches(a) {
+  var needle = state.q.toLowerCase();
+  return !needle || (a.title + " " + a.excerpt).toLowerCase().indexOf(needle) !== -1;
+}
+function paginate(arr, size) {
+  var pages = Math.max(1, Math.ceil(arr.length / size));
+  if (state.page > pages) { state.page = pages; }
+  var start = (state.page - 1) * size;
+  return { pages: pages, start: start, total: arr.length, shown: arr.slice(start, start + size) };
+}
+function pagerNode(pages) {
+  var box = el("span", "pager");
+  if (pages < 2) { return box; }
+  function add(label, target, off, cur) {
+    var n;
+    if (off || cur) { n = el("span", cur ? "current" : "off", label); }
+    else { n = el("a", "", label); n.href = link({ page: target }); }
+    box.appendChild(n);
+  }
+  add("<", state.page - 1, state.page === 1, false);
+  for (var i = 1; i <= pages; i++) { add(String(i), i, false, i === state.page); }
+  add(">", state.page + 1, state.page === pages, false);
+  return box;
+}
+function hasCat(g, name) { return [].concat(g.cats || g.cat || []).indexOf(name) !== -1; }
+function section(title, href, node) {
   var box = el("section", "hubSection");
   var head = el("div", "sectionHead");
   head.appendChild(el("h2", "", title));
   var more = el("a", "", "See all");
-  more.href = url(1, type);
+  more.href = href;
   head.appendChild(more);
   box.appendChild(head);
   box.appendChild(node);
   return box;
 }
+function emptyNode() { return el("div", "emptyRow", "Nothing here yet."); }
 
-function featuredNode() {
-  var news = ofKind("News").slice(0, 3);
-  var wrap = el("div", "featured");
-  if (!news.length) { return wrap; }
-  var big = el("a", "featBig");
-  big.href = detailUrl(news[0]);
-  big.style.background = "linear-gradient(to top, rgba(0,0,0,.8), rgba(0,0,0,.05)), " + gradient(news[0].hue);
-  big.appendChild(el("h3", "", news[0].title));
-  big.appendChild(el("p", "", news[0].excerpt));
-  wrap.appendChild(big);
-  var side = el("div", "featSide");
-  news.slice(1).forEach(function (n) {
-    var a = el("a", "featSmall", n.title);
-    a.href = detailUrl(n);
-    a.appendChild(el("small", "", n.date));
-    side.appendChild(a);
-  });
-  wrap.appendChild(side);
+/* --- cards --- */
+function mediaCard(a, h) {
+  var card = el("div", "mediaCard");
+  var img = el("a", "mediaImg");
+  img.href = detailUrl(a);
+  img.style.background = gradient(a.hue);
+  img.style.height = h + "px";
+  img.setAttribute("aria-label", a.title);
+  if (a.kind === "Video") { img.appendChild(el("span", "playBtn", "\u25B6")); }
+  card.appendChild(img);
+  var act = el("div", "mediaActions");
+  var btns = el("div", "miniBtns");
+  var up = el("button", "", "\u25B2"), down = el("button", "", "\u25BC");
+  up.type = "button"; down.type = "button";
+  up.setAttribute("aria-label", "Like"); down.setAttribute("aria-label", "Dislike");
+  up.addEventListener("click", function () { up.classList.toggle("on"); down.classList.remove("on"); });
+  down.addEventListener("click", function () { down.classList.toggle("on"); up.classList.remove("on"); });
+  btns.appendChild(up);
+  btns.appendChild(down);
+  act.appendChild(btns);
+  act.appendChild(counts(a));
+  card.appendChild(act);
+  var cap = el("a", "mediaCaption", a.title);
+  cap.href = detailUrl(a);
+  card.appendChild(cap);
+  var by = el("div", "mediaBy");
+  by.appendChild(miniAvatar(a.author));
+  var t = el("div");
+  t.appendChild(el("div", "byName", a.author));
+  t.appendChild(el("div", "byLink", "View " + PLURAL[a.kind].toLowerCase()));
+  by.appendChild(t);
+  card.appendChild(by);
+  return card;
+}
+var PATTERN = [[6], [4, 2], [2, 4], [3, 3]];
+function masonryNode(items) {
+  var wrap = el("div", "masonry");
+  if (!items.length) { wrap.appendChild(emptyNode()); }
+  var i = 0, r = 0;
+  while (i < items.length) {
+    var pat = PATTERN[r % PATTERN.length];
+    var n = Math.min(pat.length, items.length - i);
+    var weights = n === pat.length ? pat : [6];
+    var row = el("div", "mRow");
+    for (var k = 0; k < n; k++) {
+      var w = weights[k];
+      var cell = el("div", "mCell");
+      cell.style.flex = w + " 1 0";
+      cell.appendChild(mediaCard(items[i + k], w === 6 ? 380 : (w === 3 ? 250 : 300)));
+      row.appendChild(cell);
+    }
+    wrap.appendChild(row);
+    i += n; r++;
+  }
   return wrap;
 }
+function newsCard(a) {
+  var c = el("div", "newsCard2");
+  if (a.pinned) { c.appendChild(el("span", "ncPin", "PINNED")); }
+  var t = el("a", "ncTitle", a.title);
+  t.href = detailUrl(a);
+  c.appendChild(t);
+  c.appendChild(el("div", "ncDate", fmtDate(a.date)));
+  c.appendChild(el("p", "ncText", a.body.join("\n\n")));
+  var foot = el("div", "ncFoot");
+  var g = el("div", "ncGame");
+  g.appendChild(el("span", "gameIcon"));
+  g.appendChild(document.createTextNode(GAME.name));
+  foot.appendChild(g);
+  foot.appendChild(counts(a));
+  c.appendChild(foot);
+  return c;
+}
+function reviewCard(a) {
+  var c = el("div", "reviewTile");
+  c.appendChild(el("div", "", a.helpful + " people found this review helpful"));
+  c.appendChild(el("div", "", a.funny + (a.funny === 1 ? " person" : " people") + " found this review funny"));
+  var v = el("div", "rtVerdict");
+  var th = el("span", "thumb " + (a.recommended ? "up" : "down"));
+  th.innerHTML = THUMB; /* static trusted markup */
+  var vt = el("div");
+  var vl = el("a", "verdictLink", a.recommended ? "Recommended" : "Not Recommended");
+  vl.href = detailUrl(a);
+  vt.appendChild(vl);
+  vt.appendChild(el("div", "rtHours", a.hours.toFixed(1) + " hrs on record"));
+  v.appendChild(th);
+  v.appendChild(vt);
+  c.appendChild(v);
+  c.appendChild(el("div", "rtPosted", "Posted: " + fmtDate(a.date)));
+  c.appendChild(el("div", "rtText", a.body.join("\n\n")));
+  var foot = el("div", "rtFoot");
+  var by = el("div", "mediaBy");
+  by.appendChild(miniAvatar(a.author));
+  by.appendChild(el("div", "byName", a.author));
+  foot.appendChild(by);
+  var cc = el("span", "cmtCount");
+  cc.appendChild(icon(BUBBLE));
+  cc.appendChild(document.createTextNode(" " + a.replies));
+  foot.appendChild(cc);
+  c.appendChild(foot);
+  return c;
+}
+function guideRow(a) {
+  var row = el("div", "guideRow");
+  var th = el("div", "gThumb");
+  th.style.background = gradient(a.hue);
+  var body = el("div");
+  var top = el("div", "gTop");
+  var t = el("a", "gTitle", a.title);
+  t.href = detailUrl(a);
+  top.appendChild(t);
+  var stars = el("span", "stars");
+  for (var i = 0; i < 5; i++) { stars.appendChild(el("span", i < Math.round(a.rating || 0) ? "star on" : "star", "\u2605")); }
+  top.appendChild(stars);
+  body.appendChild(top);
+  body.appendChild(el("div", "gBy", "by " + a.author));
+  body.appendChild(el("div", "gDesc", a.excerpt));
+  row.appendChild(th);
+  row.appendChild(body);
+  return row;
+}
 
-function setPagers(totalPages) {
-  ["pagerTop", "pagerBottom"].forEach(function (id) {
-    var box = document.getElementById(id);
-    if (!box) { return; }
-    box.textContent = "";
-    if (totalPages <= 1) { return; }
-    function add(label, target, off, current) {
-      var n;
-      if (off || current) { n = el("span", current ? "current" : "off", label); }
-      else { n = el("a", "", label); n.href = url(target, state.type); }
-      box.appendChild(n);
+/* --- tab views --- */
+function clip(t, n) { return t.length > n ? t.slice(0, n - 1).trim() + "\u2026" : t; }
+
+function discussionCard(a) {
+  var c = el("div", "fCard");
+  var h = el("h3", "fTitle");
+  var l = el("a", "", a.title);
+  l.href = detailUrl(a);
+  h.appendChild(l);
+  c.appendChild(h);
+  c.appendChild(el("div", "quoteBox", clip(a.body.join(" "), 230)));
+  var who = el("div", "fWho");
+  who.appendChild(miniAvatar(a.author));
+  var t = el("div", "fWhoText");
+  t.appendChild(el("div", "byName", a.author));
+  t.appendChild(el("div", "byLink", a.ago || fmtDate(a.lastDate)));
+  who.appendChild(t);
+  var cc = el("span", "cmtCount");
+  cc.appendChild(icon(BUBBLE));
+  cc.appendChild(document.createTextNode(" " + a.replies));
+  who.appendChild(cc);
+  c.appendChild(who);
+  c.appendChild(el("div", "spacer"));
+  c.appendChild(el("div", "fFoot", a.sub || "General Discussions"));
+  return c;
+}
+
+function guideCard(a) {
+  var c = el("div", "fCard");
+  c.appendChild(el("h3", "fTitle", "Guide"));
+  var it = el("div", "featItem");
+  var th = el("div", "gThumb");
+  th.style.background = gradient(a.hue);
+  var l = el("a", "", a.title);
+  l.href = detailUrl(a);
+  it.appendChild(th);
+  it.appendChild(l);
+  c.appendChild(it);
+  c.appendChild(el("p", "fDesc", clip(a.excerpt, 170)));
+  c.appendChild(el("div", "spacer"));
+  var foot = el("div", "fStatRow");
+  var stars = el("span", "stars");
+  for (var i = 0; i < 5; i++) { stars.appendChild(el("span", i < Math.round(a.rating || 0) ? "star on" : "star", "\u2605")); }
+  foot.appendChild(stars);
+  foot.appendChild(counts(a));
+  c.appendChild(foot);
+  return c;
+}
+
+function feedCard(a, cols) {
+  if (a.kind === "Discussion") { return discussionCard(a); }
+  if (a.kind === "Guide") { return guideCard(a); }
+  if (a.kind === "Review") { return reviewCard(a); }
+  if (a.kind === "News") { return newsCard(a); }
+  return mediaCard(a, cols === 2 ? 260 : 190);
+}
+
+/* Endless scroll: rows of 2 or 3 cards are appended whenever the sentinel nears the viewport. */
+var FEED_PATTERN = [2, 3, 2, 2, 3, 2];
+function startFeed(content, items) {
+  var feed = el("div", "feed");
+  var sentinel = el("div", "feedSentinel");
+  var status = el("div", "feedStatus");
+  content.appendChild(feed);
+  content.appendChild(sentinel);
+  content.appendChild(status);
+  var idx = 0, row = 0, obs = null;
+
+  function loadRows(n) {
+    for (var r = 0; r < n && idx < items.length; r++) {
+      var cols = FEED_PATTERN[row % FEED_PATTERN.length];
+      row++;
+      var take = Math.min(cols, items.length - idx);
+      var line = el("div", "fRow");
+      for (var k = 0; k < take; k++) {
+        var cell = el("div", "fCell");
+        cell.appendChild(feedCard(items[idx + k], take === 1 ? 2 : cols));
+        line.appendChild(cell);
+      }
+      feed.appendChild(line);
+      idx += take;
     }
-    add("<", state.page - 1, state.page === 1, false);
-    for (var i = 1; i <= totalPages; i++) { add(String(i), i, false, i === state.page); }
-    add(">", state.page + 1, state.page === totalPages, false);
+    status.textContent = idx < items.length ? "Loading more\u2026"
+      : (items.length ? "You have reached the end. There is no more content to show." : "Nothing to show yet.");
+  }
+
+  loadRows(3);
+  if (idx >= items.length) { return; }
+  if (!("IntersectionObserver" in window)) { loadRows(items.length); return; }
+  obs = new IntersectionObserver(function (entries) {
+    if (!entries[entries.length - 1].isIntersecting) { return; }
+    loadRows(2);
+    obs.unobserve(sentinel);
+    if (idx < items.length) { obs.observe(sentinel); } else { obs.disconnect(); }
+  }, { rootMargin: "300px" });
+  obs.observe(sentinel);
+}
+
+function renderAll(content) {
+  var banner = el("div", "gameBanner");
+  var stats = el("div", "bannerStats");
+  stats.appendChild(el("span", "green", GAME.inGame + " In-Game"));
+  stats.appendChild(el("span", "", GAME.chat + " in Group Chat"));
+  banner.appendChild(stats);
+  var body = el("div", "bannerBody");
+  var cap = el("div", "capsuleBig", GAME.name);
+  cap.style.background = gradient(215);
+  var txt = el("div", "bannerText");
+  txt.appendChild(el("p", "", GAME.desc));
+  var price = el("div", "priceRow");
+  price.appendChild(el("span", "priceTag", GAME.price));
+  var store = el("a", "btn btn-dlink", "Visit the Store Page");
+  store.href = "../products/index.php";
+  price.appendChild(store);
+  price.appendChild(actionButton("Post to the hub", "Discussion"));
+  txt.appendChild(price);
+  body.appendChild(cap);
+  body.appendChild(txt);
+  banner.appendChild(body);
+  content.appendChild(banner);
+
+  /* 1. Latest news, directly under the store box */
+  var latest = ofKind("News").slice(0, 3);
+  var ng = el("div", "nGrid n3");
+  latest.forEach(function (a) { ng.appendChild(newsCard(a)); });
+  content.appendChild(section("Latest news", tabUrl("News"), ng));
+
+  /* 2. Most popular content, endless scroll */
+  content.appendChild(el("p", "popularNote", "Most popular community and official content for the past week."));
+  content.appendChild(el("hr", "blueRule"));
+  var skip = latest.map(function (a) { return a.id; });
+  startFeed(content, sortItems(ITEMS.filter(function (i) { return skip.indexOf(i.id) === -1; }), "popular"));
+}
+
+function renderDiscussions(content) {
+  var list = ITEMS.filter(function (i) { return i.kind === "Discussion" && (!state.sub || i.sub === state.sub) && matches(i); });
+  list.sort(function (a, b) { return (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || byDate(a, b); });
+  var pg = paginate(list, PAGE_SIZE);
+  var two = el("div", "twoCol");
+  var main = el("div");
+  var bar = el("div", "topicBar");
+  bar.appendChild(el("span", "", pg.total ? "Showing " + (pg.start + 1) + "-" + (pg.start + pg.shown.length) + " of " + pg.total + " active topics" : "No topics found"));
+  bar.appendChild(pagerNode(pg.pages));
+  main.appendChild(bar);
+  pg.shown.forEach(function (a) {
+    var row = el("div", "dRow");
+    row.appendChild(el("span", "dIcon", a.locked ? "\u26BF" : (a.pinned ? "\u2605" : "\u2709")));
+    var mid = el("div", "dMid");
+    var t = el("div");
+    if (a.pinned) { t.appendChild(el("span", "pinned", "PINNED: ")); }
+    var l = el("a", "dTitle", a.title);
+    l.href = detailUrl(a);
+    t.appendChild(l);
+    mid.appendChild(t);
+    mid.appendChild(el("div", "dAuthor", a.author));
+    var rc = el("div", "dReplies");
+    rc.appendChild(icon(BUBBLE));
+    rc.appendChild(document.createTextNode(" " + a.replies));
+    row.appendChild(mid);
+    row.appendChild(el("div", "dWhen", a.ago || fmtDate(a.lastDate)));
+    row.appendChild(rc);
+    main.appendChild(row);
   });
+  if (!pg.shown.length) { main.appendChild(emptyNode()); }
+  var bottom = el("div", "topicBar");
+  bottom.appendChild(el("span"));
+  bottom.appendChild(pagerNode(pg.pages));
+  main.appendChild(bottom);
+
+  var side = el("aside", "sideCol");
+  side.appendChild(searchForm("Search discussions", "big"));
+  var start = el("button", "btn btn-start btn-block", "Start a New Discussion");
+  start.type = "button";
+  start.addEventListener("click", function () { openPost("Discussion"); });
+  side.appendChild(start);
+  var box = el("div", "subBox");
+  var head = el("div", "subHead");
+  head.appendChild(el("span", "", "SUB FORUMS"));
+  head.appendChild(el("span", "", "THREADS"));
+  box.appendChild(head);
+  [""].concat(SUBS).forEach(function (name) {
+    var n = ofKind("Discussion").filter(function (i) { return !name || i.sub === name; }).length;
+    var a = el("a", "subItem" + (state.sub === name ? " active" : ""));
+    a.href = link({ sub: name });
+    a.appendChild(el("span", "", name || "All Discussions"));
+    a.appendChild(el("span", "", String(n)));
+    box.appendChild(a);
+  });
+  side.appendChild(box);
+  two.appendChild(main);
+  two.appendChild(side);
+  content.appendChild(two);
+}
+
+function renderMedia(content, kind, extraLabel) {
+  content.appendChild(mediaToolbar(MEDIA_SORTS, extraLabel, kind));
+  var list = sortItems(ofKind(kind).filter(matches), state.sort || "popular");
+  var pg = paginate(list, PAGE_SIZE);
+  content.appendChild(masonryNode(pg.shown));
+  var bar = el("div", "topicBar");
+  bar.appendChild(el("span", "", pg.total + " " + PLURAL[kind].toLowerCase()));
+  bar.appendChild(pagerNode(pg.pages));
+  content.appendChild(bar);
+}
+
+function renderNews(content) {
+  var bar = el("div", "dbar");
+  bar.appendChild(el("span", "dlabel", "SHOW"));
+  bar.appendChild(selectNode([["recent", "All News"], ["popular", "Most Popular"]], state.sort || "recent", function (v) { go({ sort: v }); }));
+  bar.appendChild(searchForm("Search news"));
+  content.appendChild(bar);
+  var list = ofKind("News").filter(matches);
+  list = state.sort === "popular" ? sortItems(list, "popular") : list.sort(function (a, b) { return (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || byDate(a, b); });
+  var pg = paginate(list, PAGE_SIZE);
+  var grid = el("div", "nGrid");
+  pg.shown.forEach(function (a) { grid.appendChild(newsCard(a)); });
+  if (!pg.shown.length) { grid.appendChild(emptyNode()); }
+  content.appendChild(grid);
+  var foot = el("div", "topicBar");
+  foot.appendChild(el("span", "", pg.total + " articles"));
+  foot.appendChild(pagerNode(pg.pages));
+  content.appendChild(foot);
+}
+
+function renderGuides(content) {
+  var intro = el("div", "guideIntro");
+  intro.appendChild(el("span", "", "Browse and rate player-created guides for this game. Or create your own and share your tips with the community."));
+  var create = el("button", "btn btn-start", "Create your own");
+  create.type = "button";
+  create.addEventListener("click", function () { openPost("Guide"); });
+  intro.appendChild(create);
+  content.appendChild(intro);
+
+  var home = !state.q && !state.cat && !state.browse;
+  var guides = ofKind("Guide").filter(function (g) { return (!state.cat || hasCat(g, state.cat)) && matches(g); });
+  var two = el("div", "twoCol guides");
+  var main = el("div");
+  if (home) {
+    main.appendChild(el("h2", "gHeading", "Popular Categories (" + GUIDE_CATS.length + ")"));
+    var tiles = el("div", "tileGrid");
+    GUIDE_CATS.forEach(function (name) {
+      var n = ofKind("Guide").filter(function (g) { return hasCat(g, name); }).length;
+      var t = el("a", "catTile");
+      t.href = link({ cat: name, browse: "popular" });
+      var ic = el("div", "catIcon");
+      ic.style.background = gradient(hueOf(name));
+      var tx = el("div");
+      tx.appendChild(el("div", "catName", name));
+      tx.appendChild(el("div", "catCount", n + (n === 1 ? " Guide" : " Guides")));
+      t.appendChild(ic);
+      t.appendChild(tx);
+      tiles.appendChild(t);
+    });
+    main.appendChild(tiles);
+  }
+  main.appendChild(el("h2", "gHeading", home ? "Popular Steam Guides" : (state.cat ? state.cat + " Guides" : "Guides")));
+  var mode = state.browse === "recent" ? "recent" : (state.browse === "top" ? "top" : "popular");
+  var sorted = sortItems(guides, mode);
+  var pg = paginate(sorted, PAGE_SIZE);
+  (home ? sorted.slice(0, 5) : pg.shown).forEach(function (g) { main.appendChild(guideRow(g)); });
+  if (!sorted.length) { main.appendChild(emptyNode()); }
+  if (!home) {
+    var bar = el("div", "topicBar");
+    bar.appendChild(el("span", "", pg.total + " guides"));
+    bar.appendChild(pagerNode(pg.pages));
+    main.appendChild(bar);
+  }
+
+  var side = el("aside", "sideCol");
+  side.appendChild(searchForm("Search guides", "big"));
+  var filt = el("div", "subBox");
+  filt.appendChild(el("div", "subHead", "FILTER BY CATEGORY"));
+  var fsel = selectNode([["", "All categories"]].concat(GUIDE_CATS.map(function (c) { return [c, c]; })), state.cat,
+    function (v) { go({ cat: v, browse: v ? "popular" : "" }); });
+  fsel.className = "dsel wide";
+  filt.appendChild(fsel);
+  side.appendChild(filt);
+  var browse = el("div", "subBox");
+  browse.appendChild(el("div", "subHead", "BROWSE BY:"));
+  [["", "Home"], ["popular", "Most Popular"], ["top", "Top Rated All Time"], ["recent", "Most Recent"]].forEach(function (b) {
+    var a = el("a", "subItem" + (state.browse === b[0] && !state.cat ? " active" : ""), b[1]);
+    a.href = link({ browse: b[0], cat: "", q: "" });
+    browse.appendChild(a);
+  });
+  side.appendChild(browse);
+  var more = el("div", "subBox");
+  more.appendChild(el("div", "subHead", "MORE ABOUT GUIDES"));
+  more.appendChild(el("div", "promo", "Click here to learn more about Guides"));
+  side.appendChild(more);
+  two.appendChild(main);
+  two.appendChild(side);
+  content.appendChild(two);
+}
+
+function renderReviews(content) {
+  var bar = el("div", "dbar");
+  bar.appendChild(el("span", "dlabel", "SHOW"));
+  bar.appendChild(selectNode([["helpful", "Most Helpful (All Time)"], ["recent", "Most Recent"]], state.sort || "helpful", function (v) { go({ sort: v }); }));
+  bar.appendChild(selectNode([["", "All"], ["yes", "Recommended"], ["no", "Not Recommended"]], state.rec, function (v) { go({ rec: v }); }));
+  bar.appendChild(el("span", "dlabel", "LANGUAGE"));
+  bar.appendChild(selectNode([["en", "English"]], "en", function () {}, true));
+  bar.appendChild(searchForm("Search reviews"));
+  content.appendChild(bar);
+  var list = ofKind("Review").filter(function (a) {
+    return matches(a) && (!state.rec || (state.rec === "yes") === a.recommended);
+  });
+  var pg = paginate(sortItems(list, state.sort || "helpful"), PAGE_SIZE);
+  var grid = el("div", "rvGrid");
+  pg.shown.forEach(function (a) { grid.appendChild(reviewCard(a)); });
+  if (!pg.shown.length) { grid.appendChild(emptyNode()); }
+  content.appendChild(grid);
+  var foot = el("div", "topicBar");
+  foot.appendChild(el("span", "", pg.total + " reviews"));
+  foot.appendChild(pagerNode(pg.pages));
+  content.appendChild(foot);
 }
 
 function render() {
   var content = document.getElementById("hubContent");
-  var info = document.getElementById("resultInfo");
   content.textContent = "";
-
-  if (state.type === "All" && !state.q) {
-    info.textContent = "";
-    setPagers(1);
-    content.appendChild(section("Latest news", "News", featuredNode()));
-    content.appendChild(section("Discussions", "Discussion", rowsNode(ofKind("Discussion").slice(0, 4))));
-    content.appendChild(section("Artwork", "Artwork", gridNode(ofKind("Artwork").slice(0, 4))));
-    content.appendChild(section("Guides", "Guide", rowsNode(ofKind("Guide").slice(0, 3))));
-    content.appendChild(section("Reviews", "Review", rowsNode(ofKind("Review").slice(0, 3))));
-    return;
+  switch (state.type) {
+    case "Discussion": renderDiscussions(content); break;
+    case "Screenshot": renderMedia(content, "Screenshot", "Share a screenshot"); break;
+    case "Artwork": renderMedia(content, "Artwork", "Upload artwork"); break;
+    case "Video": renderMedia(content, "Video", "Upload a video"); break;
+    case "News": renderNews(content); break;
+    case "Guide": renderGuides(content); break;
+    case "Review": renderReviews(content); break;
+    default: renderAll(content);
   }
-
-  var needle = state.q.toLowerCase();
-  var results = ITEMS.filter(function (i) {
-    var okKind = state.type === "All" || i.kind === state.type;
-    var okText = !needle || (i.title + " " + i.excerpt).toLowerCase().indexOf(needle) !== -1;
-    return okKind && okText;
-  }).sort(function (a, b) { return (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0) || byDate(a, b); });
-
-  var totalPages = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
-  if (state.page > totalPages) { state.page = totalPages; }
-  var start = (state.page - 1) * PAGE_SIZE;
-  var shown = results.slice(start, start + PAGE_SIZE);
-  info.textContent = results.length
-    ? "Showing " + (start + 1) + "-" + (start + shown.length) + " of " + results.length
-    : "0 results";
-  content.appendChild(state.type === "Artwork" ? gridNode(shown) : rowsNode(shown));
-  setPagers(totalPages);
 }
 
 function initPostForm() {
@@ -279,7 +801,7 @@ function initPostForm() {
     var body = document.getElementById("postBody").value.trim();
     var file = document.getElementById("postImage").files[0];
     var extra = {};
-    if (["Discussion", "Artwork", "Guide", "Review"].indexOf(kind) === -1) { err.textContent = "Choose a valid type."; return; }
+    if (["Discussion", "Artwork", "Screenshot", "Video", "Guide", "Review"].indexOf(kind) === -1) { err.textContent = "Choose a valid type."; return; }
     if (title.length < 5 || title.length > 100) { err.textContent = "Title must be 5-100 characters."; return; }
     if (body.length < 10 || body.length > 1000) { err.textContent = "Description must be 10-1000 characters."; return; }
     if (file && (["image/png", "image/jpeg", "image/gif"].indexOf(file.type) === -1 || file.size > 2 * 1024 * 1024)) {
@@ -303,26 +825,31 @@ function initPostForm() {
 
 function initList() {
   var params = new URLSearchParams(window.location.search);
-  state.q = (params.get("q") || "").trim().slice(0, 100);
   var t = params.get("type");
   state.type = TABS.some(function (x) { return x.k === t; }) ? t : "All";
+  state.q = (params.get("q") || "").trim().slice(0, 100);
   var p = parseInt(params.get("page"), 10);
   state.page = isNaN(p) || p < 1 ? 1 : p;
+  ["sort", "sub", "cat", "browse", "rec"].forEach(function (k) { state[k] = (params.get(k) || "").slice(0, 40); });
 
-  document.getElementById("gameName").textContent = GAME.name;
-  document.getElementById("q").value = state.q;
-  document.getElementById("type").value = state.type === "All" ? "" : state.type;
-
+  document.getElementById("gameTitle").textContent = GAME.name;
+  document.title = "Steam Community :: " + GAME.name;
   var tabs = document.getElementById("catTabs");
   TABS.forEach(function (x) {
     var li = el("li", x.k === state.type ? "active" : "");
     var a = el("a", "", x.l);
-    a.href = url(1, x.k);
+    a.href = tabUrl(x.k);
     li.appendChild(a);
     tabs.appendChild(li);
   });
   initPostForm();
   render();
+
+  var top = el("button", "backTop", "Back to top");
+  top.type = "button";
+  top.addEventListener("click", function () { window.scrollTo({ top: 0, behavior: "smooth" }); });
+  document.body.appendChild(top);
+  window.addEventListener("scroll", function () { top.classList.toggle("show", window.scrollY > 600); });
 }
 
 /* ---------- Review layout (modeled on a Steam review page) ---------- */
@@ -397,7 +924,7 @@ function renderReview(it, box) {
 }
 
 /* ---------- Detail page (modeled on a Steam guide page) ---------- */
-var PLURAL = { News: "News", Discussion: "Discussions", Artwork: "Artwork", Guide: "Guides", Review: "Reviews" };
+var PLURAL = { News: "News", Discussion: "Discussions", Artwork: "Artwork", Guide: "Guides", Review: "Reviews", Screenshot: "Screenshots", Video: "Videos" };
 var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 var comments = [], cmtPage = 1, CMT_SIZE = 5, postAuthor = "", favs = 0;
 
@@ -484,7 +1011,8 @@ function kv(k, v, id) {
 
 function renderPost(it, box) {
   var isGuide = it.kind === "Guide";
-  var hasDesc = isGuide || it.kind === "Artwork";
+  var isMedia = ["Artwork", "Screenshot", "Video"].indexOf(it.kind) !== -1;
+  var hasDesc = isGuide || isMedia;
   favs = Math.round(it.replies * 1.5) + 3;
 
   var head = el("div", "postHead");
@@ -514,10 +1042,12 @@ function renderPost(it, box) {
   var main = el("div", "postMain");
   var side = el("aside", "postSide");
 
-  if (it.kind === "Artwork") {
+  if (isMedia) {
     var hero = el("div", "hero");
     hero.style.background = gradient(it.hue);
     hero.style.height = "320px";
+    hero.style.position = "relative";
+    if (it.kind === "Video") { hero.appendChild(el("span", "playBtn", "\u25B6")); }
     main.appendChild(hero);
   }
   var anchors = [{ label: "Overview", target: "#overview" }];
@@ -557,7 +1087,7 @@ function renderPost(it, box) {
   side.appendChild(by);
 
   var det = sideBox("");
-  det.appendChild(kv("Category:", it.kind === "News" ? "Announcement" : it.kind));
+  det.appendChild(kv("Category:", it.kind === "News" ? "Announcement" : (it.kind === "Guide" ? ([].concat(it.cats || it.cat || []).join(", ") || "Guide") : it.kind)));
   det.appendChild(kv("Language:", "English"));
   det.appendChild(kv("Posted", fmtDate(it.date)));
   det.appendChild(kv("Updated", fmtDate(it.lastDate)));

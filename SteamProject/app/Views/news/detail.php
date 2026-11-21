@@ -10,21 +10,23 @@
   <style>body{background:#1b2838;color:#c6d4df;font-family:Arial,Helvetica,sans-serif}a{color:#67c1f5}</style>
 </head>
 <body data-page="article">
-  <nav class="navbar navbar-expand-md navbar-dark darkNav">
-    <a class="navbar-brand" href="../home/index.php"><img class="logoBig" src="../../../public/assets/images/utils/logo_steam.svg" alt="Steam"></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="mainNav">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item"><a class="nav-link" href="../home/index.php">Store</a></li>
-        <li class="nav-item active"><a class="nav-link" href="index.php">Community</a></li>
-        <li class="nav-item"><a class="nav-link" href="../about/index.php">About</a></li>
-        <li class="nav-item"><a class="nav-link" href="../contact/index.php">Support</a></li>
-      </ul>
-      <a class="btn btn-success" href="../auth/login.php">Sign in</a>
+  <header class="steamHeader">
+    <div class="headerTop">
+      <a class="btn-install" href="#">Install Steam</a>
+      <a href="../auth/login.php">sign in</a>
     </div>
-  </nav>
+    <div class="headerInner">
+      <a href="../home/index.php"><img class="logoBig" src="../../../public/assets/images/utils/logo_steam.svg" alt="Steam"></a>
+      <nav aria-label="Main">
+        <ul class="mainNav">
+          <li><a href="../home/index.php">Store</a></li>
+          <li class="active"><a href="index.php">Community</a></li>
+          <li><a href="../about/index.php">About</a></li>
+          <li><a href="../contact/index.php">Support</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
 
   <main class="container forumWrap">
     <div class="hubHead">
