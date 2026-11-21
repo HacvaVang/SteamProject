@@ -21,6 +21,29 @@
             <img width="15px" height="15px" src="/public/assets/images/utils/download.png">Install Steam</button>
 
           </nav>
+        <style>
+          /* Centered card, light text on the dark Steam background */
+          #loginForm {
+            width: 100%;
+            max-width: 420px;
+            margin: 8vh auto 0;
+            padding: 0 16px;
+          }
+          #loginForm label,
+          #loginForm label b,
+          #loginForm .smallFont {
+            color: #c6d4df;
+          }
+          #loginForm a { color: #66c0f4; }
+          #loginForm a:hover { color: #fff; }
+          #loginForm input[type="text"],
+          #loginForm input[type="password"] {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            margin: 6px 0 18px;
+          }
+        </style>
     </head>
 
     <body id="transparentBG" style="background-color: #1b2838;" class="fade-in">

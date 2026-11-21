@@ -21,13 +21,39 @@
             <img width="15px" height="15px" src="/public/assets/images/utils/download.png">Install Steam</button>
 
           </nav>
+        <style>
+          #registerForm {
+            width: 100%;
+            max-width: 480px;
+            margin: 5vh auto 0;
+            padding: 0 16px;
+          }
+          #registerForm label,
+          #registerForm label b,
+          #registerForm .smallFont {
+            color: #c6d4df;
+          }
+          #registerForm input[type="text"],
+          #registerForm input[type="password"] {
+            display: block;
+            width: 100%;
+            box-sizing: border-box;
+            margin: 6px 0 18px;
+          }
+          #registerForm button[type="submit"],
+          #registerForm .cancelbtn {
+            display: block;
+            width: 140px;
+            margin: 8px auto 0;
+          }
+        </style>
     </head>
 
     <body id="transparentBG" style="background-color: #1b2838;" class="fade-in">
       
         <img style="position: absolute; width: 800px; height:700px;visibility: hidden;" src="../../ImageData/games.jpg">
   
-        <form id="registerForm" action="../Home/home.html" method="post" style="width: 40%; margin-top: 5%;" class="container fade-in">
+        <form id="registerForm" action="../Home/home.html" method="post" class="container fade-in">
           <div class="container" style="text-align: center;">
             <img src="/public/assets/images/utils/logo_steam.svg">
           </div>
@@ -48,13 +74,13 @@
 
 
                 
-            <button type="submit" class="smallFont" style="display: block;width: 25%; margin-left: 37%; margin-top:2%;height: 50px ;background-image: linear-gradient(to right, #3786c6 , #223e87);;">
+            <button type="submit" class="smallFont" style="height: 50px; background-image: linear-gradient(to right, #3786c6 , #223e87);;">
               <span style="color: whitesmoke; font-weight: 600;">Sign Up</span></button>
           </div>
         
           <div class="container" >
-            <button style="width: 25%; margin-left: 37%; margin-top:2%;height: 50px; background-image: linear-gradient(to right, #df1b1b, #ba3030);" 
-            type="button" class="cancelbtn smallFont" onclick=clearInput()><span style="color: whitesmoke; font-weight: 600;">Clear</span></button></button>
+            <button style="height: 50px; background-image: linear-gradient(to right, #df1b1b, #ba3030);" 
+            type="button" class="cancelbtn smallFont" onclick="clearInput()"><span style="color: whitesmoke; font-weight: 600;">Clear</span></button>
           </div>
         </form>
 
