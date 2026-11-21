@@ -14,11 +14,11 @@
             
         <div class="mx-auto bg">
             <a href="../Home/home.html"><img
-                class="logoBig" src="https://store.cloudflare.steamstatic.com/public/shared/images/header/logo_steam.svg?t=962016"></a>            
+                class="logoBig" src="/public/assets/images/utils/logo_steam.svg"></a>            
         </div>
 
         <button type="button" class="d-none d-md-block btn btn-success" data-target="#">
-            <img width="15px" height="15px" src="https://img.icons8.com/material-sharp/256/download--v1.png">Install Steam</button>
+            <img width="15px" height="15px" src="/public/assets/images/utils/download.png">Install Steam</button>
 
           </nav>
     </head>
@@ -29,7 +29,7 @@
   
         <form id="registerForm" action="../Home/home.html" method="post" style="width: 40%; margin-top: 5%;" class="container fade-in">
           <div class="container" style="text-align: center;">
-            <img src="https://store.cloudflare.steamstatic.com/public/shared/images/header/logo_steam.svg?t=962016">
+            <img src="/public/assets/images/utils/logo_steam.svg">
           </div>
         
           <div class="container smallFont">
