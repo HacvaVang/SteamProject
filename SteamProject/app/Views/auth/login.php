@@ -14,11 +14,11 @@
             
         <div class="mx-auto bg">
             <a href="../Home/home.html"><img
-                class="logoBig" src="/public/assets/images/utils/logo_steam.svg"></a>            
+                class="logoBig" src="/assets/images/utils/logo_steam.svg"></a>            
         </div>
 
         <button type="button" class="d-none d-md-block btn btn-success" data-target="#">
-            <img width="15px" height="15px" src="/public/assets/images/utils/download.png">Install Steam</button>
+            <img width="15px" height="15px" src="/assets/images/utils/download.png">Install Steam</button>
 
           </nav>
         <style>
@@ -64,7 +64,7 @@
               <button type="submit">
               <span style="color: whitesmoke;">Sign in</span></button>
               <br>
-              <label class="smallFont"><a href="../Register/register.html">Not Registered?</a></label>
+              <label class="smallFont"><a href="?page=register">Not Registered?</a></label>
                 <br>
               <label class="smallFont"><a href="../Register/register.html">Forgot Password?</a></label>
             </div>

@@ -55,7 +55,7 @@
   
         <form id="registerForm" action="../Home/home.html" method="post" class="container fade-in">
           <div class="container" style="text-align: center;">
-            <img src="/public/assets/images/utils/logo_steam.svg">
+            <img src="/assets/images/utils/logo_steam.svg">
           </div>
         
           <div class="container smallFont">
