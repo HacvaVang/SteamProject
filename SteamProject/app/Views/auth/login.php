@@ -8,7 +8,7 @@
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="login-js.js"></script>
+        <script src="login.js"></script>
 
         <nav class="d-flex navbar navbar-expand-md darkNav navbar-dark">
             
@@ -18,7 +18,8 @@
         </div>
 
         <button type="button" class="d-none d-md-block btn btn-success" href="https://cdn.akamai.steamstatic.com/client/installer/SteamSetup.exe">
-            <img width="15px" height="15px" src="/public/assets/images/utils/download.png">Install Steam</button>
+            <img width="15px" height="15px" src="/public/assets/images/utils/download.png">Install Steam
+        </button>
 
           </nav>
         <style>
@@ -48,7 +49,7 @@
 
     <body id="transparentBG" style="background-color: #1b2838;" class="fade-in">
       
-        <img style="position: absolute; width: 800px; height:700px;visibility: hidden;" src="../../ImageData/games.jpg">
+        <img style="position: absolute; width: 800px; height:700px;visibility: hidden;" src="/public/assets/images/utils/login_bg.jpg">
 
         <form id="loginForm" action="../Home/home.html" method="post" class="container smallFont fade-in">
           
