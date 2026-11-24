@@ -17,7 +17,7 @@
                 class="logoBig" src="/public/assets/images/utils/logo_steam.svg"></a>            
         </div>
 
-        <button type="button" class="d-none d-md-block btn btn-success" data-target="#">
+        <button type="button" class="d-none d-md-block btn btn-success" href="https://cdn.akamai.steamstatic.com/client/installer/SteamSetup.exe">
             <img width="15px" height="15px" src="/public/assets/images/utils/download.png">Install Steam</button>
 
           </nav>
@@ -62,7 +62,7 @@
             
             <div style="text-align: center;">
               <button type="submit">
-              <span style="color: whitesmoke;">Sign in</span></button>
+              <span style="color: #1B2838;">Sign in</span></button>
               <br>
               <label class="smallFont"><a href="../Register/register.html">Not Registered?</a></label>
                 <br>
