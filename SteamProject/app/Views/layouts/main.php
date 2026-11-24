@@ -13,6 +13,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['switch_mode'])) {
         $returnPage = 'home';
     }
 
+    if ($targetMode === 'guest') {
+        unset($_SESSION['user'], $_SESSION['force_user']);
+        $nextPage = in_array($returnPage, ['admin_products', 'cart', 'user'], true)
+            ? 'products'
+            : $returnPage;
+        header('Location: ?page=' . urlencode($nextPage));
+        exit;
+    }
+
     if ($targetMode === 'grant_admin') {
         unset($_SESSION['force_user']);
         if (!isset($_SESSION['user']) || !is_array($_SESSION['user'])) {
@@ -61,7 +70,7 @@ $isActive = static function (string $route) use ($currRoute): bool {
 };
 
 $loggedInUser = $currentUser ?? ($_SESSION['user'] ?? null);
-$isLoggedIn = !empty($loggedInUser);
+$isLoggedIn = !empty($loggedInUser) || !empty($_SESSION['force_user']);
 $isAdmin = isAdminUser($loggedInUser);
 
 $userLabel = $isLoggedIn
@@ -91,6 +100,7 @@ $safeCurrRoute = htmlspecialchars($currRoute, ENT_QUOTES, 'UTF-8');
   <link rel="stylesheet" href="assets/css/news.css">
   <link rel="stylesheet" href="assets/css/layout.css">
   <link rel="stylesheet" href="assets/css/auth.css">
+
 </head>
 <body>
   <?php require __DIR__ . '/header.php'; ?>
@@ -130,6 +140,11 @@ $safeCurrRoute = htmlspecialchars($currRoute, ENT_QUOTES, 'UTF-8');
               Bật quyền Admin (test)
             </button>
           <?php endif; ?>
+          <?php if ($isLoggedIn): ?>
+            <button type="submit" name="switch_mode" value="guest" class="modeSwitchToggleBtn">
+              Chuyển sang Guest (không đăng nhập)
+            </button>
+          <?php endif; ?>
         </form>
       </div>
     </nav>
@@ -141,6 +156,7 @@ $safeCurrRoute = htmlspecialchars($currRoute, ENT_QUOTES, 'UTF-8');
   <script src="assets/js/toolbar.js" defer></script>
   <script src="assets/js/product.js" defer></script>
   <script src="assets/js/news.js" defer></script>
+  <script src="/assets/js/register.js" defer></script>
   
 </body>
 </html>

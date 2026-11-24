@@ -1,6 +1,6 @@
 <?php
-$loginError = (string) ($error ?? '');
-$oldUsername = htmlspecialchars((string) ($oldUsername ?? ($_POST['uname'] ?? '')), ENT_QUOTES, 'UTF-8');
+$loginError = (string) ($loginError ?? ($error ?? ''));
+$oldUsername = (string) ($oldUsername ?? ($_POST['uname'] ?? ''));
 ?>
 <section class="loginPage" aria-label="Đăng nhập">
   <form id="loginForm" action="?page=login" method="post" class="loginCard">
@@ -11,12 +11,12 @@ $oldUsername = htmlspecialchars((string) ($oldUsername ?? ($_POST['uname'] ?? ''
     <?php endif; ?>
 
     <div class="loginField">
-      <label for="uname"><b>Tên tài khoản</b></label>
+      <label for="uname">Tên tài khoản</label>
       <input
         id="uname"
         type="text"
         name="uname"
-        value="<?= $oldUsername ?>"
+        value="<?= htmlspecialchars($oldUsername, ENT_QUOTES, 'UTF-8') ?>"
         placeholder="Nhập tên tài khoản"
         autocomplete="username"
         required
@@ -24,7 +24,7 @@ $oldUsername = htmlspecialchars((string) ($oldUsername ?? ($_POST['uname'] ?? ''
     </div>
 
     <div class="loginField">
-      <label for="psw"><b>Mật khẩu</b></label>
+      <label for="psw">Mật khẩu</label>
       <input
         id="psw"
         type="password"
