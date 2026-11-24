@@ -1,0 +1,72 @@
+<!-- Store Navigation module. Include it from a page; load store-nav.css with it. -->
+<div class="store-nav">
+    <div class="store-nav-inner">
+
+        <ul class="store-menu">
+
+            <li class="store-menu-item">
+                <a href="/store" class="store-menu-link" aria-haspopup="true">Browse</a>
+                <ul class="store-dropdown">
+                    <li><a href="/store">All Games</a></li>
+                    <li><a href="/store?sort=new">New Releases</a></li>
+                    <li><a href="/store?sort=top">Top Sellers</a></li>
+                </ul>
+            </li>
+
+            <li class="store-menu-item">
+                <a href="/store?view=recommended" class="store-menu-link" aria-haspopup="true">Recommendations</a>
+                <ul class="store-dropdown">
+                    <li><a href="/store?view=recommended">For You</a></li>
+                    <li><a href="/store?view=friends">Friends Play</a></li>
+                    <li><a href="/store?view=curators">Curators</a></li>
+                </ul>
+            </li>
+
+            <li class="store-menu-item">
+                <a href="/store?view=categories" class="store-menu-link" aria-haspopup="true">Categories</a>
+                <ul class="store-dropdown">
+                    <li><a href="/store?tag=action">Action</a></li>
+                    <li><a href="/store?tag=rhythm">Rhythm</a></li>
+                    <li><a href="/store?tag=strategy">Strategy</a></li>
+                    <li><a href="/store?tag=indie">Indie</a></li>
+                </ul>
+            </li>
+
+            <li class="store-menu-item">
+                <a href="/store?view=play" class="store-menu-link" aria-haspopup="true">Ways to Play</a>
+                <ul class="store-dropdown">
+                    <li><a href="/store?tag=singleplayer">Single-player</a></li>
+                    <li><a href="/store?tag=multiplayer">Multi-player</a></li>
+                    <li><a href="/store?tag=coop">Online Co-op</a></li>
+                </ul>
+            </li>
+
+            <li class="store-menu-item">
+                <a href="/store?view=special" class="store-menu-link" aria-haspopup="true">Special Sections</a>
+                <ul class="store-dropdown">
+                    <li><a href="/store?view=sale">On Sale</a></li>
+                    <li><a href="/store?view=free">Free to Play</a></li>
+                    <li><a href="/store?view=upcoming">Coming Soon</a></li>
+                </ul>
+            </li>
+
+        </ul>
+
+        <form class="store-search" action="/store" method="get" role="search">
+            <input
+                type="search"
+                name="q"
+                placeholder="Search the store"
+                maxlength="100"
+                aria-label="Search the store"
+            >
+            <button type="submit" aria-label="Search">
+                <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+                    <path fill="currentColor" d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                </svg>
+            </button>
+        </form>
+
+    </div>
+</div>
+
