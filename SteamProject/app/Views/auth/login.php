@@ -1,79 +1,46 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="login-stylesheet.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="login-js.js"></script>
+<?php
+$loginError = (string) ($error ?? '');
+$oldUsername = htmlspecialchars((string) ($oldUsername ?? ($_POST['uname'] ?? '')), ENT_QUOTES, 'UTF-8');
+?>
+<section class="loginPage" aria-label="Đăng nhập">
+  <form id="loginForm" action="?page=login" method="post" class="loginCard">
+    <h1 class="loginTitle">Đăng nhập</h1>
 
-        <nav class="d-flex navbar navbar-expand-md darkNav navbar-dark">
-            
-        <div class="mx-auto bg">
-            <a href="../Home/home.html"><img
-                class="logoBig" src="/assets/images/utils/logo_steam.svg"></a>            
-        </div>
+    <?php if ($loginError !== ''): ?>
+      <p class="loginError" role="alert"><?= htmlspecialchars($loginError, ENT_QUOTES, 'UTF-8') ?></p>
+    <?php endif; ?>
 
-        <button type="button" class="d-none d-md-block btn btn-success" data-target="#">
-            <img width="15px" height="15px" src="/assets/images/utils/download.png">Install Steam</button>
+    <div class="loginField">
+      <label for="uname"><b>Tên tài khoản</b></label>
+      <input
+        id="uname"
+        type="text"
+        name="uname"
+        value="<?= $oldUsername ?>"
+        placeholder="Nhập tên tài khoản"
+        autocomplete="username"
+        required
+      >
+    </div>
 
-          </nav>
-        <style>
-          /* Centered card, light text on the dark Steam background */
-          #loginForm {
-            width: 100%;
-            max-width: 420px;
-            margin: 8vh auto 0;
-            padding: 0 16px;
-          }
-          #loginForm label,
-          #loginForm label b,
-          #loginForm .smallFont {
-            color: #c6d4df;
-          }
-          #loginForm a { color: #66c0f4; }
-          #loginForm a:hover { color: #fff; }
-          #loginForm input[type="text"],
-          #loginForm input[type="password"] {
-            display: block;
-            width: 100%;
-            box-sizing: border-box;
-            margin: 6px 0 18px;
-          }
-        </style>
-    </head>
+    <div class="loginField">
+      <label for="psw"><b>Mật khẩu</b></label>
+      <input
+        id="psw"
+        type="password"
+        name="psw"
+        placeholder="Nhập mật khẩu"
+        autocomplete="current-password"
+        required
+      >
+    </div>
 
-    <body id="transparentBG" style="background-color: #1b2838;" class="fade-in">
-      
-        <img style="position: absolute; width: 800px; height:700px;visibility: hidden;" src="../../ImageData/games.jpg">
-
-        <form id="loginForm" action="../Home/home.html" method="post" class="container smallFont fade-in">
-          
-          <div style="display: block;">
-            <label for="uname"><b>Sign in with account name</b></label>
-            <input  type="text" placeholder="Enter Username" name="uname" required>
-
-            <label for="psw"><b>Password</b></label>
-            
-            <input  type="password" placeholder="Enter Password" name="psw" required>
-            
-            <div style="text-align: center;">
-              <button type="submit">
-              <span style="color: whitesmoke;">Sign in</span></button>
-              <br>
-              <label class="smallFont"><a href="?page=register">Not Registered?</a></label>
-                <br>
-              <label class="smallFont"><a href="../Register/register.html">Forgot Password?</a></label>
-            </div>
-
-
-        </div>
-
-
-        </form>
-
-    </body>
-</html>
+    <div class="loginActions">
+      <button type="submit" class="loginSubmit">Đăng nhập</button>
+      <div class="loginLinks">
+        <a href="?page=register">Chưa có tài khoản? Đăng ký</a>
+        <a href="?page=register">Quên mật khẩu?</a>
+      </div>
+    </div>
+  </form>
+</section>

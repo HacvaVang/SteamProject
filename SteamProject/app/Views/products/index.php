@@ -1,69 +1,32 @@
 <?php
-if (!function_exists('resolveProductImage')) {
-    $helperCandidates = [
-        __DIR__ . '/../../Helpers/imgrel.php',
-        // __DIR__ . '/../../Helpers/ProductImageHelper.php',
-        // __DIR__ . '/../../Helpers/ImageHelper.php',
-    ];
+require_once __DIR__ . '/../../Helpers/product_data.php';
 
-    foreach ($helperCandidates as $helperFile) {
-        if (is_file($helperFile)) {
-            require_once $helperFile;
-            break;
-        }
-    }
+$isLoggedIn = !empty($currentUser ?? ($_SESSION['user'] ?? null));
+$rawQuery = trim((string) ($_GET['q'] ?? ''));
+$searchQuery = htmlspecialchars($rawQuery, ENT_QUOTES, 'UTF-8');
+
+$products = getStoreProducts(is_array($products ?? null) ? $products : []);
+
+if ($rawQuery !== '') {
+    $needle = mb_strtolower($rawQuery, 'UTF-8');
+    $products = array_values(array_filter($products, static function (array $item) use ($needle): bool {
+        $haystack = mb_strtolower(
+            (string) ($item['name'] ?? '') . ' ' . (string) ($item['summary'] ?? ''),
+            'UTF-8'
+        );
+        return mb_strpos($haystack, $needle) !== false;
+    }));
 }
-if (!isset($products) || !is_array($products)) {
-    $imgDir = __DIR__ . '/../../../public/assets/images/products';
-    $scanned = [];
 
-    if (is_dir($imgDir)) {
-        $files = scandir($imgDir) ?: [];
-        $idx = 1;
-        foreach ($files as $file) {
-            if ($file === '.' || $file === '..') {
-                continue;
-            }
-            $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-            if (!in_array($ext, ['jpg', 'jpeg', 'png', 'webp'], true)) {
-                continue;
-            }
-            $stem = pathinfo($file, PATHINFO_FILENAME);
-            $scanned[] = [
-                'id'          => $idx,
-                'name'        => ucwords(str_replace(['-', '_'], ' ', $stem)),
-                'description' => 'Sản phẩm mẫu tạo tự động từ file ' . $file,
-                'price'       => $idx * 100000,
-                'image'       => $file,
-            ];
-            $idx++;
-        }
-    }
-
-    $products = $scanned;
-}
+$featuredProducts = array_slice($products, 0, 6);
 ?>
-<?php
-$allProducts = $products ?? [];
-$carouselItems = array_slice($allProducts, 0, 6);
-$keywordValue = (string) ($keyword ?? '');
-
-$getProductImg = static function (array $item): string {
-    $id = (string) ($item['id'] ?? '');
-    $rawImage = (string) ($item['image'] ?? '');
-
-    if (function_exists('resolveProductImage')) {
-        return (string) resolveProductImage($rawImage, $id);
-    }
-
-    return $rawImage !== ''
-        ? 'assets/images/products/' . htmlspecialchars($rawImage, ENT_QUOTES, 'UTF-8')
-        : '';
-};
-?>
-
-
-<section class="storeCatalog" aria-label="Danh sách sản phẩm">
+<section
+  class="storeCatalog"
+  aria-label="Danh sách sản phẩm"
+  data-logged-in="<?= $isLoggedIn ? '1' : '0' ?>"
+  data-login-url="?page=login"
+  data-cart-url="?page=cart"
+>
   <header class="storeBanner">
     <div>
       <h1 class="storeBannerTitle">Cửa hàng sản phẩm</h1>
@@ -71,51 +34,47 @@ $getProductImg = static function (array $item): string {
     </div>
   </header>
 
-  <!-- 1. Carousel sản phẩm nổi bật ở trên -->
-  <?php if (!empty($carouselItems)): ?>
-    <section class="featuredCarousel" aria-label="Sản phẩm nổi bật" data-carousel>
-      <div class="fcHeader">
-        <h2 class="fcHeading">Sản phẩm nổi bật</h2>
-        <div class="fcControls">
-          <button type="button" class="fcNavBtn" data-carousel-prev aria-label="Sản phẩm trước">&#8249;</button>
-          <button type="button" class="fcNavBtn" data-carousel-next aria-label="Sản phẩm tiếp">&#8250;</button>
-        </div>
+  <section class="featuredCarousel" aria-label="Sản phẩm nổi bật" data-carousel>
+    <div class="fcHeader">
+      <h2 class="fcHeading">Sản phẩm nổi bật</h2>
+      <div class="fcControls">
+        <button type="button" class="fcNavBtn" data-carousel-prev aria-label="Sản phẩm trước">&#8249;</button>
+        <button type="button" class="fcNavBtn" data-carousel-next aria-label="Sản phẩm tiếp">&#8250;</button>
       </div>
+    </div>
 
-      <div class="fcViewport" data-carousel-track>
-        <?php foreach ($carouselItems as $item): ?>
-          <?php
-            $id = (int) ($item['id'] ?? 0);
-            $name = htmlspecialchars((string) ($item['name'] ?? 'Sản phẩm'), ENT_QUOTES, 'UTF-8');
-            $price = number_format((float) ($item['price'] ?? 0), 0, ',', '.');
-            $img = $getProductImg($item);
-            echo '<!-- DEBUG CAROUSEL IMG: ' . htmlspecialchars($img, ENT_QUOTES, 'UTF-8') . ' -->';
-          ?>
-          <article class="fcItem">
-            <a href="?page=product&id=<?= $id ?>" class="fcCard">
-              <div class="fcThumb">
-                <?php if ($img !== ''): ?>
-                  <img src="<?= htmlspecialchars($img, ENT_QUOTES, 'UTF-8') ?>" alt="<?= $name ?>" class="fcImg" loading="lazy">
-                <?php else: ?>
-                  <div class="fcPlaceholder"></div>
-                <?php endif; ?>
-              </div>
-              <div class="fcMeta">
-                <strong class="fcName"><?= $name ?></strong>
-                <span class="fcPrice"><?= $price ?> đ</span>
-              </div>
-            </a>
-          </article>
-        <?php endforeach; ?>
-      </div>
-    </section>
-  <?php endif; ?>
+    <div class="fcViewport" data-carousel-track>
+      <?php foreach ($featuredProducts as $item): ?>
+        <?php
+        $id = htmlspecialchars((string) ($item['id'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $name = htmlspecialchars((string) ($item['name'] ?? 'Sản phẩm'), ENT_QUOTES, 'UTF-8');
+        $priceNum = (int) ($item['price'] ?? 0);
+        $priceText = number_format($priceNum, 0, ',', '.') . ' đ';
+        $imgSrc = resolveProductImage((string) ($item['image'] ?? ''), (string) ($item['id'] ?? ''));
+        ?>
+        <article class="fcItem">
+          <a href="?page=product&id=<?= $id ?>" class="fcCard">
+            <div class="fcThumb">
+              <?php if ($imgSrc !== ''): ?>
+                <img src="<?= htmlspecialchars($imgSrc, ENT_QUOTES, 'UTF-8') ?>" alt="<?= $name ?>" class="fcImg">
+              <?php else: ?>
+                <div class="fcPlaceholder"></div>
+              <?php endif; ?>
+            </div>
+            <div class="fcMeta">
+              <strong class="fcName"><?= $name ?></strong>
+              <span class="fcPrice"><?= $priceText ?></span>
+            </div>
+          </a>
+        </article>
+      <?php endforeach; ?>
+    </div>
+  </section>
 
-  <!-- 2. Danh sách sản phẩm dạng list + tìm kiếm từ khóa ở dưới -->
   <section class="catalogSection" aria-label="Tất cả sản phẩm">
     <div class="catalogTop">
       <h2 class="catalogHeading">Tất cả sản phẩm</h2>
-      <span class="catalogCount"><?= count($allProducts) ?> sản phẩm</span>
+      <span class="catalogCount"><?= count($products) ?> sản phẩm</span>
     </div>
 
     <form method="GET" action="" class="filterForm" role="search">
@@ -124,57 +83,70 @@ $getProductImg = static function (array $item): string {
         <input
           type="search"
           name="q"
-          value="<?= htmlspecialchars($keywordValue, ENT_QUOTES, 'UTF-8') ?>"
+          value="<?= $searchQuery ?>"
           placeholder="Tìm kiếm sản phẩm theo từ khóa..."
           class="filterInput"
+          data-catalog-search
+          data-server-filtered="<?= $rawQuery !== '' ? '1' : '0' ?>"
           aria-label="Từ khóa sản phẩm"
         >
         <button type="submit" class="filterSubmit">Tìm kiếm</button>
       </div>
-      <?php if ($keywordValue !== ''): ?>
-        <a href="?page=products" class="filterReset">Xóa lọc</a>
-      <?php endif; ?>
     </form>
 
-    <?php if (empty($allProducts)): ?>
-      <div class="catalogEmpty">Không tìm thấy sản phẩm nào khớp với từ khóa.</div>
-    <?php else: ?>
-      <div class="catalogList">
-        <?php foreach ($allProducts as $p): ?>
-          <?php
-            $id = (int) ($p['id'] ?? 0);
-            $name = htmlspecialchars((string) ($p['name'] ?? 'Sản phẩm'), ENT_QUOTES, 'UTF-8');
-            $desc = htmlspecialchars((string) ($p['description'] ?? ''), ENT_QUOTES, 'UTF-8');
-            $price = number_format((float) ($p['price'] ?? 0), 0, ',', '.');
-            $img = $getProductImg($p);
-            echo '<!-- DEBUG LIST IMG: ' . htmlspecialchars($img, ENT_QUOTES, 'UTF-8') . ' -->';
-          ?>
-          <article class="catalogRow">
-            <a href="?page=product&id=<?= $id ?>" class="catalogThumbLink" aria-label="<?= $name ?>">
-              <div class="catalogThumb">
-                <?php if ($img !== ''): ?>
-                  <img src="<?= htmlspecialchars($img, ENT_QUOTES, 'UTF-8') ?>" alt="<?= $name ?>" class="fcImg" loading="lazy">
-                <?php else: ?>
-                  <div class="fcPlaceholder"></div>
-                <?php endif; ?>
-              </div>
-            </a>
-
-            <div class="catalogBody">
-              <a href="?page=product&id=<?= $id ?>" class="catalogTitle"><?= $name ?></a>
-              <?php if ($desc !== ''): ?>
-                <p class="catalogSummary"><?= $desc ?></p>
+    <div class="emptyRow" data-catalog-empty <?= empty($products) ? '' : 'hidden' ?>>
+      Không tìm thấy sản phẩm nào.
+    </div>
+    <div class="catalogList" data-catalog-list>
+      <?php foreach ($products as $item): ?>
+        <?php
+        $id = htmlspecialchars((string) ($item['id'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $name = htmlspecialchars((string) ($item['name'] ?? 'Sản phẩm'), ENT_QUOTES, 'UTF-8');
+        $summary = htmlspecialchars((string) ($item['summary'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $searchText = htmlspecialchars(
+            trim((string) ($item['id'] ?? '') . ' ' . (string) ($item['name'] ?? '') . ' ' . (string) ($item['summary'] ?? '')),
+            ENT_QUOTES,
+            'UTF-8'
+        );
+        $priceNum = (int) ($item['price'] ?? 0);
+        $priceText = number_format($priceNum, 0, ',', '.') . ' đ';
+        $imgSrc = resolveProductImage((string) ($item['image'] ?? ''), (string) ($item['id'] ?? ''));
+        ?>
+        <article class="catalogRow" data-catalog-item data-search="<?= $searchText ?>">
+          <a href="?page=product&id=<?= $id ?>" class="catalogThumbLink" aria-label="<?= $name ?>">
+            <div class="catalogThumb">
+              <?php if ($imgSrc !== ''): ?>
+                <img src="<?= htmlspecialchars($imgSrc, ENT_QUOTES, 'UTF-8') ?>" alt="<?= $name ?>" class="catalogImg">
+              <?php else: ?>
+                <div class="fcPlaceholder"></div>
               <?php endif; ?>
             </div>
+          </a>
 
-            <div class="catalogAside">
-              <span class="catalogPrice"><?= $price ?> đ</span>
+          <div class="catalogBody">
+            <a href="?page=product&id=<?= $id ?>" class="catalogTitle"><?= $name ?></a>
+            <?php if ($summary !== ''): ?>
+              <p class="catalogSummary"><?= $summary ?></p>
+            <?php endif; ?>
+          </div>
+
+          <div class="catalogAside">
+            <span class="catalogPrice"><?= $priceText ?></span>
+            <div class="catalogActions">
               <a href="?page=product&id=<?= $id ?>" class="catalogDetailBtn">Chi tiết</a>
+              <button
+                type="button"
+                class="catalogAddCartBtn"
+                data-add-to-cart
+                data-product-id="<?= $id ?>"
+                data-product-name="<?= $name ?>"
+              >
+                Thêm vào giỏ
+              </button>
             </div>
-          </article>
-        <?php endforeach; ?>
-      </div>
-    <?php endif; ?>
+          </div>
+        </article>
+      <?php endforeach; ?>
+    </div>
   </section>
 </section>
-
