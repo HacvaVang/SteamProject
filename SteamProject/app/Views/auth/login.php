@@ -8,49 +8,26 @@
         <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="login-js.js"></script>
+        <script src="login.js"></script>
 
         <nav class="d-flex navbar navbar-expand-md darkNav navbar-dark">
             
         <div class="mx-auto bg">
-            <a href="../Home/home.html"><img
-                class="logoBig" src="/public/assets/images/utils/logo_steam.svg"></a>            
+            <a href="/"><img
+            class="logoBig" src="<?= ASSET_URL ?>/assets/images/utils/logo_steam.svg"></a>
         </div>
 
-        <button type="button" class="d-none d-md-block btn btn-success" href="https://cdn.akamai.steamstatic.com/client/installer/SteamSetup.exe">
-            <img width="15px" height="15px" src="/public/assets/images/utils/download.png">Install Steam</button>
+        <button type="button" class="d-none d-md-block btn btn-success" data-target="#">
+            <img width="15px" height="15px" src="<?= ASSET_URL ?>/assets/images/utils/download.png">Install Steam</button>
 
           </nav>
-        <style>
-          /* Centered card, light text on the dark Steam background */
-          #loginForm {
-            width: 100%;
-            max-width: 420px;
-            margin: 8vh auto 0;
-            padding: 0 16px;
-          }
-          #loginForm label,
-          #loginForm label b,
-          #loginForm .smallFont {
-            color: #c6d4df;
-          }
-          #loginForm a { color: #66c0f4; }
-          #loginForm a:hover { color: #fff; }
-          #loginForm input[type="text"],
-          #loginForm input[type="password"] {
-            display: block;
-            width: 100%;
-            box-sizing: border-box;
-            margin: 6px 0 18px;
-          }
-        </style>
     </head>
 
     <body id="transparentBG" style="background-color: #1b2838;" class="fade-in">
-      
-        <img style="position: absolute; width: 800px; height:700px;visibility: hidden;" src="../../ImageData/games.jpg">
 
-        <form id="loginForm" action="../Home/home.html" method="post" class="container smallFont fade-in">
+        <img style="position: absolute; width: 800px; height:700px;visibility: hidden;" src="<?= ASSET_URL ?>/assets/images/utils/login_bg.jpg">
+
+        <form id="loginForm" action="/login" method="post" class="container smallFont fade-in">
           
           <div style="display: block;">
             <label for="uname"><b>Sign in with account name</b></label>
@@ -62,11 +39,11 @@
             
             <div style="text-align: center;">
               <button type="submit">
-              <span style="color: #1B2838;">Sign in</span></button>
+              <span style="color: whitesmoke;">Sign in</span></button>
               <br>
-              <label class="smallFont"><a href="../Register/register.html">Not Registered?</a></label>
+              <label class="smallFont"><a href="/register">Not Registered?</a></label>
                 <br>
-              <label class="smallFont"><a href="../Register/register.html">Forgot Password?</a></label>
+              <label class="smallFont"><a href="/register">Forgot Password?</a></label>
             </div>
 
 

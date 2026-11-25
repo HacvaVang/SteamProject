@@ -85,6 +85,14 @@ main {
     position: relative;
 }
 
+.navbar-item.navbar-cart {
+    margin-left: auto;
+}
+
+.navbar-item.navbar-cart + .navbar-item.navbar-user {
+    margin-left: 0;
+}
+
 .navbar-link {
     display: inline-block;
     padding: 8px 0;

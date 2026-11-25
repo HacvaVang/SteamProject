@@ -1,0 +1,34 @@
+[
+    {
+        "id": "1",
+        "name": "League",
+        "summary": "Sản phẩm mẫu tạo tự động từ file league.jpeg",
+        "description": "Thông tin chi tiết cho League (league.jpeg).",
+        "price": 100000,
+        "image": "league.jpeg"
+    },
+    {
+        "id": "2",
+        "name": "Lor",
+        "summary": "Sản phẩm mẫu tạo tự động từ file lor.jpeg",
+        "description": "Thông tin chi tiết cho Lor (lor.jpeg).",
+        "price": 200000,
+        "image": "lor.jpeg"
+    },
+    {
+        "id": "3",
+        "name": "Ovc",
+        "summary": "Sản phẩm mẫu tạo tự động từ file ovc.jpg",
+        "description": "Thông tin chi tiết cho Ovc (ovc.jpg).",
+        "price": 300000,
+        "image": "ovc.jpg"
+    },
+    {
+        "id": "4",
+        "name": "Sls",
+        "summary": "Sản phẩm mẫu tạo tự động từ file sls.jpg",
+        "description": "Thông tin chi tiết cho Sls (sls.jpg).",
+        "price": 400000,
+        "image": "sls.jpg"
+    }
+]

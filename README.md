@@ -197,3 +197,19 @@ SteamProject/
 ├── .gitignore
 └── README.md
 ```
+
+# How to run?
+
+ 
+````bash
+php -S localhost:8000 -t public
+````
+
+Truy cập web tại đường dẫn sau:
+````
+http://localhost:8000
+````
+
+Thực hiện chỉnh sửa tại file ***public/index.php*** để tạm thời thay controller trong việc chuyển trang.
+
+Muốn thêm rel của stylesheet thì include ở trong ***layout/main.php***
