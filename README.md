@@ -220,10 +220,24 @@ Thực hiện chỉnh sửa tại file ***public/index.php*** để tạm thời
 
 Muốn thêm rel của stylesheet thì include ở trong ***layout/main.php***
 
-## Product data
+## SQLite product data
 
-`SteamProject/app/Data/products.json` stores products using `game_id`, `name`,
-`description`, `base_price`, `discount_check` (percentage), `tags` (array), and
-`reviews` (rating entries). `final_price` is calculated from the base price and
-discount; `rating` is the average review score from 0 to 5. Legacy `id` and
-`price` records are normalized by the product helper.
+The Store and Admin catalog read and write `SteamProject/storage/app.sqlite`
+through PDO SQLite. The app uses `games` for product fields, `game_tags` for
+tags, and the average of `reviews.rating_score` for ratings. The database's
+`discount_check` is a boolean; the UI derives the displayed percentage from
+`base_price` and `final_price`.
+
+For a new database, from the repository root run:
+
+```bash
+cd SteamProject
+php storage/fetch_steam_seed.php
+sqlite3 storage/app.sqlite < storage/schema.sql
+sqlite3 storage/app.sqlite < storage/seeders.sql
+```
+
+The PHP runtime must have `pdo_sqlite` enabled. To use a different database
+file, set `STEAM_PROJECT_SQLITE_PATH` to its absolute path. The Steam seed
+generator fetches Steam data, writes the SQL file, and downloads images; it
+does not execute SQL.
