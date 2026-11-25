@@ -54,16 +54,14 @@ $safeCurrRoute = htmlspecialchars($currRoute, ENT_QUOTES, 'UTF-8');
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><?= htmlspecialchars($pageTitle ?? 'SteamProject') ?></title>
-  <link rel="stylesheet" href="<?= ASSET_URL ?>/assets/css/style.css">
-  <link rel="stylesheet" href="<?= ASSET_URL ?>/assets/css/product.css">
-  <link rel="stylesheet" href="<?= ASSET_URL ?>/assets/css/responsive.css">
-  <link rel="stylesheet" href="<?= ASSET_URL ?>/assets/css/news.css">
-  <link rel="stylesheet" href="<?= ASSET_URL ?>/assets/css/layout.css">
-  <link rel="stylesheet" href="<?= ASSET_URL ?>/assets/css/register.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><?= htmlspecialchars($title ?? 'SteamProject') ?></title>
 
+    <link rel="stylesheet" href="/public/assets/css/layout.css">
+    <?php foreach ($styles ?? [] as $css): ?>
+        <link rel="stylesheet" href="<?= htmlspecialchars($css) ?>">
+    <?php endforeach; ?>
 </head>
 <body>
   <?php require __DIR__ . '/header.php'; ?>
@@ -92,6 +90,10 @@ $safeCurrRoute = htmlspecialchars($currRoute, ENT_QUOTES, 'UTF-8');
           Store Sản phẩm
         </a>
 
+    <?php foreach ($scripts ?? [] as $js): ?>
+        <script src="<?= htmlspecialchars($js) ?>"></script>
+    <?php endforeach; ?>
+
         <form method="POST" action="<?= htmlspecialchars(BASE_URL, ENT_QUOTES, 'UTF-8') ?>/mode" class="modeSwitchForm">
           <input type="hidden" name="return_page" value="<?= $safeCurrRoute ?>">
           <?php if ($isAdmin): ?>
@@ -113,13 +115,6 @@ $safeCurrRoute = htmlspecialchars($currRoute, ENT_QUOTES, 'UTF-8');
     </nav>
   </div>
   <?php include_once __DIR__ . '/footer.html'; ?>
-
-  <script src="<?= ASSET_URL ?>/assets/js/main.js" defer></script>
-  <script src="<?= ASSET_URL ?>/assets/js/navbar.js" defer></script>
-  <script src="<?= ASSET_URL ?>/assets/js/toolbar.js" defer></script>
-  <script src="<?= ASSET_URL ?>/assets/js/product.js" defer></script>
-  <script src="<?= ASSET_URL ?>/assets/js/news.js" defer></script>
-  <script src="<?= ASSET_URL ?>/assets/js/register.js" defer></script>
   
 </body>
 </html>

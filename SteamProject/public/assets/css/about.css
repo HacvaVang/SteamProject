@@ -1,0 +1,111 @@
+/* About page. Everything is scoped under .about-page. */
+
+.about-page {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 30px 30px 50px;
+    color: #c6d4df;
+}
+
+.about-page h1,
+.about-page h2,
+.about-page h3 { color: #ffffff; font-weight: 400; margin: 0; }
+
+.about-page p { line-height: 1.7; margin: 0; }
+
+/* ---- Hero ---- */
+.about-hero {
+    padding: 40px 30px;
+    text-align: center;
+    background: linear-gradient(to right, rgba(0, 0, 0, .35), rgba(42, 71, 94, .6));
+}
+.about-hero h1 { font-size: 34px; margin-bottom: 12px; }
+.about-hero p { max-width: 640px; margin: 0 auto; font-size: 16px; }
+
+/* ---- Stats ---- */
+.about-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin: 20px 0 10px;
+}
+.stat {
+    padding: 18px;
+    text-align: center;
+    background: rgba(0, 0, 0, .25);
+}
+.stat-value { display: block; font-size: 26px; color: #66c0f4; }
+.stat-label { font-size: 13px; color: #8f98a0; text-transform: uppercase; }
+
+/* ---- Sections ---- */
+.about-section { margin-top: 36px; }
+.about-section h2 {
+    font-size: 16px;
+    text-transform: uppercase;
+    padding-bottom: 6px;
+    margin-bottom: 14px;
+    border-bottom: 1px solid #2a475e;
+}
+
+.feature-grid,
+.team-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+    gap: 14px;
+}
+
+.feature {
+    padding: 18px;
+    background: rgba(0, 0, 0, .25);
+}
+.feature h3 { font-size: 17px; color: #66c0f4; margin-bottom: 8px; }
+.feature p { font-size: 14px; }
+
+/* ---- Team ---- */
+.member {
+    padding: 18px;
+    text-align: center;
+    background: rgba(0, 0, 0, .25);
+}
+.member-avatar {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, #2a75bb, #1b2838);
+    border: 2px solid #5c7e10;
+}
+.member-name { color: #fff; font-weight: 600; }
+.member-role { font-size: 13px; color: #8f98a0; margin-top: 2px; }
+
+/* ---- Call to action ---- */
+.about-cta {
+    margin-top: 40px;
+    padding: 24px;
+    text-align: center;
+    background: rgba(0, 0, 0, .25);
+}
+.btn-contact {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 8px 24px;
+    color: #66c0f4;
+    text-decoration: none;
+    background: rgba(103, 193, 245, .2);
+    border-radius: 2px;
+    transition: background-color .2s ease, color .2s ease;
+}
+.btn-contact:hover { background: #67c1f5; color: #1b2838; }
+
+/* ---- Responsive ---- */
+@media (max-width: 600px) {
+    .about-page { padding: 15px; }
+    .about-hero { padding: 28px 16px; }
+    .about-hero h1 { font-size: 26px; }
+    .about-stats { grid-template-columns: 1fr; }
+}
