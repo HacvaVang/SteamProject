@@ -2,7 +2,10 @@
 require_once __DIR__ . '/../../Helpers/product_data.php';
 
 $styles = ['/public/assets/css/product.css'];
-$scripts = ['/public/assets/js/product.js'];
+$scripts = [
+    '/public/assets/js/product.js',
+    '/public/assets/js/catalog-search.js',
+];
 
 $isLoggedIn = !empty($currentUser ?? ($_SESSION['user'] ?? null));
 $rawQuery = trim((string) ($_GET['q'] ?? ''));

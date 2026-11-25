@@ -1,5 +1,23 @@
 <?php
+if (PHP_SAPI === 'cli-server') {
+    $requestPath = rawurldecode((string) parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH));
+    $assetPrefix = '/public/assets/';
 
+    if (str_starts_with($requestPath, $assetPrefix)) {
+        $assetsRoot = realpath(__DIR__ . '/assets');
+        $assetPath = $assetsRoot === false
+            ? false
+            : realpath($assetsRoot . DIRECTORY_SEPARATOR . substr($requestPath, strlen($assetPrefix)));
+
+        if (
+            $assetPath !== false
+            && str_starts_with($assetPath, $assetsRoot . DIRECTORY_SEPARATOR)
+            && is_file($assetPath)
+        ) {
+            return false;
+        }
+    }
+}
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }

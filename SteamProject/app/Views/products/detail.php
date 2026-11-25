@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../../Helpers/product_data.php';
 
+$styles = ['/public/assets/css/product.css'];
+$scripts = ['/public/assets/js/product.js'];
+
 $isLoggedIn = !empty($currentUser ?? ($_SESSION['user'] ?? null));
 $allProducts = getStoreProducts(is_array($products ?? null) ? $products : []);
 $reqId = trim((string) ($_GET['id'] ?? ''));

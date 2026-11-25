@@ -1,0 +1,109 @@
+.adminProductsWrap {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.adminAlertSuccess,
+.adminAlertError {
+    padding: 10px 14px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.adminAlertSuccess {
+    background-color: rgba(164, 208, 7, 0.14);
+    border: 1px solid #a4d007;
+    color: #beee11;
+}
+
+.adminAlertError {
+    background-color: rgba(217, 83, 79, 0.16);
+    border: 1px solid #d9534f;
+    color: #ffb3b0;
+}
+
+.adminProductForm {
+    background-color: #171d25;
+    border: 1px solid #2a3544;
+    border-radius: 6px;
+    padding: 20px;
+}
+
+.adminFormHeading {
+    margin: 0 0 16px;
+    font-size: 18px;
+    color: #ffffff;
+}
+
+.adminFormGrid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.adminField {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.adminField label {
+    color: #c6d4df;
+    font-size: 13px;
+}
+
+.adminField input,
+.adminField textarea {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1px solid #363c44;
+    border-radius: 4px;
+    background-color: #1b2838;
+    color: #ffffff;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.adminField input:focus,
+.adminField textarea:focus {
+    outline: none;
+    border-color: #66c0f4;
+}
+
+.adminFormActions,
+.adminRowActions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.inlineDeleteForm {
+    margin: 0;
+}
+
+.adminDeleteBtn {
+    padding: 6px 12px;
+    border: 1px solid #d9534f;
+    border-radius: 3px;
+    background-color: rgba(217, 83, 79, 0.16);
+    color: #ff9c98;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.adminDeleteBtn:hover {
+    background-color: #d9534f;
+    color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .adminFormGrid {
+        grid-template-columns: 1fr;
+    }
+}

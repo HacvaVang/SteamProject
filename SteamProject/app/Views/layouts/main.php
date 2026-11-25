@@ -59,6 +59,8 @@ $safeCurrRoute = htmlspecialchars($currRoute, ENT_QUOTES, 'UTF-8');
     <title><?= htmlspecialchars($pageTitle ?? 'SteamProject') ?></title>
 
     <link rel="stylesheet" href="/public/assets/css/layout.css">
+    <link rel="stylesheet" href="/public/assets/css/style.css">
+    <link rel="stylesheet" href="/public/assets/css/responsive.css">
     <?php foreach ($styles ?? [] as $css): ?>
         <link rel="stylesheet" href="<?= htmlspecialchars($css) ?>">
     <?php endforeach; ?>
@@ -91,10 +93,6 @@ $safeCurrRoute = htmlspecialchars($currRoute, ENT_QUOTES, 'UTF-8');
           Store Sản phẩm
         </a>
 
-    <?php foreach ($scripts ?? [] as $js): ?>
-        <script src="<?= htmlspecialchars($js) ?>"></script>
-    <?php endforeach; ?>
-
         <form method="POST" action="<?= htmlspecialchars(BASE_URL, ENT_QUOTES, 'UTF-8') ?>/mode" class="modeSwitchForm">
           <input type="hidden" name="return_page" value="<?= $safeCurrRoute ?>">
           <?php if ($isAdmin): ?>
@@ -116,6 +114,10 @@ $safeCurrRoute = htmlspecialchars($currRoute, ENT_QUOTES, 'UTF-8');
     </nav>
   </div>
   <?php include_once __DIR__ . '/footer.html'; ?>
+
+  <?php foreach ($scripts ?? [] as $js): ?>
+    <script src="<?= htmlspecialchars($js, ENT_QUOTES, 'UTF-8') ?>" defer></script>
+  <?php endforeach; ?>
   
 </body>
 </html>
