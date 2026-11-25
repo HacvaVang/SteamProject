@@ -37,8 +37,16 @@ $product = is_array($product ?? null) ? $product : findStoreProductById($allProd
     $name = htmlspecialchars((string) ($product['name'] ?? 'Sản phẩm'), ENT_QUOTES, 'UTF-8');
     $summary = htmlspecialchars((string) ($product['summary'] ?? ''), ENT_QUOTES, 'UTF-8');
     $description = htmlspecialchars((string) ($product['description'] ?? ($product['summary'] ?? '')), ENT_QUOTES, 'UTF-8');
-    $priceNum = (int) ($product['price'] ?? 0);
+    $basePriceNum = (int) ($product['base_price'] ?? 0);
+    $priceNum = (int) ($product['final_price'] ?? $product['price'] ?? 0);
     $priceText = number_format($priceNum, 0, ',', '.') . ' đ';
+    $basePriceText = number_format($basePriceNum, 0, ',', '.') . ' đ';
+    $discount = (float) ($product['discount_check'] ?? 0);
+    $rating = $product['rating'];
+    $ratingText = $rating === null
+        ? 'Chưa có đánh giá'
+        : number_format((float) $rating, 1, ',', '.') . ' / 5 (' . (int) $product['review_count'] . ' đánh giá)';
+    $tags = is_array($product['tags'] ?? null) ? $product['tags'] : [];
     $imgSrc = resolveProductImage((string) ($product['image'] ?? ''), (string) ($product['id'] ?? ''));
     ?>
     <article class="productDetailCard">
@@ -52,7 +60,20 @@ $product = is_array($product ?? null) ? $product : findStoreProductById($allProd
 
       <div class="productDetailInfo">
         <h1 class="productDetailTitle"><?= $name ?></h1>
-        <div class="productDetailPrice"><?= $priceText ?></div>
+        <p class="productRating"><?= htmlspecialchars($ratingText, ENT_QUOTES, 'UTF-8') ?></p>
+        <div class="productDetailPrice">
+          <?php if ($discount > 0): ?><del class="catalogOriginalPrice"><?= $basePriceText ?></del><?php endif; ?>
+          <strong><?= $priceText ?></strong>
+          <?php if ($discount > 0): ?><span class="catalogDiscount">-<?= rtrim(rtrim(number_format($discount, 2, ',', '.'), '0'), ',') ?>%</span><?php endif; ?>
+        </div>
+
+        <?php if ($tags !== []): ?>
+          <div class="catalogTags" aria-label="Thẻ sản phẩm">
+            <?php foreach ($tags as $tag): ?>
+              <span class="productTag"><?= htmlspecialchars((string) $tag, ENT_QUOTES, 'UTF-8') ?></span>
+            <?php endforeach; ?>
+          </div>
+        <?php endif; ?>
 
         <?php if ($summary !== ''): ?>
           <p class="productDetailSummary"><?= $summary ?></p>

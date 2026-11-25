@@ -31,11 +31,14 @@ function scanProductsFromImages(): array
             }
             $stem = pathinfo($file, PATHINFO_FILENAME);
             $items[] = [
-                'id'          => (string) $idx,
+                'game_id'     => (string) $idx,
                 'name'        => ucfirst(str_replace(['-', '_'], ' ', $stem)),
                 'summary'     => 'Sản phẩm mẫu tạo tự động từ file ' . $file,
                 'description' => 'Thông tin chi tiết cho ' . ucfirst(str_replace(['-', '_'], ' ', $stem)) . ' (' . $file . ').',
-                'price'       => $idx * 100000,
+                'base_price'  => $idx * 100000,
+                'discount_check' => 0,
+                'tags'        => [],
+                'reviews'     => [],
                 'image'       => $file,
             ];
             $idx++;
@@ -43,6 +46,77 @@ function scanProductsFromImages(): array
     }
 
     return $items;
+}
+
+function normalizeStoreProduct(array $item): ?array
+{
+    $id = trim((string) ($item['game_id'] ?? $item['id'] ?? ''));
+    $name = trim((string) ($item['name'] ?? ''));
+    if ($id === '' || $name === '') {
+        return null;
+    }
+
+    $basePrice = max(0, (int) ($item['base_price'] ?? $item['price'] ?? 0));
+    $discountRaw = $item['discount_check'] ?? 0;
+    $discount = is_numeric($discountRaw) ? (float) $discountRaw : 0.0;
+    $discount = min(100.0, max(0.0, $discount));
+    $finalPrice = (int) round($basePrice * (1 - ($discount / 100)));
+
+    $rawTags = $item['tags'] ?? [];
+    if (is_string($rawTags)) {
+        $rawTags = explode(',', $rawTags);
+    }
+    $tags = [];
+    if (is_array($rawTags)) {
+        foreach ($rawTags as $tag) {
+            if (!is_scalar($tag)) {
+                continue;
+            }
+            $tag = trim((string) $tag);
+            if ($tag !== '' && !in_array($tag, $tags, true)) {
+                $tags[] = $tag;
+            }
+        }
+    }
+
+    $reviews = [];
+    $rawReviews = is_array($item['reviews'] ?? null) ? $item['reviews'] : [];
+    foreach ($rawReviews as $review) {
+        $reviewRating = is_array($review) ? ($review['rating'] ?? null) : $review;
+        if (!is_numeric($reviewRating)) {
+            continue;
+        }
+        $reviewRating = (float) $reviewRating;
+        if ($reviewRating < 0 || $reviewRating > 5) {
+            continue;
+        }
+        $reviews[] = ['rating' => $reviewRating];
+    }
+
+    $rating = null;
+    if ($reviews !== []) {
+        $rating = round(
+            array_sum(array_column($reviews, 'rating')) / count($reviews),
+            1
+        );
+    }
+
+    return [
+        'game_id'        => $id,
+        'id'             => $id,
+        'name'           => $name,
+        'summary'        => trim((string) ($item['summary'] ?? '')),
+        'description'    => trim((string) ($item['description'] ?? ($item['summary'] ?? ''))),
+        'base_price'     => $basePrice,
+        'discount_check' => $discount,
+        'final_price'    => $finalPrice,
+        'price'          => $finalPrice,
+        'tags'           => $tags,
+        'reviews'        => $reviews,
+        'rating'         => $rating,
+        'review_count'   => count($reviews),
+        'image'          => trim((string) ($item['image'] ?? '')),
+    ];
 }
 
 function saveStoreProducts(array $products): bool
@@ -58,18 +132,20 @@ function saveStoreProducts(array $products): bool
         if (!is_array($item)) {
             continue;
         }
-        $id = trim((string) ($item['id'] ?? ''));
-        $name = trim((string) ($item['name'] ?? ''));
-        if ($id === '' || $name === '') {
+        $product = normalizeStoreProduct($item);
+        if ($product === null) {
             continue;
         }
         $normalized[] = [
-            'id'          => $id,
-            'name'        => $name,
-            'summary'     => trim((string) ($item['summary'] ?? '')),
-            'description' => trim((string) ($item['description'] ?? ($item['summary'] ?? ''))),
-            'price'       => max(0, (int) ($item['price'] ?? 0)),
-            'image'       => trim((string) ($item['image'] ?? '')),
+            'game_id'        => $product['game_id'],
+            'name'           => $product['name'],
+            'summary'        => $product['summary'],
+            'description'    => $product['description'],
+            'base_price'     => $product['base_price'],
+            'discount_check' => $product['discount_check'],
+            'tags'           => $product['tags'],
+            'reviews'        => $product['reviews'],
+            'image'          => $product['image'],
         ];
     }
 
@@ -84,7 +160,16 @@ function saveStoreProducts(array $products): bool
 function getStoreProducts(array $incomingProducts = []): array
 {
     if (!empty($incomingProducts)) {
-        return array_values($incomingProducts);
+        $normalized = [];
+        foreach ($incomingProducts as $item) {
+            if (is_array($item)) {
+                $product = normalizeStoreProduct($item);
+                if ($product !== null) {
+                    $normalized[] = $product;
+                }
+            }
+        }
+        return $normalized;
     }
 
     $storeFile = getProductsStoreFile();
@@ -93,7 +178,16 @@ function getStoreProducts(array $incomingProducts = []): array
         if ($raw !== false && trim($raw) !== '') {
             $decoded = json_decode($raw, true);
             if (is_array($decoded)) {
-                return array_values($decoded);
+                $normalized = [];
+                foreach ($decoded as $item) {
+                    if (is_array($item)) {
+                        $product = normalizeStoreProduct($item);
+                        if ($product !== null) {
+                            $normalized[] = $product;
+                        }
+                    }
+                }
+                return $normalized;
             }
         }
     }
@@ -103,13 +197,20 @@ function getStoreProducts(array $incomingProducts = []): array
         saveStoreProducts($scanned);
     }
 
-    return $scanned;
+    $normalized = [];
+    foreach ($scanned as $item) {
+        $product = normalizeStoreProduct($item);
+        if ($product !== null) {
+            $normalized[] = $product;
+        }
+    }
+    return $normalized;
 }
 
 function findStoreProductById(array $products, string $id): ?array
 {
     foreach ($products as $item) {
-        if ((string) ($item['id'] ?? '') === $id) {
+        if ((string) ($item['game_id'] ?? $item['id'] ?? '') === $id) {
             return $item;
         }
     }
@@ -120,7 +221,7 @@ function generateNextProductId(array $products): string
 {
     $maxNum = 0;
     foreach ($products as $item) {
-        $id = (string) ($item['id'] ?? '');
+        $id = (string) ($item['game_id'] ?? $item['id'] ?? '');
         if (ctype_digit($id)) {
             $maxNum = max($maxNum, (int) $id);
         }

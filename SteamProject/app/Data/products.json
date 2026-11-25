@@ -1,34 +1,46 @@
 [
     {
-        "id": "1",
+        "game_id": "1",
         "name": "League",
         "summary": "Sản phẩm mẫu tạo tự động từ file league.jpeg",
         "description": "Thông tin chi tiết cho League (league.jpeg).",
-        "price": 100000,
+        "base_price": 100000,
+        "discount_check": 0,
+        "tags": [],
+        "reviews": [],
         "image": "league.jpeg"
     },
     {
-        "id": "2",
+        "game_id": "2",
         "name": "Lor",
         "summary": "Sản phẩm mẫu tạo tự động từ file lor.jpeg",
         "description": "Thông tin chi tiết cho Lor (lor.jpeg).",
-        "price": 200000,
+        "base_price": 200000,
+        "discount_check": 0,
+        "tags": [],
+        "reviews": [],
         "image": "lor.jpeg"
     },
     {
-        "id": "3",
+        "game_id": "3",
         "name": "Ovc",
         "summary": "Sản phẩm mẫu tạo tự động từ file ovc.jpg",
         "description": "Thông tin chi tiết cho Ovc (ovc.jpg).",
-        "price": 300000,
+        "base_price": 300000,
+        "discount_check": 0,
+        "tags": [],
+        "reviews": [],
         "image": "ovc.jpg"
     },
     {
-        "id": "4",
+        "game_id": "4",
         "name": "Sls",
         "summary": "Sản phẩm mẫu tạo tự động từ file sls.jpg",
         "description": "Thông tin chi tiết cho Sls (sls.jpg).",
-        "price": 400000,
+        "base_price": 400000,
+        "discount_check": 0,
+        "tags": [],
+        "reviews": [],
         "image": "sls.jpg"
     }
 ]

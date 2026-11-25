@@ -19,7 +19,7 @@ foreach ($allProducts as $p) {
     $productCatalogMap[$pid] = [
         'id'    => $pid,
         'name'  => (string) ($p['name'] ?? 'Sản phẩm'),
-        'price' => (int) ($p['price'] ?? 0),
+        'price' => (int) ($p['final_price'] ?? $p['price'] ?? 0),
         'image' => resolveProductImage((string) ($p['image'] ?? ''), $pid),
     ];
 }

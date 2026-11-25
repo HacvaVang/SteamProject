@@ -214,3 +214,11 @@ http://localhost:8000
 Thực hiện chỉnh sửa tại file ***public/index.php*** để tạm thời thay controller trong việc chuyển trang.
 
 Muốn thêm rel của stylesheet thì include ở trong ***layout/main.php***
+
+## Product data
+
+`SteamProject/app/Data/products.json` stores products using `game_id`, `name`,
+`description`, `base_price`, `discount_check` (percentage), `tags` (array), and
+`reviews` (rating entries). `final_price` is calculated from the base price and
+discount; `rating` is the average review score from 0 to 5. Legacy `id` and
+`price` records are normalized by the product helper.

@@ -19,29 +19,41 @@ if ($isAdmin && $_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['switch_m
     if ($action === 'save') {
         $submittedId = trim((string) ($_POST['id'] ?? ''));
         $name = trim((string) ($_POST['name'] ?? ''));
-        $price = max(0, (int) ($_POST['price'] ?? 0));
+        $basePrice = max(0, (int) ($_POST['base_price'] ?? 0));
+        $discountRaw = trim((string) ($_POST['discount_check'] ?? '0'));
+        $discount = is_numeric($discountRaw) ? (float) $discountRaw : null;
         $image = trim((string) ($_POST['image'] ?? ''));
         $summary = trim((string) ($_POST['summary'] ?? ''));
         $description = trim((string) ($_POST['description'] ?? ''));
+        $tags = array_values(array_unique(array_filter(
+            array_map('trim', explode(',', (string) ($_POST['tags'] ?? ''))),
+            static fn(string $tag): bool => $tag !== ''
+        )));
 
         if ($name === '') {
             $adminError = 'Vui lòng nhập tên sản phẩm.';
+        } elseif ($discount === null || $discount < 0 || $discount > 100) {
+            $adminError = 'Phần trăm giảm giá phải nằm trong khoảng 0–100.';
         } else {
-            $isEditing = $submittedId !== '' && findStoreProductById($products, $submittedId) !== null;
+            $existingProduct = $submittedId !== '' ? findStoreProductById($products, $submittedId) : null;
+            $isEditing = $existingProduct !== null;
             $targetId = $isEditing ? $submittedId : generateNextProductId($products);
 
             $record = [
-                'id'          => $targetId,
-                'name'        => $name,
-                'summary'     => $summary,
-                'description' => $description !== '' ? $description : $summary,
-                'price'       => $price,
-                'image'       => $image,
+                'game_id'        => $targetId,
+                'name'           => $name,
+                'summary'        => $summary,
+                'description'    => $description !== '' ? $description : $summary,
+                'base_price'     => $basePrice,
+                'discount_check' => $discount,
+                'tags'           => $tags,
+                'reviews'        => $existingProduct['reviews'] ?? [],
+                'image'          => $image,
             ];
 
             if ($isEditing) {
                 foreach ($products as $idx => $existing) {
-                    if ((string) ($existing['id'] ?? '') === $targetId) {
+                    if ((string) ($existing['game_id'] ?? $existing['id'] ?? '') === $targetId) {
                         $products[$idx] = $record;
                         break;
                     }
@@ -76,7 +88,7 @@ if ($isAdmin && $_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['switch_m
     } elseif ($action === 'scan_images') {
         $scanned = scanProductsFromImages();
         if (saveStoreProducts($scanned)) {
-            $products = $scanned;
+            $products = getStoreProducts($scanned);
             $adminNotice = 'Đã đồng bộ lại sản phẩm từ thư mục ảnh.';
         } else {
             $adminError = 'Không thể lưu dữ liệu quét từ ảnh.';
@@ -84,12 +96,16 @@ if ($isAdmin && $_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['switch_m
     }
 }
 
+$products = getStoreProducts($products);
+
 $editId = trim((string) ($_GET['edit'] ?? ''));
 $editingProduct = ($isAdmin && $editId !== '') ? findStoreProductById($products, $editId) : null;
 
 $formId = htmlspecialchars((string) ($editingProduct['id'] ?? ''), ENT_QUOTES, 'UTF-8');
 $formName = htmlspecialchars((string) ($editingProduct['name'] ?? ''), ENT_QUOTES, 'UTF-8');
-$formPrice = (int) ($editingProduct['price'] ?? 0);
+$formBasePrice = (int) ($editingProduct['base_price'] ?? 0);
+$formDiscount = number_format((float) ($editingProduct['discount_check'] ?? 0), 2, '.', '');
+$formTags = htmlspecialchars(implode(', ', $editingProduct['tags'] ?? []), ENT_QUOTES, 'UTF-8');
 $formImage = htmlspecialchars((string) ($editingProduct['image'] ?? ''), ENT_QUOTES, 'UTF-8');
 $formSummary = htmlspecialchars((string) ($editingProduct['summary'] ?? ''), ENT_QUOTES, 'UTF-8');
 $formDesc = htmlspecialchars((string) ($editingProduct['description'] ?? ''), ENT_QUOTES, 'UTF-8');
@@ -146,13 +162,23 @@ $formDesc = htmlspecialchars((string) ($editingProduct['description'] ?? ''), EN
         </div>
 
         <div class="adminField">
-          <label for="prodPrice">Giá (VNĐ)</label>
-          <input id="prodPrice" type="number" name="price" min="0" step="1000" value="<?= $formPrice ?>" required>
+          <label for="prodBasePrice">Giá gốc (VNĐ)</label>
+          <input id="prodBasePrice" type="number" name="base_price" min="0" step="1000" value="<?= $formBasePrice ?>" required>
+        </div>
+
+        <div class="adminField">
+          <label for="prodDiscount">Giảm giá (%)</label>
+          <input id="prodDiscount" type="number" name="discount_check" min="0" max="100" step="0.01" value="<?= $formDiscount ?>" required>
         </div>
 
         <div class="adminField">
           <label for="prodImage">Tên file ảnh (trong assets/images/products)</label>
           <input id="prodImage" type="text" name="image" value="<?= $formImage ?>" placeholder="vd: league.jpeg">
+        </div>
+
+        <div class="adminField">
+          <label for="prodTags">Tag (phân cách bằng dấu phẩy)</label>
+          <input id="prodTags" type="text" name="tags" value="<?= $formTags ?>" placeholder="action, multiplayer">
         </div>
 
         <div class="adminField">
@@ -203,12 +229,19 @@ $formDesc = htmlspecialchars((string) ($editingProduct['description'] ?? ''), EN
           $id = htmlspecialchars((string) ($item['id'] ?? ''), ENT_QUOTES, 'UTF-8');
           $name = htmlspecialchars((string) ($item['name'] ?? 'Sản phẩm'), ENT_QUOTES, 'UTF-8');
           $summary = htmlspecialchars((string) ($item['summary'] ?? ''), ENT_QUOTES, 'UTF-8');
+          $tags = is_array($item['tags'] ?? null) ? $item['tags'] : [];
           $searchText = htmlspecialchars(
-              trim((string) ($item['id'] ?? '') . ' ' . (string) ($item['name'] ?? '') . ' ' . (string) ($item['summary'] ?? '')),
+              trim((string) ($item['id'] ?? '') . ' ' . (string) ($item['name'] ?? '') . ' ' . (string) ($item['summary'] ?? '') . ' ' . implode(' ', $tags)),
               ENT_QUOTES,
               'UTF-8'
           );
-          $priceText = number_format((int) ($item['price'] ?? 0), 0, ',', '.') . ' đ';
+          $basePriceText = number_format((int) ($item['base_price'] ?? 0), 0, ',', '.') . ' đ';
+          $priceText = number_format((int) ($item['final_price'] ?? $item['price'] ?? 0), 0, ',', '.') . ' đ';
+          $discount = (float) ($item['discount_check'] ?? 0);
+          $rating = $item['rating'];
+          $ratingText = $rating === null
+              ? 'Chưa có đánh giá'
+              : number_format((float) $rating, 1, ',', '.') . ' / 5 (' . (int) $item['review_count'] . ')';
           $imgSrc = resolveProductImage((string) ($item['image'] ?? ''), (string) ($item['id'] ?? ''));
           ?>
           <article class="catalogRow" data-catalog-item data-search="<?= $searchText ?>">
@@ -225,10 +258,22 @@ $formDesc = htmlspecialchars((string) ($editingProduct['description'] ?? ''), EN
               <?php if ($summary !== ''): ?>
                 <p class="catalogSummary"><?= $summary ?></p>
               <?php endif; ?>
+              <p class="productRating"><?= htmlspecialchars($ratingText, ENT_QUOTES, 'UTF-8') ?></p>
+              <?php if ($tags !== []): ?>
+                <div class="catalogTags">
+                  <?php foreach ($tags as $tag): ?>
+                    <span class="productTag"><?= htmlspecialchars((string) $tag, ENT_QUOTES, 'UTF-8') ?></span>
+                  <?php endforeach; ?>
+                </div>
+              <?php endif; ?>
             </div>
 
             <div class="catalogAside">
               <span class="catalogPrice"><?= $priceText ?></span>
+              <span>Giá gốc: <?= $basePriceText ?></span>
+              <?php if ($discount > 0): ?>
+                <span class="catalogDiscount">Giảm <?= rtrim(rtrim(number_format($discount, 2, ',', '.'), '0'), ',') ?>%</span>
+              <?php endif; ?>
               <div class="adminRowActions">
                 <a href="/admin/products?edit=<?= $id ?>" class="catalogDetailBtn">Sửa</a>
                 <form method="POST" action="/admin/products" class="inlineDeleteForm" onsubmit="return confirm('Xóa sản phẩm này?');">

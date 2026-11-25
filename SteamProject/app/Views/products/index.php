@@ -54,8 +54,15 @@ $featuredProducts = array_slice($products, 0, 6);
         <?php
         $id = htmlspecialchars((string) ($item['id'] ?? ''), ENT_QUOTES, 'UTF-8');
         $name = htmlspecialchars((string) ($item['name'] ?? 'Sản phẩm'), ENT_QUOTES, 'UTF-8');
-        $priceNum = (int) ($item['price'] ?? 0);
+        $basePriceNum = (int) ($item['base_price'] ?? 0);
+        $priceNum = (int) ($item['final_price'] ?? $item['price'] ?? 0);
         $priceText = number_format($priceNum, 0, ',', '.') . ' đ';
+        $basePriceText = number_format($basePriceNum, 0, ',', '.') . ' đ';
+        $discount = (float) ($item['discount_check'] ?? 0);
+        $rating = $item['rating'];
+        $ratingText = $rating === null
+            ? 'Chưa có đánh giá'
+            : number_format((float) $rating, 1, ',', '.') . ' / 5 (' . (int) $item['review_count'] . ')';
         $imgSrc = resolveProductImage((string) ($item['image'] ?? ''), (string) ($item['id'] ?? ''));
         ?>
         <article class="fcItem">
@@ -69,7 +76,12 @@ $featuredProducts = array_slice($products, 0, 6);
             </div>
             <div class="fcMeta">
               <strong class="fcName"><?= $name ?></strong>
-              <span class="fcPrice"><?= $priceText ?></span>
+              <span class="fcPrice">
+                <?php if ($discount > 0): ?><del><?= $basePriceText ?></del><?php endif; ?>
+                <strong><?= $priceText ?></strong>
+                <?php if ($discount > 0): ?><span class="catalogDiscount">-<?= rtrim(rtrim(number_format($discount, 2, ',', '.'), '0'), ',') ?>%</span><?php endif; ?>
+              </span>
+              <span class="productRating"><?= htmlspecialchars($ratingText, ENT_QUOTES, 'UTF-8') ?></span>
             </div>
           </a>
         </article>
@@ -108,13 +120,21 @@ $featuredProducts = array_slice($products, 0, 6);
         $id = htmlspecialchars((string) ($item['id'] ?? ''), ENT_QUOTES, 'UTF-8');
         $name = htmlspecialchars((string) ($item['name'] ?? 'Sản phẩm'), ENT_QUOTES, 'UTF-8');
         $summary = htmlspecialchars((string) ($item['summary'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $tags = is_array($item['tags'] ?? null) ? $item['tags'] : [];
         $searchText = htmlspecialchars(
-            trim((string) ($item['id'] ?? '') . ' ' . (string) ($item['name'] ?? '') . ' ' . (string) ($item['summary'] ?? '')),
+            trim((string) ($item['id'] ?? '') . ' ' . (string) ($item['name'] ?? '') . ' ' . (string) ($item['summary'] ?? '') . ' ' . implode(' ', $tags)),
             ENT_QUOTES,
             'UTF-8'
         );
-        $priceNum = (int) ($item['price'] ?? 0);
+        $basePriceNum = (int) ($item['base_price'] ?? 0);
+        $priceNum = (int) ($item['final_price'] ?? $item['price'] ?? 0);
         $priceText = number_format($priceNum, 0, ',', '.') . ' đ';
+        $basePriceText = number_format($basePriceNum, 0, ',', '.') . ' đ';
+        $discount = (float) ($item['discount_check'] ?? 0);
+        $rating = $item['rating'];
+        $ratingText = $rating === null
+            ? 'Chưa có đánh giá'
+            : number_format((float) $rating, 1, ',', '.') . ' / 5 (' . (int) $item['review_count'] . ')';
         $imgSrc = resolveProductImage((string) ($item['image'] ?? ''), (string) ($item['id'] ?? ''));
         ?>
         <article class="catalogRow" data-catalog-item data-search="<?= $searchText ?>">
@@ -133,10 +153,22 @@ $featuredProducts = array_slice($products, 0, 6);
             <?php if ($summary !== ''): ?>
               <p class="catalogSummary"><?= $summary ?></p>
             <?php endif; ?>
+            <p class="productRating"><?= htmlspecialchars($ratingText, ENT_QUOTES, 'UTF-8') ?></p>
+            <?php if ($tags !== []): ?>
+              <div class="catalogTags" aria-label="Thẻ sản phẩm">
+                <?php foreach ($tags as $tag): ?>
+                  <span class="productTag"><?= htmlspecialchars((string) $tag, ENT_QUOTES, 'UTF-8') ?></span>
+                <?php endforeach; ?>
+              </div>
+            <?php endif; ?>
           </div>
 
           <div class="catalogAside">
             <span class="catalogPrice"><?= $priceText ?></span>
+            <?php if ($discount > 0): ?>
+              <span class="catalogOriginalPrice"><?= $basePriceText ?></span>
+              <span class="catalogDiscount">-<?= rtrim(rtrim(number_format($discount, 2, ',', '.'), '0'), ',') ?>%</span>
+            <?php endif; ?>
             <div class="catalogActions">
               <a href="/product?id=<?= $id ?>" class="catalogDetailBtn">Chi tiết</a>
               <button
