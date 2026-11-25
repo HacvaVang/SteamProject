@@ -104,7 +104,7 @@ ob_start();
                         <span><?= (int) $q['views'] ?> views</span>
                     </div>
                     <div class="q-main">
-                        <a class="q-title" href="detail.php?id=<?= (int) $id ?>"><?= e($q['title']) ?></a>
+                        <a class="q-title" href="qa/detail?id=<?= (int) $id ?>"><?= e($q['title']) ?></a>
                         <p class="q-excerpt"><?= e(mb_strimwidth($q['body'], 0, 160, '...')) ?></p>
                         <div class="q-foot">
                             <span>
