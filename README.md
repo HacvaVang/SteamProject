@@ -1,4 +1,19 @@
 # Steam Project
+## How to host web server on Xampp
+ 1. Download Xampp
+ 2. Open httpd.conf file in `<Config>` tab (next to Apache module)
+ 3. Looking for DocumentRoot, change directory into `<Installed location>/SteamProject/`
+
+````bash
+cd SteamProject
+php -S localhost:8000 -t . public/index.php
+````
+
+Truy cập web tại đường dẫn sau:
+````
+http://localhost:8000
+````
+
 ## Tree directory
 ```
 SteamProject/
@@ -198,18 +213,8 @@ SteamProject/
 └── README.md
 ```
 
-# How to run?
-
  
-````bash
-cd SteamProject
-php -S localhost:8000 -t . public/index.php
-````
 
-Truy cập web tại đường dẫn sau:
-````
-http://localhost:8000
-````
 
 Thực hiện chỉnh sửa tại file ***public/index.php*** để tạm thời thay controller trong việc chuyển trang.
 
