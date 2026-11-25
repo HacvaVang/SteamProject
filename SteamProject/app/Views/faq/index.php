@@ -63,7 +63,7 @@ ob_start();
             <?php endif; ?>
 
             <?php foreach ($faqs as $id => $faq): ?>
-                <a class="faq-row" href="detail.php?id=<?= (int) $id ?>">
+                <a class="faq-row" href="faq/detail?id=<?= (int) $id ?>">
                     <span class="faq-row-title"><?= e($faq['title']) ?></span>
                     <span class="faq-row-cat"><?= e($faq['cat']) ?></span>
                 </a>

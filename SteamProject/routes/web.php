@@ -36,8 +36,16 @@ $router->get('/faq', static function () use ($renderView): void {
     $renderView('faq/index.php', 'SteamProject - Những câu hỏi thường được hỏi');
 });
 
+$router->get('/faq/detail', static function () use ($renderView): void {
+    $renderView('faq/detail.php', 'SteamProject - Những câu hỏi thường được hỏi');
+});
+
 $router->get('/qa', static function () use ($renderView): void {
     $renderView('qa/index.php', 'SteamProject - Hỏi Đáp');
+});
+
+$router->get('/qa/detail', static function () use ($renderView): void {
+    $renderView('qa/detail.php', 'SteamProject - Hỏi Đáp');
 });
 
 

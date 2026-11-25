@@ -37,7 +37,8 @@ $isActive = static function (string $route) use ($currRoute): bool {
     </div>
 
     <!-- Navigation Menu -->
-    <ul class="navbar-menu">
+    <ul class="navbar-menu" id="navbar-menu" data-current="<?= $currRoute ?>">
+    <!-- <ul class="navbar-menu">
 
       <li class="navbar-item <?= $isActive('home') ? 'active' : '' ?>">
         <a href="/" class="navbar-link<?= $isActive('home') ? ' is-active' : '' ?>">
@@ -73,7 +74,7 @@ $isActive = static function (string $route) use ($currRoute): bool {
         <a href="/qa" class="navbar-link<?= $isActive('qa') ? ' is-active' : '' ?>">
           Support
         </a>
-      </li>
+      </li> -->
 
       <?php
         $loggedInUser = $currentUser ?? ($_SESSION['user'] ?? null);
