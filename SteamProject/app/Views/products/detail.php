@@ -10,23 +10,23 @@ $product = is_array($product ?? null) ? $product : findStoreProductById($allProd
   class="productDetailWrap"
   aria-label="Chi tiết sản phẩm"
   data-logged-in="<?= $isLoggedIn ? '1' : '0' ?>"
-  data-login-url="?page=login"
+  data-login-url="/login"
 >
   <div class="detailTopBar">
-    <a href="?page=products" class="detailBackLink">&#8592; Quay lại cửa hàng</a>
+    <a href="/products" class="detailBackLink">&#8592; Quay lại cửa hàng</a>
     <div class="detailTopActions">
       <?php if ($product): ?>
         <?php $topId = htmlspecialchars((string) ($product['id'] ?? ''), ENT_QUOTES, 'UTF-8'); ?>
-        <a href="?page=review&id=<?= $topId ?>" class="detailReviewLink">Đánh giá sản phẩm</a>
+        <a href="/review?id=<?= $topId ?>" class="detailReviewLink">Đánh giá sản phẩm</a>
       <?php endif; ?>
-      <a href="?page=cart" class="detailCartLink">Xem giỏ hàng</a>
+      <a href="/cart" class="detailCartLink">Xem giỏ hàng</a>
     </div>
   </div>
 
   <?php if (!$product): ?>
     <div class="emptyRow">
       <p>Không tìm thấy sản phẩm bạn yêu cầu.</p>
-      <a href="?page=products" class="catalogDetailBtn">Về danh sách sản phẩm</a>
+      <a href="/products" class="catalogDetailBtn">Về danh sách sản phẩm</a>
     </div>
   <?php else: ?>
     <?php
@@ -72,8 +72,8 @@ $product = is_array($product ?? null) ? $product : findStoreProductById($allProd
           >
             Thêm vào giỏ hàng
           </button>
-          <a href="?page=review&id=<?= $id ?>" class="detailReviewBtn">Đánh giá sản phẩm</a>
-          <a href="?page=cart" class="catalogDetailBtn">Đi tới giỏ hàng</a>
+          <a href="/review?id=<?= $id ?>" class="detailReviewBtn">Đánh giá sản phẩm</a>
+          <a href="/cart" class="catalogDetailBtn">Đi tới giỏ hàng</a>
         </div>
       </div>
     </article>

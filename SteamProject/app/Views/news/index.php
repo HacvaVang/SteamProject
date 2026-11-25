@@ -6,23 +6,23 @@
   <meta name="description" content="Steam news and announcements forum.">
   <title>Steam Community :: Hub</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="../../../public/assets/css/news.css">
+  <link rel="stylesheet" href="<?= ASSET_URL ?>/assets/css/news.css">
   <style>body{background:#1b2838;color:#c6d4df;font-family:Arial,Helvetica,sans-serif}a{color:#67c1f5}</style>
 </head>
 <body data-page="list">
   <header class="steamHeader">
     <div class="headerTop">
       <a class="btn-install" href="#">Install Steam</a>
-      <a href="../auth/login.php">sign in</a>
+      <a href="/login">sign in</a>
     </div>
     <div class="headerInner">
-      <a href="../home/index.php"><img class="logoBig" src="../../../public/assets/images/utils/logo_steam.svg" alt="Steam"></a>
+      <a href="/"><img class="logoBig" src="<?= ASSET_URL ?>/assets/images/utils/logo_steam.svg" alt="Steam"></a>
       <nav aria-label="Main">
         <ul class="mainNav">
-          <li><a href="../home/index.php">Store</a></li>
+          <li><a href="/products">Store</a></li>
           <li class="active"><a href="index.php">Community</a></li>
-          <li><a href="../about/index.php">About</a></li>
-          <li><a href="../contact/index.php">Support</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/faq">Support</a></li>
         </ul>
       </nav>
     </div>
@@ -32,7 +32,7 @@
     <div class="hubHead">
       <div class="hubHeadTop">
         <h1 id="gameTitle">Hub</h1>
-        <a class="btn btn-storepage" href="../products/index.php">Store Page</a>
+        <a class="btn btn-storepage" href="/products">Store Page</a>
       </div>
       <ul id="catTabs" class="detailTabs" aria-label="Content types"></ul>
     </div>
@@ -94,16 +94,16 @@
         <li><a href="#">Cookies</a></li>
       </ul>
       <ul class="footerLinks footerAbout">
-        <li><a href="../about/index.php">About</a></li>
-        <li><a href="../contact/index.php">Support</a></li>
-        <li><a href="../faq/index.php">FAQ</a></li>
-        <li><a href="index.php">Community</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/faq">Support</a></li>
+        <li><a href="/faq">FAQ</a></li>
+        <li><a href="/news">Community</a></li>
       </ul>
     </div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../../../public/assets/js/news.js"></script>
+  <script src="<?= ASSET_URL ?>/assets/js/news.js"></script>
 </body>
 </html>

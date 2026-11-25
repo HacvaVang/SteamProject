@@ -1,46 +1,56 @@
-<?php
-$loginError = (string) ($loginError ?? ($error ?? ''));
-$oldUsername = (string) ($oldUsername ?? ($_POST['uname'] ?? ''));
-?>
-<section class="loginPage" aria-label="Đăng nhập">
-  <form id="loginForm" action="?page=login" method="post" class="loginCard">
-    <h1 class="loginTitle">Đăng nhập</h1>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="login-stylesheet.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="login.js"></script>
 
-    <?php if ($loginError !== ''): ?>
-      <p class="loginError" role="alert"><?= htmlspecialchars($loginError, ENT_QUOTES, 'UTF-8') ?></p>
-    <?php endif; ?>
+        <nav class="d-flex navbar navbar-expand-md darkNav navbar-dark">
+            
+        <div class="mx-auto bg">
+            <a href="/"><img
+            class="logoBig" src="<?= ASSET_URL ?>/assets/images/utils/logo_steam.svg"></a>
+        </div>
 
-    <div class="loginField">
-      <label for="uname">Tên tài khoản</label>
-      <input
-        id="uname"
-        type="text"
-        name="uname"
-        value="<?= htmlspecialchars($oldUsername, ENT_QUOTES, 'UTF-8') ?>"
-        placeholder="Nhập tên tài khoản"
-        autocomplete="username"
-        required
-      >
-    </div>
+        <button type="button" class="d-none d-md-block btn btn-success" data-target="#">
+            <img width="15px" height="15px" src="<?= ASSET_URL ?>/assets/images/utils/download.png">Install Steam</button>
 
-    <div class="loginField">
-      <label for="psw">Mật khẩu</label>
-      <input
-        id="psw"
-        type="password"
-        name="psw"
-        placeholder="Nhập mật khẩu"
-        autocomplete="current-password"
-        required
-      >
-    </div>
+          </nav>
+    </head>
 
-    <div class="loginActions">
-      <button type="submit" class="loginSubmit">Đăng nhập</button>
-      <div class="loginLinks">
-        <a href="?page=register">Chưa có tài khoản? Đăng ký</a>
-        <a href="?page=register">Quên mật khẩu?</a>
-      </div>
-    </div>
-  </form>
-</section>
+    <body id="transparentBG" style="background-color: #1b2838;" class="fade-in">
+
+        <img style="position: absolute; width: 800px; height:700px;visibility: hidden;" src="<?= ASSET_URL ?>/assets/images/utils/login_bg.jpg">
+
+        <form id="loginForm" action="/login" method="post" class="container smallFont fade-in">
+          
+          <div style="display: block;">
+            <label for="uname"><b>Sign in with account name</b></label>
+            <input  type="text" placeholder="Enter Username" name="uname" required>
+
+            <label for="psw"><b>Password</b></label>
+            
+            <input  type="password" placeholder="Enter Password" name="psw" required>
+            
+            <div style="text-align: center;">
+              <button type="submit">
+              <span style="color: whitesmoke;">Sign in</span></button>
+              <br>
+              <label class="smallFont"><a href="/register">Not Registered?</a></label>
+                <br>
+              <label class="smallFont"><a href="/register">Forgot Password?</a></label>
+            </div>
+
+
+        </div>
+
+
+        </form>
+
+    </body>
+</html>

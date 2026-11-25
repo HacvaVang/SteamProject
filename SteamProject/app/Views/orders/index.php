@@ -29,13 +29,13 @@ foreach ($allProducts as $p) {
       <h1 class="storeBannerTitle">Giỏ hàng của bạn</h1>
       <p class="storeBannerSub">Kiểm tra sản phẩm đã chọn trước khi đặt mua</p>
     </div>
-    <a href="?page=products" class="catalogDetailBtn">Tiếp tục mua sắm</a>
+    <a href="/products" class="catalogDetailBtn">Tiếp tục mua sắm</a>
   </header>
 
   <?php if (!$isLoggedIn): ?>
     <div class="cartNoticeBox">
       <p>Bạn cần đăng nhập để đồng bộ và quản lý giỏ hàng đầy đủ.</p>
-      <a href="?page=login" class="catalogAddCartBtn">Đăng nhập ngay</a>
+      <a href="/login" class="catalogAddCartBtn">Đăng nhập ngay</a>
     </div>
   <?php endif; ?>
 

@@ -78,22 +78,22 @@
     <body id="transparentBG" style="background-color: #1b2838;" class="fade-in">
         <nav class="d-flex navbar navbar-expand-md darkNav navbar-dark" aria-label="Registration navigation">
             <div class="mx-auto bg">
-                <a href="/app/Views/home/index.php">
-                    <img class="logoBig" src="/assets/images/utils/logo_steam.svg" alt="Steam">
+                <a href="/">
+                    <img class="logoBig" src="<?= ASSET_URL ?>/assets/images/utils/logo_steam.svg" alt="Steam">
                 </a>
             </div>
             <a class="install-steam" href="https://cdn.akamai.steamstatic.com/client/installer/SteamSetup.exe">
-                <img width="15" height="15" src="/assets/images/utils/download.png" alt="">
+                <img width="15" height="15" src="<?= ASSET_URL ?>/assets/images/utils/download.png" alt="">
                 Install Steam
             </a>
         </nav>
 
-        <img style="position: absolute; width: 100%; height:100%; visibility: hidden;" src="/assets/images/utils/login_bg.jpg">
+        <img style="position: absolute; width: 100%; height:100%; visibility: hidden;" src="<?= ASSET_URL ?>/assets/images/utils/login_bg.jpg">
   
-      <form id="registerForm" action="/app/Views/home/index.php" method="post" class="container fade-in" novalidate>
+      <form id="registerForm" action="/register" method="post" class="container fade-in" novalidate>
 
           <div class="container" style="text-align: center;">
-            <img src="/assets/images/utils/logo_steam.svg" alt="Steam Logo">
+            <img src="<?= ASSET_URL ?>/assets/images/utils/logo_steam.svg" alt="Steam Logo">
           </div>
 
           <div class="container smallFont">
@@ -134,7 +134,7 @@
 
         <footer class="card-footer" style="background-color: #313234; width: 100%; min-height:100px; padding: 20px 350px; color: whitesmoke; overflow: hidden; position: relative;">
             <div style="float: left; padding-right: 10px; height: 100%;">
-              <img src="/assets/images/utils/valve.png" width="88" height="25" alt="Valve Software">
+              <img src="<?= ASSET_URL ?>/assets/images/utils/valve.png" width="88" height="25" alt="Valve Software">
             </div>
             <span>
               © 2026 Valve Corporation. All rights reserved. All trademarks are property of their respective owners in the US and other countries

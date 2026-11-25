@@ -24,8 +24,8 @@ $featuredProducts = array_slice($products, 0, 6);
   class="storeCatalog"
   aria-label="Danh sách sản phẩm"
   data-logged-in="<?= $isLoggedIn ? '1' : '0' ?>"
-  data-login-url="?page=login"
-  data-cart-url="?page=cart"
+  data-login-url="/login"
+  data-cart-url="/cart"
 >
   <header class="storeBanner">
     <div>
@@ -53,7 +53,7 @@ $featuredProducts = array_slice($products, 0, 6);
         $imgSrc = resolveProductImage((string) ($item['image'] ?? ''), (string) ($item['id'] ?? ''));
         ?>
         <article class="fcItem">
-          <a href="?page=product&id=<?= $id ?>" class="fcCard">
+          <a href="/product?id=<?= $id ?>" class="fcCard">
             <div class="fcThumb">
               <?php if ($imgSrc !== ''): ?>
                 <img src="<?= htmlspecialchars($imgSrc, ENT_QUOTES, 'UTF-8') ?>" alt="<?= $name ?>" class="fcImg">
@@ -77,8 +77,7 @@ $featuredProducts = array_slice($products, 0, 6);
       <span class="catalogCount"><?= count($products) ?> sản phẩm</span>
     </div>
 
-    <form method="GET" action="" class="filterForm" role="search">
-      <input type="hidden" name="page" value="products">
+    <form method="GET" action="/products" class="filterForm" role="search">
       <div class="filterBox">
         <input
           type="search"
@@ -113,7 +112,7 @@ $featuredProducts = array_slice($products, 0, 6);
         $imgSrc = resolveProductImage((string) ($item['image'] ?? ''), (string) ($item['id'] ?? ''));
         ?>
         <article class="catalogRow" data-catalog-item data-search="<?= $searchText ?>">
-          <a href="?page=product&id=<?= $id ?>" class="catalogThumbLink" aria-label="<?= $name ?>">
+          <a href="/product?id=<?= $id ?>" class="catalogThumbLink" aria-label="<?= $name ?>">
             <div class="catalogThumb">
               <?php if ($imgSrc !== ''): ?>
                 <img src="<?= htmlspecialchars($imgSrc, ENT_QUOTES, 'UTF-8') ?>" alt="<?= $name ?>" class="catalogImg">
@@ -124,7 +123,7 @@ $featuredProducts = array_slice($products, 0, 6);
           </a>
 
           <div class="catalogBody">
-            <a href="?page=product&id=<?= $id ?>" class="catalogTitle"><?= $name ?></a>
+            <a href="/product?id=<?= $id ?>" class="catalogTitle"><?= $name ?></a>
             <?php if ($summary !== ''): ?>
               <p class="catalogSummary"><?= $summary ?></p>
             <?php endif; ?>
@@ -133,7 +132,7 @@ $featuredProducts = array_slice($products, 0, 6);
           <div class="catalogAside">
             <span class="catalogPrice"><?= $priceText ?></span>
             <div class="catalogActions">
-              <a href="?page=product&id=<?= $id ?>" class="catalogDetailBtn">Chi tiết</a>
+              <a href="/product?id=<?= $id ?>" class="catalogDetailBtn">Chi tiết</a>
               <button
                 type="button"
                 class="catalogAddCartBtn"

@@ -97,12 +97,12 @@ $formDesc = htmlspecialchars((string) ($editingProduct['description'] ?? ''), EN
     </div>
     <div class="adminFormActions">
       <?php if ($isAdmin): ?>
-        <form method="POST" action="?page=admin_products" class="inlineDeleteForm" onsubmit="return confirm('Quét lại sản phẩm từ thư mục ảnh?');">
+        <form method="POST" action="/admin/products" class="inlineDeleteForm" onsubmit="return confirm('Quét lại sản phẩm từ thư mục ảnh?');">
           <input type="hidden" name="admin_action" value="scan_images">
           <button type="submit" class="catalogDetailBtn">Quét lại từ ảnh</button>
         </form>
       <?php endif; ?>
-      <a href="?page=products" class="catalogDetailBtn">Xem trang Store</a>
+      <a href="/products" class="catalogDetailBtn">Xem trang Store</a>
     </div>
   </header>
 
@@ -113,8 +113,8 @@ $formDesc = htmlspecialchars((string) ($editingProduct['description'] ?? ''), EN
         Trang <strong>Quản lý sản phẩm</strong> chỉ dành cho tài khoản có quyền <strong>admin</strong>. Bạn có thể bấm nút chuyển quyền ở thanh phía dưới để kiểm thử nhanh.
       </p>
       <div class="adminLockedActions">
-        <a href="?page=login" class="catalogDetailBtn">Đăng nhập tài khoản Admin</a>
-        <a href="?page=products" class="catalogAddCartBtn">Quay lại Store</a>
+        <a href="/login" class="catalogDetailBtn">Đăng nhập tài khoản Admin</a>
+        <a href="/products" class="catalogAddCartBtn">Quay lại Store</a>
       </div>
     </section>
   <?php else: ?>
@@ -126,7 +126,7 @@ $formDesc = htmlspecialchars((string) ($editingProduct['description'] ?? ''), EN
       <div class="adminAlertError" role="alert"><?= htmlspecialchars($adminError, ENT_QUOTES, 'UTF-8') ?></div>
     <?php endif; ?>
 
-    <form method="POST" action="?page=admin_products" class="adminProductForm">
+    <form method="POST" action="/admin/products" class="adminProductForm">
       <input type="hidden" name="admin_action" value="save">
       <input type="hidden" name="id" value="<?= $formId ?>">
 
@@ -166,7 +166,7 @@ $formDesc = htmlspecialchars((string) ($editingProduct['description'] ?? ''), EN
           <?= $editingProduct ? 'Lưu thay đổi' : 'Thêm sản phẩm' ?>
         </button>
         <?php if ($editingProduct): ?>
-          <a href="?page=admin_products" class="catalogDetailBtn">Hủy sửa</a>
+          <a href="/admin/products" class="catalogDetailBtn">Hủy sửa</a>
         <?php endif; ?>
       </div>
     </form>
@@ -225,8 +225,8 @@ $formDesc = htmlspecialchars((string) ($editingProduct['description'] ?? ''), EN
             <div class="catalogAside">
               <span class="catalogPrice"><?= $priceText ?></span>
               <div class="adminRowActions">
-                <a href="?page=admin_products&edit=<?= $id ?>" class="catalogDetailBtn">Sửa</a>
-                <form method="POST" action="?page=admin_products" class="inlineDeleteForm" onsubmit="return confirm('Xóa sản phẩm này?');">
+                <a href="/admin/products?edit=<?= $id ?>" class="catalogDetailBtn">Sửa</a>
+                <form method="POST" action="/admin/products" class="inlineDeleteForm" onsubmit="return confirm('Xóa sản phẩm này?');">
                   <input type="hidden" name="admin_action" value="delete">
                   <input type="hidden" name="id" value="<?= $id ?>">
                   <button type="submit" class="adminDeleteBtn">Xóa</button>

@@ -14,5 +14,5 @@
     </button>
   </form>
 
-  <a href="?page=products&action=create" class="btn-dlink">Tạo mới</a>
+  <a href="/products?action=create" class="btn-dlink">Tạo mới</a>
 </div>

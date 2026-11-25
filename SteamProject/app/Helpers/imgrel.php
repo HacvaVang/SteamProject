@@ -3,7 +3,7 @@ function resolveProductImage(string $rawImage, string $productId = ''): string
 {
     $projectRoot = realpath(__DIR__ . '/../..') ?: (__DIR__ . '/../..');
     $baseDir = rtrim($projectRoot, '/\\') . '/public/assets/images/products/';
-    $webPrefix = 'assets/images/products/';
+    $webPrefix = '/public/assets/images/products/';
     $exts = ['jpg', 'jpeg', 'png', 'webp', 'JPG', 'JPEG', 'PNG', 'WEBP'];
 
     $rawImage = trim($rawImage);

@@ -1,30 +1,34 @@
 <?php
-// Trong public/index.php (ví dụ điều hướng cơ bản theo ?page=)
+
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$page = $_GET['page'] ?? 'home';
+define('BASE_PATH', dirname(__DIR__));
 
-$viewMap = [
-    'home'     => [__DIR__ . '/../app/Views/home/index.php', 'Trang chủ'],
-    'products' => [__DIR__ . '/../app/Views/products/index.php', 'Sản phẩm'],
-    'product'  => [__DIR__ . '/../app/Views/products/detail.php', 'Chi tiết sản phẩm'],
-    'cart'     => [__DIR__ . '/../app/Views/orders/index.php', 'Giỏ hàng'],
-    'login'    => [__DIR__ . '/../app/Views/auth/login.php', 'Đăng nhập'],
-    'register' => [__DIR__ . '/../app/Views/auth/register.php', 'Đăng ký'],
-    'review' => [__DIR__ . '/../review.php', 'Đánh giá sản phẩm (place holder)'],
-    'admin_products' => [__DIR__ . '/../app/Views/admin/products/index.php', 'Quản lý sản phẩm'],
-];
+define('BASE_URL', '');
+define('ASSET_URL', '/public');
 
-[$viewFile, $pageTitle] = $viewMap[$page] ?? $viewMap['home'];
+// Load Router
+require_once BASE_PATH . '/app/Core/Router.php';
 
-ob_start();
-if (is_file($viewFile)) {
-    include $viewFile;
-} else {
-    echo '<div class="emptyRow">Không tìm thấy view tương ứng.</div>';
+// Initialize Router
+$router = new Router();
+
+// Load routing table
+require BASE_PATH . '/routes/web.php';
+
+// Get HTTP request information
+$method = $_SERVER['REQUEST_METHOD'];
+$uri = $_SERVER['REQUEST_URI'];
+$requestPath = (string) parse_url($uri, PHP_URL_PATH);
+
+if ($requestPath === '/public' || strpos($requestPath, '/public/') === 0) {
+    $requestPath = substr($requestPath, strlen('/public')) ?: '/';
 }
-$content = ob_get_clean();
+if ($requestPath === '/index.php' || $requestPath === '' || $requestPath === '/') {
+    $requestPath = '/';
+}
 
-include __DIR__ . '/../app/Views/layouts/main.php';
+$router->dispatch($method, $requestPath);
+?>

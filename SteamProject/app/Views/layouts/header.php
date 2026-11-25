@@ -1,9 +1,25 @@
 <?php
-// Lấy route/trang hiện tại từ query hoặc URI (tùy theo Router/Controller của bạn)
-$currRoute = $_GET['page'] ?? trim(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH), '/');
-if ($currRoute === '' || $currRoute === 'index.php') {
-  $currRoute = 'home';
+$requestPath = rtrim((string) parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH), '/') ?: '/';
+if (strpos($requestPath, '/public/') === 0) {
+  $requestPath = substr($requestPath, strlen('/public'));
 }
+$routeNames = [
+  '/' => 'home',
+  '/home' => 'home',
+  '/products' => 'products',
+  '/product' => 'product',
+  '/cart' => 'cart',
+  '/login' => 'login',
+  '/register' => 'register',
+  '/admin/products' => 'admin_products',
+  '/news' => 'news',
+  '/news/detail' => 'news_detail',
+  '/about' => 'about',
+  '/forums' => 'forums',
+  '/faq' => 'faq',
+  '/user' => 'user',
+];
+$currRoute = $routeNames[$requestPath] ?? 'home';
 
 $isActive = static function (string $route) use ($currRoute): bool {
   return $currRoute === $route;
@@ -14,12 +30,8 @@ $isActive = static function (string $route) use ($currRoute): bool {
 
     <!-- Steam Logo -->
     <div class="navbar-brand">
-      <a href="?page=home">
-        <img
-          src="assets/images/utils/logo_steam.svg"
-          alt="Steam Logo"
-          class="navbar-logo"
-        >
+      <a href="/">
+        <img src="<?= ASSET_URL ?>/assets/images/utils/logo_steam.svg" alt="Steam Logo" class="navbar-logo">
       </a>
     </div>
 
@@ -27,25 +39,25 @@ $isActive = static function (string $route) use ($currRoute): bool {
     <ul class="navbar-menu">
 
       <li class="navbar-item <?= $isActive('home') ? 'active' : '' ?>">
-        <a href="?page=home" class="navbar-link<?= $isActive('home') ? ' is-active' : '' ?>">
+        <a href="/" class="navbar-link<?= $isActive('home') ? ' is-active' : '' ?>">
           Home
         </a>
       </li>
 
       <li class="navbar-item <?= $isActive('products') ? 'active' : '' ?>">
-        <a href="?page=products" class="navbar-link<?= $isActive('products') ? ' is-active' : '' ?>">
+        <a href="/products" class="navbar-link<?= $isActive('products') ? ' is-active' : '' ?>">
           Store
         </a>
       </li>
 
       <li class="navbar-item <?= $isActive('about') ? 'active' : '' ?>">
-        <a href="?page=about" class="navbar-link<?= $isActive('about') ? ' is-active' : '' ?>">
+        <a href="/about" class="navbar-link<?= $isActive('about') ? ' is-active' : '' ?>">
           About
         </a>
       </li>
 
       <li class="navbar-item <?= $isActive('forums') ? 'active' : '' ?>">
-        <a href="?page=forums" class="navbar-link<?= $isActive('forums') ? ' is-active' : '' ?>">
+        <a href="/forums" class="navbar-link<?= $isActive('forums') ? ' is-active' : '' ?>">
           Forums
         </a>
       </li>
@@ -56,12 +68,12 @@ $isActive = static function (string $route) use ($currRoute): bool {
         $userLabel = $isLoggedIn
           ? htmlspecialchars((string) (is_array($loggedInUser) ? ($loggedInUser['name'] ?? $loggedInUser['username'] ?? 'User') : ($loggedInUser ?: 'User')), ENT_QUOTES, 'UTF-8')
           : 'Đăng nhập';
-        $userHref = $isLoggedIn ? '?page=user' : '?page=login';
+        $userHref = $isLoggedIn ? '/user' : '/login';
         $userRouteKey = $isLoggedIn ? 'user' : 'login';
       ?>
       <?php if ($isLoggedIn): ?>
         <li class="navbar-item navbar-cart <?= $isActive('cart') ? 'active' : '' ?>">
-          <a href="?page=cart" class="navbar-link<?= $isActive('cart') ? ' is-active' : '' ?>">
+          <a href="/cart" class="navbar-link<?= $isActive('cart') ? ' is-active' : '' ?>">
             Giỏ hàng
           </a>
         </li>

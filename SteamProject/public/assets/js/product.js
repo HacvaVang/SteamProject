@@ -149,7 +149,7 @@
 
   function initAddToCart() {
     const catalog = document.querySelector('.storeCatalog') || document;
-    const loginUrl = document.querySelector('.storeCatalog')?.getAttribute('data-login-url') || '?page=login';
+    const loginUrl = document.querySelector('.storeCatalog')?.getAttribute('data-login-url') || '/login';
 
     catalog.addEventListener('click', (event) => {
       const btn = event.target.closest('[data-add-to-cart]');
@@ -253,11 +253,11 @@ function formatVnd(amount) {
 
           return `
             <article class="catalogRow cartRow" data-cart-row="${id}">
-              <a href="?page=product&id=${encodeURIComponent(id)}" class="catalogThumbLink">
+              <a href="/product?id=${encodeURIComponent(id)}" class="catalogThumbLink">
                 <div class="catalogThumb">${imgHtml}</div>
               </a>
               <div class="catalogBody">
-                <a href="?page=product&id=${encodeURIComponent(id)}" class="catalogTitle">${name}</a>
+                <a href="/product?id=${encodeURIComponent(id)}" class="catalogTitle">${name}</a>
                 <p class="catalogSummary">Đơn giá: ${formatVnd(price)}</p>
               </div>
               <div class="catalogAside">
@@ -314,7 +314,7 @@ function formatVnd(amount) {
 
     checkoutBtn?.addEventListener('click', () => {
       if (!isUserLoggedIn()) {
-        window.location.href = '?page=login';
+        window.location.href = '/login';
         return;
       }
       if (msgEl) {

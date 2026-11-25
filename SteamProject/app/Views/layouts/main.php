@@ -6,64 +6,27 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once __DIR__ . '/../../Helpers/product_data.php';
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['switch_mode'])) {
-    $targetMode = (string) $_POST['switch_mode'];
-    $returnPage = preg_replace('/[^a-zA-Z0-9_-]/', '', (string) ($_POST['return_page'] ?? ($_GET['page'] ?? 'home')));
-    if ($returnPage === '') {
-        $returnPage = 'home';
-    }
-
-    if ($targetMode === 'guest') {
-        unset($_SESSION['user'], $_SESSION['force_user']);
-        $nextPage = in_array($returnPage, ['admin_products', 'cart', 'user'], true)
-            ? 'products'
-            : $returnPage;
-        header('Location: ?page=' . urlencode($nextPage));
-        exit;
-    }
-
-    if ($targetMode === 'grant_admin') {
-        unset($_SESSION['force_user']);
-        if (!isset($_SESSION['user']) || !is_array($_SESSION['user'])) {
-            $_SESSION['user'] = [
-                'username' => 'admin',
-                'name'     => 'Admin',
-                'role'     => 'admin',
-            ];
-        } else {
-            $_SESSION['user']['role'] = 'admin';
-        }
-        header('Location: ?page=admin_products');
-        exit;
-    }
-
-    if ($targetMode === 'revoke_admin') {
-        $_SESSION['force_user'] = true;
-        if (!isset($_SESSION['user']) || !is_array($_SESSION['user'])) {
-            $_SESSION['user'] = [
-                'username' => 'user',
-                'name'     => 'User',
-                'role'     => 'user',
-            ];
-        } else {
-            $_SESSION['user']['role'] = 'user';
-            if (strtolower((string) ($_SESSION['user']['username'] ?? '')) === 'admin') {
-                $_SESSION['user']['username'] = 'user';
-            }
-            if (strtolower((string) ($_SESSION['user']['name'] ?? '')) === 'admin') {
-                $_SESSION['user']['name'] = 'User';
-            }
-        }
-        $nextPage = ($returnPage === 'admin_products') ? 'products' : $returnPage;
-        header('Location: ?page=' . urlencode($nextPage));
-        exit;
-    }
+$requestPath = rtrim((string) parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH), '/') ?: '/';
+if (strpos($requestPath, '/public/') === 0) {
+    $requestPath = substr($requestPath, strlen('/public'));
 }
-
-$currRoute = $_GET['page'] ?? trim(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH), '/');
-if ($currRoute === '' || $currRoute === 'index.php') {
-    $currRoute = 'home';
-}
+$routeNames = [
+    '/' => 'home',
+    '/home' => 'home',
+    '/products' => 'products',
+    '/product' => 'product',
+    '/cart' => 'cart',
+    '/login' => 'login',
+    '/register' => 'register',
+    '/admin/products' => 'admin_products',
+    '/news' => 'news',
+    '/news/detail' => 'news_detail',
+    '/about' => 'about',
+    '/forums' => 'forums',
+    '/faq' => 'faq',
+    '/user' => 'user',
+];
+$currRoute = $routeNames[$requestPath] ?? 'home';
 
 $isActive = static function (string $route) use ($currRoute): bool {
     return $currRoute === $route;
@@ -82,7 +45,7 @@ $userLabel = $isLoggedIn
         'UTF-8'
     )
     : 'Đăng nhập';
-$userHref = $isLoggedIn ? '?page=user' : '?page=login';
+$userHref = BASE_URL . ($isLoggedIn ? '/user' : '/login');
 $userRouteKey = $isLoggedIn ? 'user' : 'login';
 $safeTitle = htmlspecialchars((string) ($pageTitle ?? 'SteamProject'), ENT_QUOTES, 'UTF-8');
 $safeCurrRoute = htmlspecialchars($currRoute, ENT_QUOTES, 'UTF-8');
@@ -94,12 +57,12 @@ $safeCurrRoute = htmlspecialchars($currRoute, ENT_QUOTES, 'UTF-8');
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?= htmlspecialchars($pageTitle ?? 'SteamProject') ?></title>
-  <link rel="stylesheet" href="assets/css/style.css">
-  <link rel="stylesheet" href="assets/css/product.css">
-  <link rel="stylesheet" href="assets/css/responsive.css">
-  <link rel="stylesheet" href="assets/css/news.css">
-  <link rel="stylesheet" href="assets/css/layout.css">
-  <link rel="stylesheet" href="assets/css/auth.css">
+  <link rel="stylesheet" href="<?= ASSET_URL ?>/assets/css/style.css">
+  <link rel="stylesheet" href="<?= ASSET_URL ?>/assets/css/product.css">
+  <link rel="stylesheet" href="<?= ASSET_URL ?>/assets/css/responsive.css">
+  <link rel="stylesheet" href="<?= ASSET_URL ?>/assets/css/news.css">
+  <link rel="stylesheet" href="<?= ASSET_URL ?>/assets/css/layout.css">
+  <link rel="stylesheet" href="<?= ASSET_URL ?>/assets/css/register.css">
 
 </head>
 <body>
@@ -116,20 +79,20 @@ $safeCurrRoute = htmlspecialchars($currRoute, ENT_QUOTES, 'UTF-8');
 
       <div class="modeSwitchControls">
         <a
-          href="?page=admin_products"
+          href="<?= htmlspecialchars(BASE_URL, ENT_QUOTES, 'UTF-8') ?>/admin/products"
           class="modeSwitchBtn <?= $isActive('admin_products') ? 'is-active' : '' ?>"
         >
           Admin Sản phẩm
         </a>
 
         <a
-          href="?page=products"
+          href="<?= htmlspecialchars(BASE_URL, ENT_QUOTES, 'UTF-8') ?>/products"
           class="modeSwitchBtn <?= $isActive('products') ? 'is-active' : '' ?>"
         >
           Store Sản phẩm
         </a>
 
-        <form method="POST" action="" class="modeSwitchForm">
+        <form method="POST" action="<?= htmlspecialchars(BASE_URL, ENT_QUOTES, 'UTF-8') ?>/mode" class="modeSwitchForm">
           <input type="hidden" name="return_page" value="<?= $safeCurrRoute ?>">
           <?php if ($isAdmin): ?>
             <button type="submit" name="switch_mode" value="revoke_admin" class="modeSwitchToggleBtn">
@@ -149,14 +112,14 @@ $safeCurrRoute = htmlspecialchars($currRoute, ENT_QUOTES, 'UTF-8');
       </div>
     </nav>
   </div>
-  <?php include_once __DIR__ . '/footer.php'; ?>
+  <?php include_once __DIR__ . '/footer.html'; ?>
 
-  <script src="assets/js/main.js" defer></script>
-  <script src="assets/js/navbar.js" defer></script>
-  <script src="assets/js/toolbar.js" defer></script>
-  <script src="assets/js/product.js" defer></script>
-  <script src="assets/js/news.js" defer></script>
-  <script src="/assets/js/register.js" defer></script>
+  <script src="<?= ASSET_URL ?>/assets/js/main.js" defer></script>
+  <script src="<?= ASSET_URL ?>/assets/js/navbar.js" defer></script>
+  <script src="<?= ASSET_URL ?>/assets/js/toolbar.js" defer></script>
+  <script src="<?= ASSET_URL ?>/assets/js/product.js" defer></script>
+  <script src="<?= ASSET_URL ?>/assets/js/news.js" defer></script>
+  <script src="<?= ASSET_URL ?>/assets/js/register.js" defer></script>
   
 </body>
 </html>
