@@ -1,6 +1,11 @@
 <?php
 require_once __DIR__ . '/../../../Helpers/product_data.php';
 
+$styles = [
+    '/public/assets/css/product.css',
+    '/public/assets/css/admin-products.css',
+];
+$scripts = ['/public/assets/js/catalog-search.js'];
 $adminNotice = '';
 $adminError = '';
 $products = getStoreProducts(is_array($products ?? null) ? $products : []);

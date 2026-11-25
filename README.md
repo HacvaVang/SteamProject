@@ -202,7 +202,8 @@ SteamProject/
 
  
 ````bash
-php -S localhost:8000 -t public
+cd SteamProject
+php -S localhost:8000 -t . public/index.php
 ````
 
 Truy cập web tại đường dẫn sau:

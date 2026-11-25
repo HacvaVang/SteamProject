@@ -1,56 +1,33 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="login-stylesheet.css">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-        <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.slim.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="login.js"></script>
+<?php
+$styles = [ASSET_URL . '/assets/css/login.css'];
+$scripts = [];
+?>
 
-        <nav class="d-flex navbar navbar-expand-md darkNav navbar-dark">
-            
-        <div class="mx-auto bg">
-            <a href="/"><img
-            class="logoBig" src="<?= ASSET_URL ?>/assets/images/utils/logo_steam.svg"></a>
+<main class="login-wrapper" style="--login-bg: url('<?= htmlspecialchars(ASSET_URL, ENT_QUOTES, 'UTF-8') ?>/assets/images/utils/login_bg.jpg');">
+    <form id="loginForm" action="/login" method="post" class="login-card">
+        <h1 class="login-title">Sign In</h1>
+
+        <?php if ($loginError !== ''): ?>
+            <p class="login-error" role="alert"><?= htmlspecialchars($loginError, ENT_QUOTES, 'UTF-8') ?></p>
+        <?php endif; ?>
+
+        <div class="form-group">
+            <label for="uname" class="login-label">Sign in with account name</label>
+            <input id="uname" type="text" class="form-control login-input" placeholder="Enter Username" name="uname" value="<?= htmlspecialchars($oldUsername, ENT_QUOTES, 'UTF-8') ?>" required autocomplete="username">
         </div>
 
-        <button type="button" class="d-none d-md-block btn btn-success" data-target="#">
-            <img width="15px" height="15px" src="<?= ASSET_URL ?>/assets/images/utils/download.png">Install Steam</button>
+        <div class="form-group">
+            <label for="psw" class="login-label">Password</label>
+            <input id="psw" type="password" class="form-control login-input" placeholder="Enter Password" name="psw" required autocomplete="current-password">
+        </div>
 
-          </nav>
-    </head>
-
-    <body id="transparentBG" style="background-color: #1b2838;" class="fade-in">
-
-        <img style="position: absolute; width: 800px; height:700px;visibility: hidden;" src="<?= ASSET_URL ?>/assets/images/utils/login_bg.jpg">
-
-        <form id="loginForm" action="/login" method="post" class="container smallFont fade-in">
-          
-          <div style="display: block;">
-            <label for="uname"><b>Sign in with account name</b></label>
-            <input  type="text" placeholder="Enter Username" name="uname" required>
-
-            <label for="psw"><b>Password</b></label>
-            
-            <input  type="password" placeholder="Enter Password" name="psw" required>
-            
-            <div style="text-align: center;">
-              <button type="submit">
-              <span style="color: whitesmoke;">Sign in</span></button>
-              <br>
-              <label class="smallFont"><a href="/register">Not Registered?</a></label>
-                <br>
-              <label class="smallFont"><a href="/register">Forgot Password?</a></label>
+        <div class="login-actions">
+            <button type="submit" class="btn btn-login">Sign in</button>
+            <div class="login-links">
+                <a href="/register">Not Registered?</a>
+                <span class="link-divider">•</span>
+                <a href="/register">Forgot Password?</a>
             </div>
-
-
         </div>
-
-
-        </form>
-
-    </body>
-</html>
+    </form>
+</main>
