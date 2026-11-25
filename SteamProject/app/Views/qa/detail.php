@@ -3,6 +3,7 @@ require __DIR__ . '/../../Helpers/functions.php';
 $all = require __DIR__ . '/data.php';
 
 $styles = ['/public/assets/css/support.css'];
+$scripts = [];
 
 $id = (int) ($_GET['id'] ?? 0);
 $q  = $all[$id] ?? null;

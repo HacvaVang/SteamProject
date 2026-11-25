@@ -28,6 +28,19 @@ $router->get('/home', static function () use ($renderView): void {
     $renderView('home/index.php', 'SteamProject - Trang chủ');
 });
 
+$router->get('/about', static function () use ($renderView): void {
+    $renderView('about/index.php', 'SteamProject - Về Chúng Tôi');
+});
+
+$router->get('/faq', static function () use ($renderView): void {
+    $renderView('faq/index.php', 'SteamProject - Những câu hỏi thường được hỏi');
+});
+
+$router->get('/qa', static function () use ($renderView): void {
+    $renderView('qa/index.php', 'SteamProject - Hỏi Đáp');
+});
+
+
 $router->get('/products', static function () use ($renderView): void {
     $renderView('products/index.php', 'SteamProject - Sản phẩm');
 });
@@ -52,11 +65,11 @@ $router->get('/news/detail', static function () use ($renderStandaloneView): voi
 });
 
 // These sections do not have dedicated views yet; retain the previous home fallback.
-foreach (['/about', '/forums', '/faq', '/user', '/review'] as $path) {
-    $router->get($path, static function () use ($renderView): void {
-        $renderView('home/index.php', 'SteamProject - Trang chủ');
-    });
-}
+// foreach (['/forums', '/user', '/review'] as $path) {
+//     $router->get($path, static function () use ($renderView): void {
+//         $renderView('home/index.php', 'SteamProject - Trang chủ');
+//     });
+// }
 
 $router->get('/login', [$authController, 'showLogin']);
 $router->post('/login', [$authController, 'login']);
@@ -83,6 +96,7 @@ $router->post('/mode', static function (): void {
         'forums' => BASE_URL . '/forums',
         'faq' => BASE_URL . '/faq',
         'user' => BASE_URL . '/user',
+        'qa' => BASE_URL . '/qa',
     ];
     $returnPath = $returnPaths[$returnPage] ?? BASE_URL . '/';
 

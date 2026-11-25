@@ -1,6 +1,7 @@
 <?php
 $title  = 'Steam - About';
 $styles  = ['/public/assets/css/nav.css', '/public/assets/css/about.css'];
+$scripts = [];
 
 if (!function_exists('e')) {
     function e($text) { return htmlspecialchars((string) $text, ENT_QUOTES, 'UTF-8'); }

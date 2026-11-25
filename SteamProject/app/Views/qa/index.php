@@ -4,6 +4,7 @@ $all = require __DIR__ . '/data.php';
 
 $title  = 'Steam Support - Community Q&A';
 $styles = ['/public/assets/css/support.css'];
+$scripts = [];
 
 /* Only approved questions are public. */
 $questions = array_filter($all, function ($q) { return $q['status'] === 'approved'; });

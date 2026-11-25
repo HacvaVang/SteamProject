@@ -4,6 +4,7 @@ $data = require __DIR__ . '/data.php';
 
 $title  = 'Steam Support - FAQ';
 $styles = ['/public/assets/css/support.css'];
+$scripts = [];
 
 $cat = $_GET['cat'] ?? '';
 $q   = trim(substr($_GET['q'] ?? '', 0, 100));

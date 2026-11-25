@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../../Helpers/product_data.php';
 
+$styles = ['/public/assets/css/product.css'];
+$scripts = ['/public/assets/js/product.js'];
+
 $isLoggedIn = !empty($currentUser ?? ($_SESSION['user'] ?? null));
 $rawQuery = trim((string) ($_GET['q'] ?? ''));
 $searchQuery = htmlspecialchars($rawQuery, ENT_QUOTES, 'UTF-8');
