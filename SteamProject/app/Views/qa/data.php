@@ -1,0 +1,59 @@
+<?php
+/* Sample data. Replace with Question / Answer models (MySQL) later.
+   status: 'pending' (waiting for admin), 'approved' (visible), 'rejected' (hidden). */
+return [
+    1 => [
+        'title'  => 'Game crashes on launch after the latest update',
+        'body'   => "Since the last patch the game closes right after the logo screen.\nI already restarted my PC. Any other fixes?",
+        'author' => 'safe_user',
+        'date'   => '2026-11-18',
+        'views'  => 312,
+        'votes'  => 14,
+        'tags'   => ['crash', 'windows'],
+        'status' => 'approved',
+        'answers' => [
+            ['author' => 'pixel_pete', 'date' => '2026-11-19', 'votes' => 22, 'accepted' => true,  'status' => 'approved',
+             'body' => "Verify the integrity of the game files from the game's Properties window, then restart the client.\nThat fixed the same crash for me."],
+            ['author' => 'modder99', 'date' => '2026-11-20', 'votes' => 5, 'accepted' => false, 'status' => 'approved',
+             'body' => 'Update your graphics driver as well. The patch raised the minimum driver version.'],
+            ['author' => 'spammer1', 'date' => '2026-11-21', 'votes' => 0, 'accepted' => false, 'status' => 'pending',
+             'body' => 'This answer is waiting for approval and should not be visible.'],
+        ],
+    ],
+    2 => [
+        'title'  => 'How do I import custom charts into the song list?',
+        'body'   => 'I exported a chart from the editor but it does not show up in the song list.',
+        'author' => 'unkindled1',
+        'date'   => '2026-11-21',
+        'views'  => 98,
+        'votes'  => 6,
+        'tags'   => ['modding', 'charts'],
+        'status' => 'approved',
+        'answers' => [],
+    ],
+    3 => [
+        'title'  => 'Can I get a refund for a game I played for 3 hours?',
+        'body'   => 'I bought a game last week and played about 3 hours. Is a refund still possible?',
+        'author' => 'gabe_fan',
+        'date'   => '2026-11-15',
+        'views'  => 540,
+        'votes'  => 9,
+        'tags'   => ['refund', 'purchases'],
+        'status' => 'approved',
+        'answers' => [
+            ['author' => 'saigon_gamer', 'date' => '2026-11-16', 'votes' => 11, 'accepted' => false, 'status' => 'approved',
+             'body' => 'Usually the limit is 2 hours of playtime, but you can still submit a request and explain the reason.'],
+        ],
+    ],
+    4 => [
+        'title'  => 'This question is still waiting for approval',
+        'body'   => 'It should not appear in the list.',
+        'author' => 'new_user',
+        'date'   => '2026-11-24',
+        'views'  => 0,
+        'votes'  => 0,
+        'tags'   => [],
+        'status' => 'pending',
+        'answers' => [],
+    ],
+];
