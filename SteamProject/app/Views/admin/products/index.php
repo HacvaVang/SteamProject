@@ -65,7 +65,7 @@ if ($isAdmin && $_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['switch_m
             }
 
             if (!saveStoreProducts($products)) {
-                $adminError = 'Không thể lưu dữ liệu vào file sản phẩm.';
+                $adminError = 'Không thể lưu danh mục sản phẩm vào SQLite.';
             }
         }
     } elseif ($action === 'delete') {
@@ -81,18 +81,14 @@ if ($isAdmin && $_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['switch_m
                 if (saveStoreProducts($products)) {
                     $adminNotice = 'Đã xóa sản phẩm #' . $deleteId . '.';
                 } else {
-                    $adminError = 'Không thể cập nhật file sau khi xóa.';
+                    $adminError = 'Không thể cập nhật danh mục SQLite sau khi xóa.';
                 }
             }
         }
-    } elseif ($action === 'scan_images') {
-        $scanned = scanProductsFromImages();
-        if (saveStoreProducts($scanned)) {
-            $products = getStoreProducts($scanned);
-            $adminNotice = 'Đã đồng bộ lại sản phẩm từ thư mục ảnh.';
-        } else {
-            $adminError = 'Không thể lưu dữ liệu quét từ ảnh.';
-        }
+    } elseif ($action === 'sync_images') {
+        $updatedImages = syncStoreProductImages();
+        $products = getStoreProducts();
+        $adminNotice = 'Đã đồng bộ ảnh cho ' . $updatedImages . ' trò chơi.';
     }
 }
 
@@ -118,9 +114,9 @@ $formDesc = htmlspecialchars((string) ($editingProduct['description'] ?? ''), EN
     </div>
     <div class="adminFormActions">
       <?php if ($isAdmin): ?>
-        <form method="POST" action="/admin/products" class="inlineDeleteForm" onsubmit="return confirm('Quét lại sản phẩm từ thư mục ảnh?');">
-          <input type="hidden" name="admin_action" value="scan_images">
-          <button type="submit" class="catalogDetailBtn">Quét lại từ ảnh</button>
+        <form method="POST" action="/admin/products" class="inlineDeleteForm">
+          <input type="hidden" name="admin_action" value="sync_images">
+          <button type="submit" class="catalogDetailBtn">Đồng bộ ảnh game</button>
         </form>
       <?php endif; ?>
       <a href="/products" class="catalogDetailBtn">Xem trang Store</a>

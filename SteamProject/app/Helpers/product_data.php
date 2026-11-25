@@ -1,51 +1,31 @@
 <?php
 require_once __DIR__ . '/imgrel.php';
+require_once dirname(__DIR__, 2) . '/database/db_connect.php';
 
-function getProductsStoreFile(): string
+function syncStoreProductImages(): int
 {
-    $projectRoot = realpath(__DIR__ . '/../..') ?: (__DIR__ . '/../..');
-    return rtrim($projectRoot, '/\\') . '/app/Data/products.json';
-}
+    $projectRoot = dirname(__DIR__, 2);
+    $imageDirectory = $projectRoot . '/public/assets/images/products';
+    $database = getAppDatabaseConnection();
+    $games = $database->query(
+        'SELECT game_id, steam_app_id, image_url FROM games WHERE steam_app_id IS NOT NULL'
+    )->fetchAll();
+    $updateImage = $database->prepare('UPDATE games SET image_url = :image_url WHERE game_id = :game_id');
+    $updated = 0;
 
-function scanProductsFromImages(): array
-{
-    $projectRoot = realpath(__DIR__ . '/../..') ?: (__DIR__ . '/../..');
-    $imgDir = rtrim($projectRoot, '/\\') . '/public/assets/images/products';
-    $allowedExts = ['jpg', 'jpeg', 'png', 'webp'];
-    $items = [];
-
-    if (is_dir($imgDir)) {
-        $files = scandir($imgDir) ?: [];
-        $idx = 1;
-        foreach ($files as $file) {
-            if ($file === '.' || $file === '..') {
-                continue;
-            }
-            $fullPath = $imgDir . DIRECTORY_SEPARATOR . $file;
-            if (!is_file($fullPath)) {
-                continue;
-            }
-            $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-            if (!in_array($ext, $allowedExts, true)) {
-                continue;
-            }
-            $stem = pathinfo($file, PATHINFO_FILENAME);
-            $items[] = [
-                'game_id'     => (string) $idx,
-                'name'        => ucfirst(str_replace(['-', '_'], ' ', $stem)),
-                'summary'     => 'Sản phẩm mẫu tạo tự động từ file ' . $file,
-                'description' => 'Thông tin chi tiết cho ' . ucfirst(str_replace(['-', '_'], ' ', $stem)) . ' (' . $file . ').',
-                'base_price'  => $idx * 100000,
-                'discount_check' => 0,
-                'tags'        => [],
-                'reviews'     => [],
-                'image'       => $file,
-            ];
-            $idx++;
+    foreach ($games as $game) {
+        $image = 'steam_' . (int) $game['steam_app_id'] . '.jpg';
+        if (!is_file($imageDirectory . '/' . $image) || (string) ($game['image_url'] ?? '') === $image) {
+            continue;
         }
+        $updateImage->execute([
+            ':image_url' => $image,
+            ':game_id' => (int) $game['game_id'],
+        ]);
+        $updated++;
     }
 
-    return $items;
+    return $updated;
 }
 
 function normalizeStoreProduct(array $item): ?array
@@ -60,7 +40,11 @@ function normalizeStoreProduct(array $item): ?array
     $discountRaw = $item['discount_check'] ?? 0;
     $discount = is_numeric($discountRaw) ? (float) $discountRaw : 0.0;
     $discount = min(100.0, max(0.0, $discount));
-    $finalPrice = (int) round($basePrice * (1 - ($discount / 100)));
+    $calculatedPrice = (int) round($basePrice * (1 - ($discount / 100)));
+    $finalPriceRaw = $item['final_price'] ?? null;
+    $finalPrice = is_numeric($finalPriceRaw)
+        ? max(0, (int) round((float) $finalPriceRaw))
+        : $calculatedPrice;
 
     $rawTags = $item['tags'] ?? [];
     if (is_string($rawTags)) {
@@ -115,46 +99,88 @@ function normalizeStoreProduct(array $item): ?array
         'reviews'        => $reviews,
         'rating'         => $rating,
         'review_count'   => count($reviews),
-        'image'          => trim((string) ($item['image'] ?? '')),
+        'image'          => trim((string) ($item['image'] ?? $item['image_url'] ?? '')),
     ];
 }
 
 function saveStoreProducts(array $products): bool
 {
-    $storeFile = getProductsStoreFile();
-    $dir = dirname($storeFile);
-    if (!is_dir($dir) && !mkdir($dir, 0775, true) && !is_dir($dir)) {
-        return false;
-    }
-
     $normalized = [];
     foreach ($products as $item) {
         if (!is_array($item)) {
-            continue;
+            return false;
         }
         $product = normalizeStoreProduct($item);
-        if ($product === null) {
-            continue;
+        if ($product === null || !ctype_digit($product['game_id'])) {
+            return false;
         }
-        $normalized[] = [
-            'game_id'        => $product['game_id'],
-            'name'           => $product['name'],
-            'summary'        => $product['summary'],
-            'description'    => $product['description'],
-            'base_price'     => $product['base_price'],
-            'discount_check' => $product['discount_check'],
-            'tags'           => $product['tags'],
-            'reviews'        => $product['reviews'],
-            'image'          => $product['image'],
-        ];
+        $normalized[] = $product;
     }
 
-    $json = json_encode($normalized, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-    if ($json === false) {
+    $database = getAppDatabaseConnection();
+    $existingIds = array_map(
+        'strval',
+        $database->query('SELECT game_id FROM games')->fetchAll(PDO::FETCH_COLUMN)
+    );
+    $incomingIds = [];
+    $upsertGame = $database->prepare(
+        'INSERT INTO games (game_id, name, description, image_url, base_price, final_price, discount_check)
+         VALUES (:game_id, :name, :description, :image_url, :base_price, :final_price, :discount_check)
+         ON CONFLICT(game_id) DO UPDATE SET
+           name = excluded.name,
+           description = excluded.description,
+           image_url = excluded.image_url,
+           base_price = excluded.base_price,
+           final_price = excluded.final_price,
+           discount_check = excluded.discount_check'
+    );
+    $deleteTags = $database->prepare('DELETE FROM game_tags WHERE game_id = :game_id');
+    $insertTag = $database->prepare('INSERT OR IGNORE INTO game_tags (game_id, tag) VALUES (:game_id, :tag)');
+    $deleteGame = $database->prepare('DELETE FROM games WHERE game_id = :game_id');
+
+    $database->beginTransaction();
+    try {
+        foreach ($normalized as $product) {
+            $gameId = (int) $product['game_id'];
+            $basePrice = (int) $product['base_price'];
+            $finalPrice = (int) $product['final_price'];
+            $discountFlag = $product['discount_check'] > 0 && $finalPrice < $basePrice ? 1 : 0;
+
+            $upsertGame->execute([
+                ':game_id' => $gameId,
+                ':name' => $product['name'],
+                ':description' => $product['description'],
+                ':image_url' => $product['image'],
+                ':base_price' => $basePrice,
+                ':final_price' => $finalPrice,
+                ':discount_check' => $discountFlag,
+            ]);
+
+            $deleteTags->execute([':game_id' => $gameId]);
+            foreach ($product['tags'] as $tag) {
+                $insertTag->execute([
+                    ':game_id' => $gameId,
+                    ':tag' => $tag,
+                ]);
+            }
+            $incomingIds[$product['game_id']] = true;
+        }
+
+        foreach ($existingIds as $existingId) {
+            if (!isset($incomingIds[$existingId])) {
+                $deleteGame->execute([':game_id' => (int) $existingId]);
+            }
+        }
+
+        $database->commit();
+        return true;
+    } catch (PDOException $error) {
+        if ($database->inTransaction()) {
+            $database->rollBack();
+        }
+        error_log('Unable to save game catalog: ' . $error->getMessage());
         return false;
     }
-
-    return file_put_contents($storeFile, $json . PHP_EOL, LOCK_EX) !== false;
 }
 
 function getStoreProducts(array $incomingProducts = []): array
@@ -172,33 +198,49 @@ function getStoreProducts(array $incomingProducts = []): array
         return $normalized;
     }
 
-    $storeFile = getProductsStoreFile();
-    if (is_file($storeFile)) {
-        $raw = file_get_contents($storeFile);
-        if ($raw !== false && trim($raw) !== '') {
-            $decoded = json_decode($raw, true);
-            if (is_array($decoded)) {
-                $normalized = [];
-                foreach ($decoded as $item) {
-                    if (is_array($item)) {
-                        $product = normalizeStoreProduct($item);
-                        if ($product !== null) {
-                            $normalized[] = $product;
-                        }
-                    }
-                }
-                return $normalized;
-            }
-        }
+    $database = getAppDatabaseConnection();
+    $gameRows = $database->query(
+        'SELECT game_id, steam_app_id, name, description, image_url, base_price, final_price,
+                discount_check
+         FROM games
+         ORDER BY game_id'
+    )->fetchAll();
+
+    $tagsByGameId = [];
+    foreach ($database->query('SELECT game_id, tag FROM game_tags ORDER BY game_id, tag')->fetchAll() as $row) {
+        $tagsByGameId[(string) $row['game_id']][] = (string) $row['tag'];
     }
 
-    $scanned = scanProductsFromImages();
-    if (!empty($scanned)) {
-        saveStoreProducts($scanned);
+    $reviewsByGameId = [];
+    foreach ($database->query('SELECT game_id, rating_score FROM reviews ORDER BY review_id')->fetchAll() as $row) {
+        $reviewsByGameId[(string) $row['game_id']][] = (int) $row['rating_score'];
     }
 
     $normalized = [];
-    foreach ($scanned as $item) {
+    foreach ($gameRows as $row) {
+        $gameId = (string) $row['game_id'];
+        $basePrice = (float) $row['base_price'];
+        $finalPrice = (float) $row['final_price'];
+        $discount = (int) $row['discount_check'] === 1 && $basePrice > 0 && $finalPrice < $basePrice
+            ? round((($basePrice - $finalPrice) / $basePrice) * 100, 2)
+            : 0;
+        $image = trim((string) ($row['image_url'] ?? ''));
+        if ($image === '' && !empty($row['steam_app_id'])) {
+            $image = 'steam_' . (int) $row['steam_app_id'] . '.jpg';
+        }
+
+        $item = [
+            'game_id' => $gameId,
+            'name' => (string) $row['name'],
+            'summary' => (string) ($row['description'] ?? ''),
+            'description' => (string) ($row['description'] ?? ''),
+            'base_price' => $basePrice,
+            'final_price' => $finalPrice,
+            'discount_check' => $discount,
+            'tags' => $tagsByGameId[$gameId] ?? [],
+            'reviews' => $reviewsByGameId[$gameId] ?? [],
+            'image' => $image,
+        ];
         $product = normalizeStoreProduct($item);
         if ($product !== null) {
             $normalized[] = $product;
