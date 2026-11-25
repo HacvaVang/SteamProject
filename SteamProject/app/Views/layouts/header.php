@@ -17,6 +17,7 @@ $routeNames = [
   '/about' => 'about',
   '/forums' => 'forums',
   '/faq' => 'faq',
+  '/qa' => 'qa',
   '/user' => 'user',
 ];
 $currRoute = $routeNames[$requestPath] ?? 'home';
@@ -59,6 +60,18 @@ $isActive = static function (string $route) use ($currRoute): bool {
       <li class="navbar-item <?= $isActive('forums') ? 'active' : '' ?>">
         <a href="/forums" class="navbar-link<?= $isActive('forums') ? ' is-active' : '' ?>">
           Forums
+        </a>
+      </li>
+
+      <li class="navbar-item <?= $isActive('faq') ? 'active' : '' ?>">
+        <a href="/faq" class="navbar-link<?= $isActive('faq') ? ' is-active' : '' ?>">
+          FAQs
+        </a>
+      </li>
+
+      <li class="navbar-item <?= $isActive('qa') ? 'active' : '' ?>">
+        <a href="/qa" class="navbar-link<?= $isActive('qa') ? ' is-active' : '' ?>">
+          Support
         </a>
       </li>
 
