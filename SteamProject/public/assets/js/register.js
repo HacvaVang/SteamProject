@@ -7,11 +7,10 @@ function clearInput() {
     document.getElementById("errPassword").textContent = "";
 }
 
-
-// Validate
+// Check username
 function checkUsername() {
-    const username = document.getElementById("username").value.trim();
-    const error = document.getElementById("errUsername");
+    var username = document.getElementById("username").value.trim();
+    var error = document.getElementById("errUsername");
 
     if (username.length < 3) {
         error.textContent = "Username must contain at least 3 characters.";
@@ -22,11 +21,11 @@ function checkUsername() {
     return true;
 }
 
+// Check email
 function checkEmail() {
-    const email = document.getElementById("email").value.trim();
-    const error = document.getElementById("errEmail");
-
-    const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    var email = document.getElementById("email").value.trim();
+    var error = document.getElementById("errEmail");
+    var pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if (!pattern.test(email)) {
         error.textContent = "Invalid email address.";
@@ -37,11 +36,11 @@ function checkEmail() {
     return true;
 }
 
+// Check phone
 function checkPhone() {
-    const phone = document.getElementById("phone").value.trim();
-    const error = document.getElementById("errPhone");
-
-    const pattern = /^[0-9]{10}$/;
+    var phone = document.getElementById("phone").value.trim();
+    var error = document.getElementById("errPhone");
+    var pattern = /^[0-9]{10}$/;
 
     if (!pattern.test(phone)) {
         error.textContent = "Phone number must contain 10 digits.";
@@ -52,9 +51,10 @@ function checkPhone() {
     return true;
 }
 
+// Check password
 function checkPassword() {
-    const password = document.getElementById("password").value;
-    const error = document.getElementById("errPassword");
+    var password = document.getElementById("password").value;
+    var error = document.getElementById("errPassword");
 
     if (password.length < 8) {
         error.textContent = "Password must contain at least 8 characters.";
@@ -65,13 +65,13 @@ function checkPassword() {
     return true;
 }
 
-document.getElementById("registerForm").onsubmit = function (e) {
-    const r1 = checkUsername();
-    const r2 = checkEmail();
-    const r3 = checkPhone();
-    const r4 = checkPassword();
+document.getElementById("registerForm").onsubmit = function (event) {
+    var validUsername = checkUsername();
+    var validEmail = checkEmail();
+    var validPhone = checkPhone();
+    var validPassword = checkPassword();
 
-    if (!(r1 && r2 && r3 && r4)) {
-        e.preventDefault();
+    if (!validUsername || !validEmail || !validPhone || !validPassword) {
+        event.preventDefault();
     }
 };
