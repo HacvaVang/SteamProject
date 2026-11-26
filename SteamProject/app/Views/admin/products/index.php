@@ -94,6 +94,39 @@ if ($isAdmin && $_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['switch_m
 
 $products = getStoreProducts($products);
 
+$adminSearch = trim((string) ($_GET['q'] ?? ''));
+$adminSearchEscaped = htmlspecialchars($adminSearch, ENT_QUOTES, 'UTF-8');
+$adminSearchMatches = $products;
+if ($adminSearch !== '') {
+    $searchTokens = preg_split('/\s+/', normalizeCatalogSearchText($adminSearch), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+    $adminSearchMatches = array_values(array_filter($products, static function (array $item) use ($searchTokens): bool {
+        $tags = is_array($item['tags'] ?? null) ? $item['tags'] : [];
+        $haystack = normalizeCatalogSearchText(implode(' ', [
+            (string) ($item['game_id'] ?? $item['id'] ?? ''),
+            (string) ($item['name'] ?? ''),
+            (string) ($item['summary'] ?? ''),
+            (string) ($item['description'] ?? ''),
+            implode(' ', $tags),
+            (string) ($item['base_price'] ?? ''),
+            number_format((float) ($item['base_price'] ?? 0), 0, '.', '.'),
+            (string) ($item['final_price'] ?? ''),
+            number_format((float) ($item['final_price'] ?? 0), 0, '.', '.'),
+            (string) ($item['discount_check'] ?? ''),
+            (string) ($item['rating'] ?? ''),
+        ]));
+        foreach ($searchTokens as $token) {
+            if (strpos($haystack, $token) === false) {
+                return false;
+            }
+        }
+        return true;
+    }));
+}
+$adminMatchedIds = array_fill_keys(array_map(
+    static fn(array $item): string => (string) ($item['game_id'] ?? $item['id'] ?? ''),
+    $adminSearchMatches
+), true);
+
 $editId = trim((string) ($_GET['edit'] ?? ''));
 $editingProduct = ($isAdmin && $editId !== '') ? findStoreProductById($products, $editId) : null;
 
@@ -198,36 +231,52 @@ $formDesc = htmlspecialchars((string) ($editingProduct['description'] ?? ''), EN
       </div>
     </form>
 
-    <section class="catalogSection" aria-label="Danh sách sản phẩm quản trị">
+    <section class="catalogSection" aria-label="Danh sách sản phẩm quản trị" data-page-size="12">
       <div class="catalogTop">
         <h2 class="catalogHeading">Danh sách sản phẩm</h2>
-        <span class="catalogCount" data-catalog-count><?= count($products) ?> sản phẩm</span>
+        <span class="catalogCount" data-catalog-count><?= count($adminSearchMatches) ?> sản phẩm</span>
       </div>
 
-      <div class="filterForm" role="search">
+      <form method="GET" action="/admin/products" class="filterForm" role="search">
         <div class="filterBox">
           <input
             type="search"
+            name="q"
+            value="<?= $adminSearchEscaped ?>"
             class="filterInput"
             data-catalog-search
-            placeholder="Tìm theo tên, mô tả hoặc mã sản phẩm..."
+            placeholder="Tìm mã, tên, mô tả, tag, giá hoặc điểm đánh giá..."
             aria-label="Tìm kiếm sản phẩm quản trị"
           >
+          <button type="submit" class="filterSubmit">Tìm kiếm</button>
         </div>
-      </div>
+      </form>
 
-      <div class="emptyRow" data-catalog-empty <?= empty($products) ? '' : 'hidden' ?>>
+      <div class="emptyRow" data-catalog-empty <?= count($adminSearchMatches) === 0 ? '' : 'hidden' ?>>
         <?= empty($products) ? 'Chưa có sản phẩm nào.' : 'Không tìm thấy sản phẩm nào.' ?>
       </div>
       <div class="catalogList" data-catalog-list>
         <?php foreach ($products as $item): ?>
           <?php
-          $id = htmlspecialchars((string) ($item['id'] ?? ''), ENT_QUOTES, 'UTF-8');
+          $rawId = (string) ($item['game_id'] ?? $item['id'] ?? '');
+          $id = htmlspecialchars($rawId, ENT_QUOTES, 'UTF-8');
           $name = htmlspecialchars((string) ($item['name'] ?? 'Sản phẩm'), ENT_QUOTES, 'UTF-8');
           $summary = htmlspecialchars((string) ($item['summary'] ?? ''), ENT_QUOTES, 'UTF-8');
           $tags = is_array($item['tags'] ?? null) ? $item['tags'] : [];
           $searchText = htmlspecialchars(
-              trim((string) ($item['id'] ?? '') . ' ' . (string) ($item['name'] ?? '') . ' ' . (string) ($item['summary'] ?? '') . ' ' . implode(' ', $tags)),
+              trim(implode(' ', [
+                  $rawId,
+                  (string) ($item['name'] ?? ''),
+                  (string) ($item['summary'] ?? ''),
+                  (string) ($item['description'] ?? ''),
+                  implode(' ', $tags),
+                  (string) ($item['base_price'] ?? ''),
+                  number_format((float) ($item['base_price'] ?? 0), 0, '.', '.'),
+                  (string) ($item['final_price'] ?? ''),
+                  number_format((float) ($item['final_price'] ?? 0), 0, '.', '.'),
+                  (string) ($item['discount_check'] ?? ''),
+                  (string) ($item['rating'] ?? ''),
+              ])),
               ENT_QUOTES,
               'UTF-8'
           );
@@ -240,7 +289,7 @@ $formDesc = htmlspecialchars((string) ($editingProduct['description'] ?? ''), EN
               : number_format((float) $rating, 1, ',', '.') . ' / 5 (' . (int) $item['review_count'] . ')';
           $imgSrc = resolveProductImage((string) ($item['image'] ?? ''), (string) ($item['id'] ?? ''));
           ?>
-          <article class="catalogRow" data-catalog-item data-search="<?= $searchText ?>">
+          <article class="catalogRow" data-catalog-item data-search="<?= $searchText ?>" <?= isset($adminMatchedIds[$rawId]) ? '' : 'hidden' ?>>
             <div class="catalogThumb">
               <?php if ($imgSrc !== ''): ?>
                 <img src="<?= htmlspecialchars($imgSrc, ENT_QUOTES, 'UTF-8') ?>" alt="<?= $name ?>" class="catalogImg">
@@ -281,6 +330,11 @@ $formDesc = htmlspecialchars((string) ($editingProduct['description'] ?? ''), EN
             </div>
           </article>
         <?php endforeach; ?>
+      </div>
+      <div class="catalogPagination" data-catalog-pagination hidden>
+        <span data-catalog-page-status></span>
+        <button type="button" class="filterSubmit" data-catalog-show-more>Xem thêm</button>
+        <button type="button" class="filterReset" data-catalog-collapse hidden>Thu gọn</button>
       </div>
     </section>
   <?php endif; ?>

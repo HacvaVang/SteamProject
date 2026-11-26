@@ -26,12 +26,18 @@
         if (nextBtn) nextBtn.disabled = track.scrollLeft >= maxScroll;
       };
 
+      const scrollOneStep = (direction) => {
+        const maxScroll = Math.max(0, track.scrollWidth - track.clientWidth);
+        const target = Math.min(maxScroll, Math.max(0, track.scrollLeft + direction * getStep()));
+        track.scrollTo({ left: target, behavior: 'smooth' });
+      };
+
       prevBtn?.addEventListener('click', () => {
-        track.scrollBy({ left: -getStep(), behavior: 'smooth' });
+        scrollOneStep(-1);
       });
 
       nextBtn?.addEventListener('click', () => {
-        track.scrollBy({ left: getStep(), behavior: 'smooth' });
+        scrollOneStep(1);
       });
 
       track.addEventListener('scroll', syncButtons, { passive: true });

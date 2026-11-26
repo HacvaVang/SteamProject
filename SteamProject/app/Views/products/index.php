@@ -11,20 +11,39 @@ $isLoggedIn = !empty($currentUser ?? ($_SESSION['user'] ?? null));
 $rawQuery = trim((string) ($_GET['q'] ?? ''));
 $searchQuery = htmlspecialchars($rawQuery, ENT_QUOTES, 'UTF-8');
 
-$products = getStoreProducts(is_array($products ?? null) ? $products : []);
+$allProducts = getStoreProducts(is_array($products ?? null) ? $products : []);
+$searchMatches = $allProducts;
 
 if ($rawQuery !== '') {
-    $needle = mb_strtolower($rawQuery, 'UTF-8');
-    $products = array_values(array_filter($products, static function (array $item) use ($needle): bool {
-        $haystack = mb_strtolower(
-            (string) ($item['name'] ?? '') . ' ' . (string) ($item['summary'] ?? ''),
-            'UTF-8'
-        );
-        return mb_strpos($haystack, $needle) !== false;
+    $searchTokens = preg_split('/\s+/', normalizeCatalogSearchText($rawQuery), -1, PREG_SPLIT_NO_EMPTY) ?: [];
+    $searchMatches = array_values(array_filter($allProducts, static function (array $item) use ($searchTokens): bool {
+        $haystack = normalizeCatalogSearchText(implode(' ', [
+            (string) ($item['game_id'] ?? $item['id'] ?? ''),
+            (string) ($item['name'] ?? ''),
+            (string) ($item['summary'] ?? ''),
+            (string) ($item['description'] ?? ''),
+            implode(' ', is_array($item['tags'] ?? null) ? $item['tags'] : []),
+            (string) ($item['base_price'] ?? ''),
+            number_format((float) ($item['base_price'] ?? 0), 0, '.', '.'),
+            (string) ($item['final_price'] ?? ''),
+            number_format((float) ($item['final_price'] ?? 0), 0, '.', '.'),
+        ]));
+        foreach ($searchTokens as $token) {
+            if (strpos($haystack, $token) === false) {
+                return false;
+            }
+        }
+        return true;
     }));
 }
 
-$featuredProducts = array_slice($products, 0, 6);
+$searchMatchedIds = array_fill_keys(array_map(
+    static fn(array $item): string => (string) ($item['id'] ?? $item['game_id'] ?? ''),
+    $searchMatches
+), true);
+$catalogCount = count($searchMatches);
+$products = $allProducts;
+$featuredProducts = array_slice($allProducts, 0, 6);
 ?>
 <section
   class="storeCatalog"
@@ -89,10 +108,10 @@ $featuredProducts = array_slice($products, 0, 6);
     </div>
   </section>
 
-  <section class="catalogSection" aria-label="Tất cả sản phẩm">
+  <section class="catalogSection" aria-label="Tất cả sản phẩm" data-page-size="12">
     <div class="catalogTop">
       <h2 class="catalogHeading">Tất cả sản phẩm</h2>
-      <span class="catalogCount"><?= count($products) ?> sản phẩm</span>
+      <span class="catalogCount"><?= $catalogCount ?> sản phẩm</span>
     </div>
 
     <form method="GET" action="/products" class="filterForm" role="search">
@@ -104,25 +123,37 @@ $featuredProducts = array_slice($products, 0, 6);
           placeholder="Tìm kiếm sản phẩm theo từ khóa..."
           class="filterInput"
           data-catalog-search
-          data-server-filtered="<?= $rawQuery !== '' ? '1' : '0' ?>"
           aria-label="Từ khóa sản phẩm"
         >
         <button type="submit" class="filterSubmit">Tìm kiếm</button>
       </div>
     </form>
 
-    <div class="emptyRow" data-catalog-empty <?= empty($products) ? '' : 'hidden' ?>>
+    <div class="emptyRow" data-catalog-empty <?= $catalogCount === 0 ? '' : 'hidden' ?>>
       Không tìm thấy sản phẩm nào.
     </div>
     <div class="catalogList" data-catalog-list>
       <?php foreach ($products as $item): ?>
         <?php
-        $id = htmlspecialchars((string) ($item['id'] ?? ''), ENT_QUOTES, 'UTF-8');
+        $rawId = (string) ($item['id'] ?? $item['game_id'] ?? '');
+        $id = htmlspecialchars($rawId, ENT_QUOTES, 'UTF-8');
         $name = htmlspecialchars((string) ($item['name'] ?? 'Sản phẩm'), ENT_QUOTES, 'UTF-8');
         $summary = htmlspecialchars((string) ($item['summary'] ?? ''), ENT_QUOTES, 'UTF-8');
         $tags = is_array($item['tags'] ?? null) ? $item['tags'] : [];
         $searchText = htmlspecialchars(
-            trim((string) ($item['id'] ?? '') . ' ' . (string) ($item['name'] ?? '') . ' ' . (string) ($item['summary'] ?? '') . ' ' . implode(' ', $tags)),
+            trim(implode(' ', [
+                $rawId,
+                (string) ($item['name'] ?? ''),
+                (string) ($item['summary'] ?? ''),
+                (string) ($item['description'] ?? ''),
+                implode(' ', $tags),
+                (string) ($item['base_price'] ?? ''),
+                number_format((float) ($item['base_price'] ?? 0), 0, '.', '.'),
+                (string) ($item['final_price'] ?? ''),
+                number_format((float) ($item['final_price'] ?? 0), 0, '.', '.'),
+                (string) ($item['discount_check'] ?? ''),
+                (string) ($item['rating'] ?? ''),
+            ])),
             ENT_QUOTES,
             'UTF-8'
         );
@@ -137,7 +168,7 @@ $featuredProducts = array_slice($products, 0, 6);
             : number_format((float) $rating, 1, ',', '.') . ' / 5 (' . (int) $item['review_count'] . ')';
         $imgSrc = resolveProductImage((string) ($item['image'] ?? ''), (string) ($item['id'] ?? ''));
         ?>
-        <article class="catalogRow" data-catalog-item data-search="<?= $searchText ?>">
+        <article class="catalogRow" data-catalog-item data-search="<?= $searchText ?>" <?= isset($searchMatchedIds[$rawId]) ? '' : 'hidden' ?>>
           <a href="/product?id=<?= $id ?>" class="catalogThumbLink" aria-label="<?= $name ?>">
             <div class="catalogThumb">
               <?php if ($imgSrc !== ''): ?>
@@ -184,6 +215,11 @@ $featuredProducts = array_slice($products, 0, 6);
           </div>
         </article>
       <?php endforeach; ?>
+    </div>
+    <div class="catalogPagination" data-catalog-pagination hidden>
+      <span data-catalog-page-status></span>
+      <button type="button" class="filterSubmit" data-catalog-show-more>Xem thêm</button>
+      <button type="button" class="filterReset" data-catalog-collapse hidden>Thu gọn</button>
     </div>
   </section>
 </section>

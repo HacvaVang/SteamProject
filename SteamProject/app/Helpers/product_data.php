@@ -28,6 +28,32 @@ function syncStoreProductImages(): int
     return $updated;
 }
 
+function normalizeCatalogSearchText(string $value): string
+{
+    $value = mb_strtolower($value, 'UTF-8');
+    static $accentMap = null;
+    if ($accentMap === null) {
+        $accentGroups = [
+            'a' => 'àáảãạâầấẩẫậăằắẳẵặ',
+            'e' => 'èéẻẽẹêềếểễệ',
+            'i' => 'ìíỉĩị',
+            'o' => 'òóỏõọôồốổỗộơờớởỡợ',
+            'u' => 'ùúủũụưừứửữự',
+            'y' => 'ỳýỷỹỵ',
+            'd' => 'đ',
+        ];
+        $accentMap = [];
+        foreach ($accentGroups as $replacement => $characters) {
+            $variants = preg_split('//u', $characters, -1, PREG_SPLIT_NO_EMPTY) ?: [];
+            $accentMap += array_fill_keys($variants, $replacement);
+        }
+    }
+    $value = strtr($value, $accentMap);
+
+    $normalized = preg_replace('/[^a-z0-9]+/', ' ', $value);
+    return trim($normalized ?? $value);
+}
+
 function normalizeStoreProduct(array $item): ?array
 {
     $id = trim((string) ($item['game_id'] ?? $item['id'] ?? ''));

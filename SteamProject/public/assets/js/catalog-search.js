@@ -1,66 +1,91 @@
 (() => {
   'use strict';
 
-  function initCatalogSearch() {
-    document.querySelectorAll('[data-catalog-search]').forEach((input) => {
-      const section = input.closest('.catalogSection');
-      const list = section?.querySelector('[data-catalog-list]');
-      if (!section || !list) return;
+  function initCatalogLists() {
+    document.querySelectorAll('[data-catalog-list]').forEach((list) => {
+      const section = list.closest('.catalogSection');
+      if (!section) return;
 
       const rows = Array.from(list.querySelectorAll('[data-catalog-item]'));
+      const input = section.querySelector('[data-catalog-search]');
       const count = section.querySelector('[data-catalog-count], .catalogCount');
       const emptyState = section.querySelector('[data-catalog-empty]');
       const defaultEmptyMessage = emptyState?.textContent.trim();
-      const form = input.closest('form');
+      const pagination = section.querySelector('[data-catalog-pagination]');
+      const pageStatus = pagination?.querySelector('[data-catalog-page-status]');
+      const showMore = pagination?.querySelector('[data-catalog-show-more]');
+      const collapse = pagination?.querySelector('[data-catalog-collapse]');
+      const pageSize = Math.max(1, Number(section.dataset.pageSize) || 12);
+      let limit = pageSize;
+      let matchingRows = rows;
 
-      const normalize = (value) => value
+      const normalize = (value) => String(value)
         .toLocaleLowerCase()
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
-        .replace(/đ/g, 'd');
+        .replace(/đ/g, 'd')
+        .replace(/[^a-z0-9]+/g, ' ')
+        .trim();
 
-      const filterRows = () => {
-        const query = normalize(input.value.trim());
-        let visibleCount = 0;
-
+      const render = () => {
+        const visibleRows = new Set(matchingRows.slice(0, limit));
         rows.forEach((row) => {
-          const text = normalize(row.getAttribute('data-search') || row.textContent || '');
-          const matches = text.includes(query);
-          row.hidden = !matches;
-          if (matches) visibleCount++;
+          row.hidden = !visibleRows.has(row);
         });
 
-        if (count) count.textContent = `${visibleCount} sản phẩm`;
+        if (count) count.textContent = `${matchingRows.length} sản phẩm`;
         if (emptyState) {
-          emptyState.hidden = visibleCount > 0;
-          emptyState.textContent = query
+          emptyState.hidden = matchingRows.length > 0;
+          emptyState.textContent = matchingRows.length === 0 && input?.value.trim()
             ? 'Không tìm thấy sản phẩm nào.'
             : (defaultEmptyMessage || 'Không tìm thấy sản phẩm nào.');
         }
+
+        if (pagination) {
+          pagination.hidden = matchingRows.length <= pageSize;
+          if (pageStatus) {
+            pageStatus.textContent = `Đang hiển thị ${Math.min(limit, matchingRows.length)} / ${matchingRows.length} sản phẩm`;
+          }
+          if (showMore) {
+            const remaining = Math.max(0, matchingRows.length - limit);
+            showMore.hidden = remaining === 0;
+            showMore.textContent = `Xem thêm ${Math.min(pageSize, remaining)}`;
+          }
+          if (collapse) collapse.hidden = limit <= pageSize;
+        }
       };
 
-      input.addEventListener('input', () => {
-        if (input.dataset.serverFiltered === '1' && input.value.trim() === '' && form) {
-          form.submit();
-          return;
+      const filterRows = () => {
+        const tokens = normalize(input?.value.trim() || '').split(/\s+/).filter(Boolean);
+        matchingRows = rows.filter((row) => {
+          const text = normalize(row.getAttribute('data-search') || row.textContent || '');
+          return tokens.every((token) => text.includes(token));
+        });
+        limit = pageSize;
+        render();
+      };
+
+      input?.addEventListener('input', filterRows);
+      input?.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && input.value !== '') {
+          input.value = '';
+          filterRows();
         }
-        filterRows();
       });
 
-      input.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && input.value.trim() !== '') {
-          input.value = '';
-          if (input.dataset.serverFiltered === '1' && form) {
-            form.submit();
-          } else {
-            filterRows();
-          }
-        }
+      showMore?.addEventListener('click', () => {
+        limit = Math.min(matchingRows.length, limit + pageSize);
+        render();
+      });
+
+      collapse?.addEventListener('click', () => {
+        limit = pageSize;
+        render();
       });
 
       filterRows();
     });
   }
 
-  document.addEventListener('DOMContentLoaded', initCatalogSearch);
+  document.addEventListener('DOMContentLoaded', initCatalogLists);
 })();

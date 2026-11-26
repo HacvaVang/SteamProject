@@ -83,6 +83,7 @@
   overflow-x: auto;
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
+  overscroll-behavior-x: contain;
   scrollbar-width: none;
 }
 
@@ -227,6 +228,25 @@
 .filterReset:hover {
   background: #67c1f5;
   color: #1b2838;
+}
+
+.catalogPagination {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .5rem;
+  padding: .65rem .85rem;
+  border-top: 1px solid rgba(0, 0, 0, .35);
+}
+
+.catalogPagination[hidden] {
+  display: none;
+}
+
+.catalogPagination span {
+  margin-right: auto;
+  color: var(--muted);
+  font-size: .82rem;
 }
 
 .catalogList {
