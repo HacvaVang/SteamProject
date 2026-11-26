@@ -65,6 +65,23 @@ $router->post('/admin/products', static function () use ($renderView): void {
     $renderView('admin/products/index.php', 'SteamProject - Quản lý sản phẩm');
 });
 
+$router->get('/admin/qa', static function () use ($renderView): void {
+    $renderView('admin/qa/index.php', 'SteamProject - Q&A Moderation');
+});
+$router->post('/admin/qa', static function () use ($renderView): void {
+    $renderView('admin/qa/index.php', 'SteamProject - Q&A Moderation');
+});
+$router->get('/admin/qa/detail', static function () use ($renderView): void {
+    $renderView('admin/qa/detail.php', 'SteamProject - Q&A Moderation');
+});
+
+$router->get('/admin/faqs', static function () use ($renderView): void {
+    $renderView('admin/faqs/index.php', 'SteamProject - Quản lý FAQ');
+});
+$router->post('/admin/faqs', static function () use ($renderView): void {
+    $renderView('admin/faqs/index.php', 'SteamProject - Quản lý FAQ');
+});
+
 $router->get('/news', static function () use ($renderStandaloneView): void {
     $renderStandaloneView('news/index.php');
 });
@@ -105,6 +122,7 @@ $router->post('/mode', static function (): void {
         'faq' => BASE_URL . '/faq',
         'user' => BASE_URL . '/user',
         'qa' => BASE_URL . '/qa',
+        'admin_qa' => BASE_URL . '/admin/qa'
     ];
     $returnPath = $returnPaths[$returnPage] ?? BASE_URL . '/';
 
