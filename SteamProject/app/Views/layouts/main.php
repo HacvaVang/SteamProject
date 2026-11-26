@@ -25,6 +25,8 @@ $routeNames = [
     '/forums' => 'forums',
     '/faq' => 'faq',
     '/user' => 'user',
+    '/admin/qa' => 'admin_qa',
+    '/admin/faqs' => 'admin_faqs'
 ];
 $currRoute = $routeNames[$requestPath] ?? 'home';
 
@@ -87,6 +89,13 @@ $safeCurrRoute = htmlspecialchars($currRoute, ENT_QUOTES, 'UTF-8');
           class="modeSwitchBtn <?= $isActive('admin_products') ? 'is-active' : '' ?>"
         >
           Admin Sản phẩm
+        </a>
+
+        <a
+          href="<?= htmlspecialchars(BASE_URL, ENT_QUOTES, 'UTF-8') ?>/admin/qa"
+          class="modeSwitchBtn <?= $isActive('admin_qa') ? 'is-active' : '' ?>"
+        >
+          Admin Q&amp;A
         </a>
 
         <a
