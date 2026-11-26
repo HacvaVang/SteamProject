@@ -51,6 +51,7 @@ $featuredProducts = array_slice($allProducts, 0, 6);
   data-logged-in="<?= $isLoggedIn ? '1' : '0' ?>"
   data-login-url="/login"
   data-cart-url="/cart"
+  data-cart-sync-url="/cart/sync"
 >
   <header class="storeBanner">
     <div>

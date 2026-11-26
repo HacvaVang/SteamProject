@@ -241,3 +241,18 @@ The PHP runtime must have `pdo_sqlite` enabled. To use a different database
 file, set `STEAM_PROJECT_SQLITE_PATH` to its absolute path. The Steam seed
 generator fetches Steam data, writes the SQL file, and downloads images; it
 does not execute SQL.
+
+## Cart and order management
+
+The cart is synchronized to SQLite so Admin can review carts across browser
+sessions. Until authentication is connected to the database, each cart is
+associated with its PHP session and the displayed customer is the session's
+current name. Checkout creates a pending demo order and snapshots the product
+names and prices; it does not process a real payment.
+
+Cart statuses are `active`, `abandoned`, and `converted`. Checkout changes an
+active cart to `converted`; Admin can mark non-converted carts as active or
+abandoned. Order statuses are `pending`, `processing`, `completed`, and
+`cancelled`. Admin manages both lists at `/admin/orders`. The application
+creates these tables on first use; they are also included in
+`SteamProject/storage/schema.sql` for fresh databases.

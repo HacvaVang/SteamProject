@@ -1,6 +1,8 @@
 (() => {
   'use strict';
 
+  let cartSyncQueue = Promise.resolve();
+
   function initFeaturedCarousel() {
     const carousels = document.querySelectorAll('[data-carousel]');
 
@@ -70,13 +72,18 @@
       if (Array.isArray(parsed)) {
         cart = parsed;
       }
-    } catch (_) {
-      cart = [];
+    } catch (error) {
+      console.error('Unable to read local cart:', error);
+      throw new Error('Không thể đọc giỏ hàng hiện tại.');
     }
 
     const existing = cart.find((item) => String(item.id) === String(productId));
     if (existing) {
-      existing.qty = (Number(existing.qty) || 1) + 1;
+      const quantity = Number(existing.qty) || 1;
+      if (quantity >= 99) {
+        throw new Error('Mỗi sản phẩm chỉ được đặt tối đa 99 bản.');
+      }
+      existing.qty = quantity + 1;
     } else {
       cart.push({
         id: productId,
@@ -87,14 +94,45 @@
 
     try {
       window.localStorage.setItem(storageKey, JSON.stringify(cart));
-    } catch (_) {
-      // Bỏ qua nếu trình duyệt chặn localStorage
+    } catch (error) {
+      console.error('Unable to save local cart:', error);
+      throw new Error('Trình duyệt không cho phép lưu giỏ hàng.');
     }
+    return cart;
+  }
+
+  function syncCartToServer(items, syncUrl) {
+    const request = cartSyncQueue
+      .catch(() => undefined)
+      .then(async () => {
+        const response = await fetch(syncUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            items: items.map((item) => ({ id: item.id, qty: item.qty })),
+          }),
+          credentials: 'same-origin',
+        });
+        const responseText = await response.text();
+        let result;
+        try {
+          result = JSON.parse(responseText);
+        } catch (error) {
+          throw new Error('Máy chủ trả về phản hồi không hợp lệ.');
+        }
+        if (!response.ok || !result.ok) {
+          throw new Error(result.message || 'Không thể lưu giỏ hàng.');
+        }
+      });
+    cartSyncQueue = request;
+    return request;
   }
 
   function initAddToCart() {
     const catalog = document.querySelector('.storeCatalog') || document;
-    const loginUrl = document.querySelector('.storeCatalog')?.getAttribute('data-login-url') || '/login';
+    const storeCatalog = document.querySelector('.storeCatalog');
+    const loginUrl = storeCatalog?.getAttribute('data-login-url') || '/login';
+    const syncUrl = storeCatalog?.getAttribute('data-cart-sync-url') || '/cart/sync';
 
     catalog.addEventListener('click', (event) => {
       const btn = event.target.closest('[data-add-to-cart]');
@@ -110,16 +148,36 @@
       const productName = btn.getAttribute('data-product-name') || 'Sản phẩm';
       if (!productId) return;
 
-      addItemToLocalCart(productId, productName);
-
       const originalText = btn.textContent;
-      btn.textContent = 'Đã thêm';
       btn.disabled = true;
+      btn.textContent = 'Đang lưu...';
+      btn.removeAttribute('title');
 
-      window.setTimeout(() => {
-        btn.textContent = originalText || 'Thêm vào giỏ';
-        btn.disabled = false;
-      }, 900);
+      try {
+        const cart = addItemToLocalCart(productId, productName);
+        syncCartToServer(cart, syncUrl)
+          .then(() => {
+            btn.textContent = 'Đã thêm';
+          })
+          .catch((error) => {
+            console.error('Unable to sync cart:', error);
+            btn.textContent = 'Lỗi lưu giỏ';
+            btn.title = error.message || 'Không thể lưu giỏ hàng.';
+          })
+          .finally(() => {
+            window.setTimeout(() => {
+              btn.textContent = originalText || 'Thêm vào giỏ';
+              btn.disabled = false;
+            }, 1200);
+          });
+      } catch (error) {
+        btn.textContent = error.message || 'Không thể thêm';
+        btn.title = error.message || 'Không thể thêm sản phẩm vào giỏ.';
+        window.setTimeout(() => {
+          btn.textContent = originalText || 'Thêm vào giỏ';
+          btn.disabled = false;
+        }, 1800);
+      }
     });
   }
 

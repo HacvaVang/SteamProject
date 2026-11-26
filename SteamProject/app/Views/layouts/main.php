@@ -19,6 +19,7 @@ $routeNames = [
     '/login' => 'login',
     '/register' => 'register',
     '/admin/products' => 'admin_products',
+    '/admin/orders' => 'admin_orders',
     '/news' => 'news',
     '/news/detail' => 'news_detail',
     '/about' => 'about',
@@ -100,6 +101,12 @@ $safeCurrRoute = htmlspecialchars($currRoute, ENT_QUOTES, 'UTF-8');
           class="modeSwitchBtn <?= $isActive('admin_qa') ? 'is-active' : '' ?>"
         >
           Admin Q&amp;A
+        </a>
+        <a
+          href="<?= htmlspecialchars(BASE_URL, ENT_QUOTES, 'UTF-8') ?>/admin/orders"
+          class="modeSwitchBtn <?= $isActive('admin_orders') ? 'is-active' : '' ?>"
+        >
+          Admin Giỏ hàng &amp; đơn hàng
         </a>
 
         <a

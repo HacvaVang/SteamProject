@@ -1,109 +1,1069 @@
 .adminProductsWrap {
-    display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
+    display: grid;
+    grid-template-columns: 232px minmax(0, 1fr);
     width: 100%;
+    min-width: 0;
+    color: #344054;
+    background: #f8fafc;
+    border: 1px solid #e4e7ec;
+    border-radius: 12px;
+    overflow: hidden;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.adminProductsWrap *,
+.adminProductsWrap *::before,
+.adminProductsWrap *::after {
     box-sizing: border-box;
 }
 
-.adminAlertSuccess,
-.adminAlertError {
-    padding: 10px 14px;
-    border-radius: 4px;
-    font-size: 14px;
+.adminSidebar {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding: 22px 14px;
+    background: #fff;
+    border-right: 1px solid #eaecf0;
 }
 
-.adminAlertSuccess {
-    background-color: rgba(164, 208, 7, 0.14);
-    border: 1px solid #a4d007;
-    color: #beee11;
+.adminBrand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 8px 26px;
+    color: #101828;
+    text-decoration: none;
 }
 
-.adminAlertError {
-    background-color: rgba(217, 83, 79, 0.16);
-    border: 1px solid #d9534f;
-    color: #ffb3b0;
+.adminBrandMark {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    place-items: center;
+    border-radius: 11px;
+    background: #465fff;
+    color: #fff;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.adminBrandText {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.adminBrandText strong {
+    font-size: 16px;
+    line-height: 1.15;
+}
+
+.adminBrandText small {
+    color: #98a2b3;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: .12em;
+}
+
+.adminNavLabel {
+    margin: 0 10px 9px;
+    color: #98a2b3;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .1em;
+}
+
+.adminSidebarNav,
+.adminSidebarBottom {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.adminSidebarBottom {
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 20px;
+}
+
+.adminNavLink {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    min-height: 42px;
+    padding: 9px 10px;
+    border-radius: 7px;
+    color: #475467;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color .15s ease, color .15s ease;
+}
+
+.adminNavLink:hover {
+    background: #f2f4f7;
+    color: #344054;
+}
+
+.adminNavLink.is-active {
+    background: #eef2ff;
+    color: #465fff;
+    font-weight: 600;
+}
+
+.adminNavLink svg {
+    width: 18px;
+    height: 18px;
+    flex: none;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.7;
+}
+
+.adminSidebarUser {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 8px 0;
+    border-top: 1px solid #eaecf0;
+}
+
+.adminAvatar {
+    display: grid;
+    width: 34px;
+    height: 34px;
+    flex: none;
+    place-items: center;
+    border-radius: 50%;
+    background: #eef2ff;
+    color: #465fff;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.adminSidebarUser > span:last-child {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.adminSidebarUser strong {
+    overflow: hidden;
+    color: #344054;
+    font-size: 11px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.adminSidebarUser small {
+    color: #98a2b3;
+    font-size: 10px;
+}
+
+.adminDashboardMain {
+    min-width: 0;
+    background: #f8fafc;
+}
+
+.adminTopbar {
+    display: flex;
+    min-height: 88px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 17px 26px;
+    background: #fff;
+    border-bottom: 1px solid #eaecf0;
+}
+
+.adminTopbar h1 {
+    margin: 5px 0 0;
+    color: #101828;
+    font-size: 21px;
+    font-weight: 650;
+    line-height: 1.25;
+}
+
+.adminBreadcrumb {
+    margin: 0;
+    color: #667085;
+    font-size: 11px;
+}
+
+.adminBreadcrumb span {
+    padding: 0 5px;
+    color: #c0c5d0;
+}
+
+.adminTopbarActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.adminDashboardContent {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 20px;
+    padding: 23px 26px 28px;
+}
+
+.adminProductsWrap .inlineDeleteForm {
+    margin: 0;
+}
+
+.adminButton {
+    display: inline-flex;
+    min-height: 36px;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color .15s ease, border-color .15s ease, color .15s ease;
+}
+
+.adminButtonPrimary {
+    border-color: #465fff;
+    background: #465fff;
+    color: #fff;
+}
+
+.adminButtonPrimary:hover {
+    border-color: #3641f5;
+    background: #3641f5;
+    color: #fff;
+}
+
+.adminButtonSecondary {
+    border-color: #d0d5dd;
+    background: #fff;
+    color: #344054;
+}
+
+.adminButtonSecondary:hover {
+    border-color: #b2b9c5;
+    background: #f9fafb;
+    color: #101828;
+}
+
+.adminButtonDanger {
+    border-color: #fecdca;
+    background: #fff;
+    color: #d92d20;
+}
+
+.adminButtonDanger:hover {
+    border-color: #fda29b;
+    background: #fff5f4;
+    color: #b42318;
+}
+
+.adminButtonSmall {
+    min-height: 30px;
+    padding: 6px 9px;
+    font-size: 11px;
+}
+
+.adminStats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.adminStatCard {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 14px;
+    border: 1px solid #eaecf0;
+    border-radius: 9px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, .03);
+}
+
+.adminStatIcon {
+    display: grid;
+    width: 40px;
+    height: 40px;
+    flex: none;
+    place-items: center;
+    border-radius: 9px;
+}
+
+.adminStatIcon svg {
+    width: 19px;
+    height: 19px;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.7;
+}
+
+.adminStatIconBlue { background: #eef2ff; color: #465fff; }
+.adminStatIconGreen { background: #ecfdf3; color: #039855; }
+.adminStatIconOrange { background: #fffaeb; color: #dc6803; }
+.adminStatIconPurple { background: #f4f3ff; color: #7a5af8; }
+
+.adminStatCard > div {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.adminStatCard > div > span {
+    overflow: hidden;
+    color: #667085;
+    font-size: 11px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.adminStatCard strong {
+    color: #101828;
+    font-size: 20px;
+    line-height: 1.1;
+}
+
+.adminStatCard small {
+    color: #98a2b3;
+    font-size: 10px;
+}
+
+.adminProductForm,
+.adminCatalogPanel,
+.adminLockedBox {
+    min-width: 0;
+    border: 1px solid #eaecf0;
+    border-radius: 9px;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(16, 24, 40, .03);
 }
 
 .adminProductForm {
-    background-color: #171d25;
-    border: 1px solid #2a3544;
-    border-radius: 6px;
-    padding: 20px;
+    padding: 19px 20px 16px;
+}
+
+.adminPanelHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 15px;
+}
+
+.adminPanelHeader p {
+    margin: 5px 0 0;
+    color: #667085;
+    font-size: 11px;
 }
 
 .adminFormHeading {
-    margin: 0 0 16px;
-    font-size: 18px;
-    color: #ffffff;
+    margin: 0;
+    color: #101828;
+    font-size: 15px;
+    font-weight: 650;
 }
 
 .adminFormGrid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 14px;
+    gap: 0 14px;
 }
 
 .adminField {
     display: flex;
+    min-width: 0;
     flex-direction: column;
     gap: 6px;
-    margin-bottom: 14px;
+    margin-bottom: 13px;
+}
+
+.adminFieldFull {
+    grid-column: 1 / -1;
 }
 
 .adminField label {
-    color: #c6d4df;
-    font-size: 13px;
+    color: #344054;
+    font-size: 11px;
+    font-weight: 600;
 }
 
 .adminField input,
 .adminField textarea {
     width: 100%;
-    padding: 9px 12px;
-    border: 1px solid #363c44;
-    border-radius: 4px;
-    background-color: #1b2838;
-    color: #ffffff;
-    font-size: 14px;
-    box-sizing: border-box;
+    min-height: 37px;
+    padding: 8px 10px;
+    border: 1px solid #d0d5dd;
+    border-radius: 6px;
+    outline: none;
+    background: #fff;
+    color: #101828;
+    font: inherit;
+    font-size: 12px;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.adminField textarea {
+    min-height: 72px;
+    resize: vertical;
+}
+
+.adminField input::placeholder,
+.adminField textarea::placeholder {
+    color: #98a2b3;
 }
 
 .adminField input:focus,
-.adminField textarea:focus {
-    outline: none;
-    border-color: #66c0f4;
+.adminField textarea:focus,
+.adminSearchInput:focus {
+    border-color: #8098f9;
+    box-shadow: 0 0 0 3px rgba(70, 95, 255, .12);
 }
 
-.adminFormActions,
-.adminRowActions {
+.adminFormFooter {
     display: flex;
-    gap: 8px;
     align-items: center;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #f2f4f7;
 }
 
-.inlineDeleteForm {
+.adminFormHint {
+    color: #98a2b3;
+    font-size: 10px;
+}
+
+.adminCatalogPanel {
+    overflow: hidden;
+}
+
+.adminCommerceTabs {
+    display: flex;
+    gap: 20px;
+    padding: 0 20px;
+    border-bottom: 1px solid #eaecf0;
+}
+
+.adminCommerceTabs a {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 14px 0 12px;
+    border-bottom: 2px solid transparent;
+    color: #667085;
+    font-size: 11px;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.adminCommerceTabs a:hover,
+.adminCommerceTabs a.is-active {
+    color: #465fff;
+}
+
+.adminCommerceTabs a.is-active {
+    border-bottom-color: #465fff;
+}
+
+.adminCommerceTabs a span {
+    display: inline-grid;
+    min-width: 20px;
+    height: 18px;
+    place-items: center;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: #f2f4f7;
+    color: #667085;
+    font-size: 9px;
+}
+
+.adminCommerceTabs a.is-active span {
+    background: #eef2ff;
+    color: #465fff;
+}
+
+.adminCommerceHeader {
+    padding-top: 16px;
+}
+
+.adminCommerceTable {
+    min-width: 900px;
+}
+
+.adminRecordIdentity {
+    display: flex;
+    min-width: 125px;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.adminRecordIdentity strong {
+    color: #101828;
+    font-size: 11px;
+}
+
+.adminRecordIdentity small {
+    color: #667085;
+    font-size: 9px;
+}
+
+.adminRecordDetails {
+    min-width: 110px;
+}
+
+.adminRecordDetails summary {
+    color: #465fff;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.adminRecordDetails ul {
+    min-width: 180px;
+    margin: 7px 0 0;
+    padding: 8px 10px 8px 24px;
+    border: 1px solid #eaecf0;
+    border-radius: 6px;
+    background: #fff;
+    color: #475467;
+    font-size: 10px;
+}
+
+.adminRecordDetails li + li {
+    margin-top: 4px;
+}
+
+.adminRecordDetails li span {
+    color: #667085;
+    white-space: nowrap;
+}
+
+.adminStatusFilter,
+.adminStatusForm select {
+    min-height: 34px;
+    padding: 6px 26px 6px 9px;
+    border: 1px solid #d0d5dd;
+    border-radius: 6px;
+    background: #fff;
+    color: #344054;
+    font: inherit;
+    font-size: 10px;
+}
+
+.adminStatusForm {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
     margin: 0;
 }
 
-.adminDeleteBtn {
-    padding: 6px 12px;
-    border: 1px solid #d9534f;
-    border-radius: 3px;
-    background-color: rgba(217, 83, 79, 0.16);
-    color: #ff9c98;
-    font-size: 13px;
-    font-weight: bold;
-    cursor: pointer;
+.adminStatusForm select {
+    max-width: 140px;
 }
 
-.adminDeleteBtn:hover {
-    background-color: #d9534f;
-    color: #ffffff;
+.adminStatusPill.is-active {
+    background: #ecfdf3;
+    color: #027a48;
 }
 
-@media (max-width: 768px) {
+.adminStatusPill.is-abandoned {
+    background: #fffaeb;
+    color: #b54708;
+}
+
+.adminStatusPill.is-converted {
+    background: #eef4ff;
+    color: #3538cd;
+}
+
+.adminStatusPill.is-pending {
+    background: #fffaeb;
+    color: #b54708;
+}
+
+.adminStatusPill.is-processing {
+    background: #eff8ff;
+    color: #175cd3;
+}
+
+.adminStatusPill.is-completed {
+    background: #ecfdf3;
+    color: #027a48;
+}
+
+.adminStatusPill.is-cancelled {
+    background: #fef3f2;
+    color: #b42318;
+}
+
+.adminCatalogHeader {
+    padding: 18px 20px 14px;
+}
+
+.adminSearchForm {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 0 20px 15px;
+}
+
+.adminSearchBox {
+    display: flex;
+    min-width: 0;
+    height: 37px;
+    flex: 1;
+    align-items: center;
+    gap: 8px;
+    padding: 0 10px;
+    border: 1px solid #d0d5dd;
+    border-radius: 6px;
+    background: #fff;
+}
+
+.adminSearchBox svg {
+    width: 16px;
+    height: 16px;
+    flex: none;
+    fill: none;
+    stroke: #98a2b3;
+    stroke-linecap: round;
+    stroke-width: 1.7;
+}
+
+.adminSearchInput {
+    width: 100%;
+    min-width: 0;
+    height: 100%;
+    padding: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: #101828;
+    font: inherit;
+    font-size: 11px;
+}
+
+.adminSearchInput:focus {
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.adminSearchInput::placeholder {
+    color: #98a2b3;
+}
+
+.adminTableWrap {
+    width: 100%;
+    overflow-x: auto;
+    border-top: 1px solid #eaecf0;
+}
+
+.adminTable {
+    width: 100%;
+    min-width: 690px;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.adminTable th {
+    padding: 10px 12px;
+    background: #f9fafb;
+    color: #667085;
+    font-size: 10px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.adminTable th:first-child,
+.adminTable td:first-child {
+    padding-left: 20px;
+}
+
+.adminTable th:last-child,
+.adminTable td:last-child {
+    padding-right: 20px;
+    text-align: right;
+}
+
+.adminTable td {
+    padding: 12px;
+    border-top: 1px solid #f2f4f7;
+    color: #475467;
+    font-size: 11px;
+    vertical-align: middle;
+}
+
+.adminProductRow:hover {
+    background: #fcfcfd;
+}
+
+.adminProductRow[hidden],
+.adminEmptyState[hidden],
+.catalogPagination[hidden] {
+    display: none !important;
+}
+
+.adminProductIdentity {
+    display: flex;
+    min-width: 220px;
+    align-items: center;
+    gap: 10px;
+}
+
+.adminProductImage {
+    display: grid;
+    width: 42px;
+    height: 42px;
+    flex: none;
+    place-items: center;
+    overflow: hidden;
+    border: 1px solid #eaecf0;
+    border-radius: 7px;
+    background: #f2f4f7;
+}
+
+.adminProductImage img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.adminProductImageFallback {
+    color: #667085;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.adminProductInfo {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+}
+
+.adminProductInfo strong {
+    max-width: 260px;
+    overflow: hidden;
+    color: #101828;
+    font-size: 11px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.adminProductInfo small,
+.adminBasePrice {
+    color: #98a2b3;
+    font-size: 10px;
+}
+
+.adminProductSummary {
+    display: block;
+    max-width: 260px;
+    overflow: hidden;
+    color: #667085;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.adminProductTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 2px;
+}
+
+.adminProductTags span,
+.adminStatusPill {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 6px;
+    border-radius: 999px;
+    font-size: 9px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.adminProductTags span {
+    background: #f2f4f7;
+    color: #475467;
+}
+
+.adminPrice {
+    display: block;
+    color: #101828;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+.adminBasePrice {
+    display: block;
+    margin-top: 3px;
+    text-decoration: line-through;
+    white-space: nowrap;
+}
+
+.adminStatusPill.is-discount {
+    background: #ecfdf3;
+    color: #027a48;
+}
+
+.adminStatusPill.is-neutral {
+    background: #f2f4f7;
+    color: #667085;
+}
+
+.adminRating {
+    color: #f79009;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+.adminRating span {
+    color: #475467;
+    font-size: 10px;
+}
+
+.adminRowActions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.adminEmptyState {
+    margin: 0;
+    padding: 24px 16px;
+    color: #667085;
+    font-size: 12px;
+    text-align: center;
+}
+
+.catalogPagination {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 12px 20px;
+    border-top: 1px solid #eaecf0;
+}
+
+.catalogPagination span {
+    margin-right: auto;
+    color: #667085;
+    font-size: 10px;
+}
+
+.adminAlertSuccess,
+.adminAlertError {
+    padding: 11px 14px;
+    border: 1px solid transparent;
+    border-radius: 7px;
+    font-size: 12px;
+}
+
+.adminAlertSuccess {
+    border-color: #abefc6;
+    background: #ecfdf3;
+    color: #027a48;
+}
+
+.adminAlertError {
+    border-color: #fecdca;
+    background: #fef3f2;
+    color: #b42318;
+}
+
+.adminLockedBox {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 22px;
+}
+
+.adminLockIcon {
+    display: grid;
+    width: 38px;
+    height: 38px;
+    flex: none;
+    place-items: center;
+    border-radius: 50%;
+    background: #fffaeb;
+    color: #dc6803;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.adminLockedBox h2 {
+    margin: 0;
+    color: #101828;
+    font-size: 15px;
+}
+
+.adminLockedBox p {
+    margin: 7px 0 14px;
+    color: #667085;
+    font-size: 12px;
+}
+
+.adminLockedActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.visuallyHidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    clip-path: inset(50%);
+}
+
+@media (max-width: 1050px) {
+    .adminStats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .adminStatCard {
+        padding: 13px;
+    }
+}
+
+@media (max-width: 800px) {
+    .adminProductsWrap {
+        grid-template-columns: 1fr;
+    }
+
+    .adminSidebar {
+        padding: 12px 14px;
+        border-right: 0;
+        border-bottom: 1px solid #eaecf0;
+    }
+
+    .adminBrand {
+        padding: 0 4px 12px;
+    }
+
+    .adminNavLabel,
+    .adminSidebarBottom {
+        display: none;
+    }
+
+    .adminSidebarNav {
+        flex-direction: row;
+        overflow-x: auto;
+    }
+
+    .adminNavLink {
+        flex: none;
+    }
+
+    .adminTopbar,
+    .adminDashboardContent {
+        padding-right: 18px;
+        padding-left: 18px;
+    }
+}
+
+@media (max-width: 560px) {
+    .adminTopbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .adminTopbarActions {
+        width: 100%;
+        flex-wrap: wrap;
+    }
+
+    .adminStats {
+        gap: 8px;
+    }
+
+    .adminStatCard {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+        padding: 11px;
+    }
+
+    .adminStatIcon {
+        width: 34px;
+        height: 34px;
+    }
+
+    .adminDashboardContent {
+        gap: 14px;
+        padding: 15px 11px 18px;
+    }
+
+    .adminProductForm {
+        padding: 15px 12px 12px;
+    }
+
     .adminFormGrid {
         grid-template-columns: 1fr;
+    }
+
+    .adminFieldFull {
+        grid-column: auto;
+    }
+
+    .adminFormFooter,
+    .adminSearchForm {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .adminStatusFilter {
+        width: 100%;
+    }
+
+    .adminSearchForm .adminButton,
+    .adminFormFooter .adminButton {
+        width: 100%;
+    }
+
+    .adminPanelHeader,
+    .adminCatalogHeader {
+        align-items: flex-start;
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+
+    .adminSearchForm {
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+
+    .adminTable th:first-child,
+    .adminTable td:first-child {
+        padding-left: 12px;
+    }
+
+    .adminTable th:last-child,
+    .adminTable td:last-child {
+        padding-right: 12px;
     }
 }

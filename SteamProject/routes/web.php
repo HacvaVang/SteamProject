@@ -2,8 +2,10 @@
 
 require_once BASE_PATH . '/app/Controllers/HomeController.php';
 require_once BASE_PATH . '/app/Controllers/AuthController.php';
+require_once BASE_PATH . '/app/Controllers/CartController.php';
 
 $authController = new AuthController();
+$cartController = new CartController();
 
 $renderView = static function (string $view, string $title): void {
     $content = '';
@@ -58,11 +60,19 @@ $router->get('/product', static function () use ($renderView): void {
 $router->get('/cart', static function () use ($renderView): void {
     $renderView('orders/index.php', 'SteamProject - Giỏ hàng');
 });
+$router->post('/cart/sync', [$cartController, 'sync']);
+$router->post('/cart/checkout', [$cartController, 'checkout']);
 $router->get('/admin/products', static function () use ($renderView): void {
     $renderView('admin/products/index.php', 'SteamProject - Quản lý sản phẩm');
 });
 $router->post('/admin/products', static function () use ($renderView): void {
     $renderView('admin/products/index.php', 'SteamProject - Quản lý sản phẩm');
+});
+$router->get('/admin/orders', static function () use ($renderView): void {
+    $renderView('admin/orders/index.php', 'SteamProject - Giỏ hàng và đơn hàng');
+});
+$router->post('/admin/orders', static function () use ($renderView): void {
+    $renderView('admin/orders/index.php', 'SteamProject - Giỏ hàng và đơn hàng');
 });
 
 $router->get('/admin/qa', static function () use ($renderView): void {
@@ -115,6 +125,7 @@ $router->post('/mode', static function (): void {
         'login' => BASE_URL . '/login',
         'register' => BASE_URL . '/register',
         'admin_products' => BASE_URL . '/admin/products',
+        'admin_orders' => BASE_URL . '/admin/orders',
         'news' => BASE_URL . '/news',
         'news_detail' => BASE_URL . '/news/detail',
         'about' => BASE_URL . '/about',
@@ -128,7 +139,7 @@ $router->post('/mode', static function (): void {
 
     if ($targetMode === 'guest') {
         unset($_SESSION['user'], $_SESSION['force_user']);
-        if (in_array($returnPage, ['admin_products', 'cart', 'user'], true)) {
+        if (in_array($returnPage, ['admin_products', 'admin_orders', 'cart', 'user'], true)) {
             $returnPath = BASE_URL . '/products';
         }
     } elseif ($targetMode === 'grant_admin') {
@@ -160,7 +171,7 @@ $router->post('/mode', static function (): void {
                 $_SESSION['user']['name'] = 'User';
             }
         }
-        if ($returnPage === 'admin_products') {
+        if (in_array($returnPage, ['admin_products', 'admin_orders'], true)) {
             $returnPath = BASE_URL . '/products';
         }
     }

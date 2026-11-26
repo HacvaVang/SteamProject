@@ -71,6 +71,63 @@ CREATE TABLE IF NOT EXISTS purchase_items (
         ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
+-- Store cart and checkout records use the active PHP session until auth is connected.
+CREATE TABLE IF NOT EXISTS store_orders (
+    order_id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_key    TEXT NOT NULL,
+    customer_name  TEXT NOT NULL DEFAULT 'Guest',
+    status         TEXT NOT NULL DEFAULT 'pending'
+                   CHECK (status IN ('pending', 'processing', 'completed', 'cancelled')),
+    total_price    REAL NOT NULL DEFAULT 0 CHECK (total_price >= 0),
+    created_at     TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at     TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE TABLE IF NOT EXISTS store_carts (
+    cart_id             INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_key         TEXT NOT NULL,
+    customer_name       TEXT NOT NULL DEFAULT 'Guest',
+    status              TEXT NOT NULL DEFAULT 'active'
+                        CHECK (status IN ('active', 'abandoned', 'converted')),
+    converted_order_id  INTEGER,
+    created_at          TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at          TEXT NOT NULL DEFAULT (datetime('now')),
+    FOREIGN KEY (converted_order_id) REFERENCES store_orders(order_id)
+        ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS store_cart_items (
+    cart_id   INTEGER NOT NULL,
+    game_id   INTEGER NOT NULL,
+    quantity  INTEGER NOT NULL CHECK (quantity > 0),
+    PRIMARY KEY (cart_id, game_id),
+    FOREIGN KEY (cart_id) REFERENCES store_carts(cart_id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (game_id) REFERENCES games(game_id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS store_order_items (
+    order_item_id  INTEGER PRIMARY KEY AUTOINCREMENT,
+    order_id       INTEGER NOT NULL,
+    game_id        INTEGER NOT NULL,
+    game_name      TEXT NOT NULL,
+    unit_price     REAL NOT NULL CHECK (unit_price >= 0),
+    quantity       INTEGER NOT NULL CHECK (quantity > 0),
+    line_total     REAL NOT NULL CHECK (line_total >= 0),
+    FOREIGN KEY (order_id) REFERENCES store_orders(order_id)
+        ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_store_carts_session_status
+    ON store_carts(session_key, status, cart_id);
+CREATE INDEX IF NOT EXISTS idx_store_carts_status_updated
+    ON store_carts(status, updated_at);
+CREATE INDEX IF NOT EXISTS idx_store_orders_status_created
+    ON store_orders(status, created_at);
+CREATE INDEX IF NOT EXISTS idx_store_order_items_order
+    ON store_order_items(order_id);
+
 -- 5. NEWS
 CREATE TABLE IF NOT EXISTS news (
     news_id     INTEGER PRIMARY KEY AUTOINCREMENT,
