@@ -60,6 +60,10 @@ $safeCurrRoute = htmlspecialchars($currRoute, ENT_QUOTES, 'UTF-8');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($pageTitle ?? 'SteamProject') ?></title>
 
+    <?php foreach ($vendorStyles ?? [] as $css): ?>
+        <link rel="stylesheet" href="<?= htmlspecialchars($css) ?>">
+    <?php endforeach; ?>
+
     <link rel="stylesheet" href="/public/assets/css/layout.css">
     <link rel="stylesheet" href="/public/assets/css/style.css">
     <link rel="stylesheet" href="/public/assets/css/responsive.css">

@@ -82,11 +82,11 @@ $router->post('/admin/faqs', static function () use ($renderView): void {
     $renderView('admin/faqs/index.php', 'SteamProject - Quản lý FAQ');
 });
 
-$router->get('/news', static function () use ($renderStandaloneView): void {
-    $renderStandaloneView('news/index.php');
+$router->get('/news', static function () use ($renderView): void {
+    $renderView('news/index.php', 'SteamProject - Tin tức');
 });
-$router->get('/news/detail', static function () use ($renderStandaloneView): void {
-    $renderStandaloneView('news/detail.php');
+$router->get('/news/detail', static function () use ($renderView): void {
+    $renderView('news/detail.php', 'SteamProject - Chi tiết tin tức');
 });
 
 // These sections do not have dedicated views yet; retain the previous home fallback.
