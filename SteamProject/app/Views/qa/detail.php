@@ -1,6 +1,7 @@
 <?php
 require __DIR__ . '/../../Helpers/functions.php';
-$all = require __DIR__ . '/data.php';
+require __DIR__ . '/../../Helpers/qa_data.php';
+$all = getQaData();
 
 $styles = ['/public/assets/css/support.css'];
 $scripts = [];
