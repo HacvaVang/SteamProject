@@ -25,6 +25,8 @@ $routeNames = [
     '/forums' => 'forums',
     '/faq' => 'faq',
     '/user' => 'user',
+    '/admin/qa' => 'admin_qa',
+    '/admin/faqs' => 'admin_faqs'
 ];
 $currRoute = $routeNames[$requestPath] ?? 'home';
 
@@ -58,6 +60,10 @@ $safeCurrRoute = htmlspecialchars($currRoute, ENT_QUOTES, 'UTF-8');
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($pageTitle ?? 'SteamProject') ?></title>
 
+    <?php foreach ($vendorStyles ?? [] as $css): ?>
+        <link rel="stylesheet" href="<?= htmlspecialchars($css) ?>">
+    <?php endforeach; ?>
+
     <link rel="stylesheet" href="/public/assets/css/layout.css">
     <link rel="stylesheet" href="/public/assets/css/style.css">
     <link rel="stylesheet" href="/public/assets/css/responsive.css">
@@ -87,6 +93,13 @@ $safeCurrRoute = htmlspecialchars($currRoute, ENT_QUOTES, 'UTF-8');
           class="modeSwitchBtn <?= $isActive('admin_products') ? 'is-active' : '' ?>"
         >
           Admin Sản phẩm
+        </a>
+
+        <a
+          href="<?= htmlspecialchars(BASE_URL, ENT_QUOTES, 'UTF-8') ?>/admin/qa"
+          class="modeSwitchBtn <?= $isActive('admin_qa') ? 'is-active' : '' ?>"
+        >
+          Admin Q&amp;A
         </a>
 
         <a

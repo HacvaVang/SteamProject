@@ -1,6 +1,7 @@
 <?php
 require __DIR__ . '/../../Helpers/functions.php';
-$all = require __DIR__ . '/data.php';
+require __DIR__ . '/../../Helpers/qa_data.php';
+$all = getQaData();
 
 $title  = 'Steam Support - Community Q&A';
 $styles = ['/public/assets/css/support.css'];

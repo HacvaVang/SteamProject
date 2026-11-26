@@ -179,7 +179,7 @@ function hueOf(name) {
 }
 function byDate(a, b) { return a.date < b.date ? 1 : (a.date > b.date ? -1 : 0); }
 function ofKind(k) { return ITEMS.filter(function (i) { return i.kind === k; }).sort(byDate); }
-function detailUrl(i) { return "detail.php?id=" + i.id; }
+function detailUrl(i) { return "/news/detail?id=" + i.id; }
 
 function buildPost(name, role, date, paragraphs) {
   var post = el("div", "post");
@@ -215,9 +215,9 @@ function link(over) {
   });
   if (s2.page > 1) { sp.set("page", s2.page); }
   var qs = sp.toString();
-  return "index.php" + (qs ? "?" + qs : "");
+  return "/news" + (qs ? "?" + qs : "");
 }
-function tabUrl(k) { return "index.php" + (k === "All" ? "" : "?type=" + k); }
+function tabUrl(k) { return "/news" + (k === "All" ? "" : "?type=" + k); }
 function go(over) { window.location.href = link(over); }
 
 function icon(svg, cls) {
@@ -568,7 +568,7 @@ function renderAll(content) {
   var price = el("div", "priceRow");
   price.appendChild(el("span", "priceTag", GAME.price));
   var store = el("a", "btn btn-dlink", "Visit the Store Page");
-  store.href = "../products/index.php";
+  store.href = "/products";
   price.appendChild(store);
   price.appendChild(actionButton("Post to the hub", "Discussion"));
   txt.appendChild(price);
@@ -915,7 +915,7 @@ function renderReview(it, box) {
   side.appendChild(el("div", "mutedText", it.products + " products in account"));
   side.appendChild(el("div", "mutedText", it.reviews + " reviews"));
   var all = el("a", "", "See all reviews");
-  all.href = "index.php?type=Review";
+  all.href = "/news?type=Review";
   side.appendChild(all);
 
   layout.appendChild(card);
@@ -939,14 +939,14 @@ function initHead(it) {
   TABS.forEach(function (x) {
     var li = el("li", x.k === it.kind ? "active" : "");
     var a = el("a", "", x.l);
-    a.href = x.k === "All" ? "index.php" : "index.php?type=" + x.k;
+    a.href = x.k === "All" ? "/news" : "/news?type=" + x.k;
     li.appendChild(a);
     tabs.appendChild(li);
   });
   var c = document.getElementById("crumbs");
   c.textContent = "";
-  var g = el("a", "", GAME.name); g.href = "index.php";
-  var k = el("a", "", PLURAL[it.kind]); k.href = "index.php?type=" + it.kind;
+  var g = el("a", "", GAME.name); g.href = "/news";
+  var k = el("a", "", PLURAL[it.kind]); k.href = "/news?type=" + it.kind;
   c.appendChild(g);
   c.appendChild(document.createTextNode(" > "));
   c.appendChild(k);
@@ -1217,7 +1217,6 @@ function initArticle() {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-  var page = document.body.getAttribute("data-page");
-  if (page === "list") { initList(); }
-  if (page === "article") { initArticle(); }
+  if (document.getElementById("hubContent")) { initList(); }
+  if (document.getElementById("article")) { initArticle(); }
 });

@@ -65,11 +65,28 @@ $router->post('/admin/products', static function () use ($renderView): void {
     $renderView('admin/products/index.php', 'SteamProject - Quản lý sản phẩm');
 });
 
-$router->get('/news', static function () use ($renderStandaloneView): void {
-    $renderStandaloneView('news/index.php');
+$router->get('/admin/qa', static function () use ($renderView): void {
+    $renderView('admin/qa/index.php', 'SteamProject - Q&A Moderation');
 });
-$router->get('/news/detail', static function () use ($renderStandaloneView): void {
-    $renderStandaloneView('news/detail.php');
+$router->post('/admin/qa', static function () use ($renderView): void {
+    $renderView('admin/qa/index.php', 'SteamProject - Q&A Moderation');
+});
+$router->get('/admin/qa/detail', static function () use ($renderView): void {
+    $renderView('admin/qa/detail.php', 'SteamProject - Q&A Moderation');
+});
+
+$router->get('/admin/faqs', static function () use ($renderView): void {
+    $renderView('admin/faqs/index.php', 'SteamProject - Quản lý FAQ');
+});
+$router->post('/admin/faqs', static function () use ($renderView): void {
+    $renderView('admin/faqs/index.php', 'SteamProject - Quản lý FAQ');
+});
+
+$router->get('/news', static function () use ($renderView): void {
+    $renderView('news/index.php', 'SteamProject - Tin tức');
+});
+$router->get('/news/detail', static function () use ($renderView): void {
+    $renderView('news/detail.php', 'SteamProject - Chi tiết tin tức');
 });
 
 // These sections do not have dedicated views yet; retain the previous home fallback.
@@ -105,6 +122,7 @@ $router->post('/mode', static function (): void {
         'faq' => BASE_URL . '/faq',
         'user' => BASE_URL . '/user',
         'qa' => BASE_URL . '/qa',
+        'admin_qa' => BASE_URL . '/admin/qa'
     ];
     $returnPath = $returnPaths[$returnPage] ?? BASE_URL . '/';
 

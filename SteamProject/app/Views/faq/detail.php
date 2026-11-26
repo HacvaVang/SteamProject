@@ -1,6 +1,7 @@
 <?php
 require __DIR__ . '/../../Helpers/functions.php';
-$data = require __DIR__ . '/data.php';
+require __DIR__ . '/../../Helpers/faq_data.php';
+$data = getFaqData();
 
 $styles = ['/public/assets/css/support.css'];
 $scripts = [];
