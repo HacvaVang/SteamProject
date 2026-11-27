@@ -256,3 +256,6 @@ abandoned. Order statuses are `pending`, `processing`, `completed`, and
 `cancelled`. Admin manages both lists at `/admin/orders`. The application
 creates these tables on first use; they are also included in
 `SteamProject/storage/schema.sql` for fresh databases.
+
+The Admin catalog and commerce pages (`/admin/products` and `/admin/orders`)
+use a standalone layout separate from the Store header and footer.

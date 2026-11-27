@@ -7,7 +7,7 @@ require_once BASE_PATH . '/app/Controllers/CartController.php';
 $authController = new AuthController();
 $cartController = new CartController();
 
-$renderView = static function (string $view, string $title): void {
+$renderView = static function (string $view, string $title, string $layout = 'main.php'): void {
     $content = '';
     ob_start();
     require BASE_PATH . '/app/Views/' . $view;
@@ -16,7 +16,7 @@ $renderView = static function (string $view, string $title): void {
         $content = $viewOutput;
     }
     $pageTitle = $title;
-    require BASE_PATH . '/app/Views/layouts/main.php';
+    require BASE_PATH . '/app/Views/layouts/' . $layout;
 };
 
 $renderStandaloneView = static function (string $view): void {
@@ -63,16 +63,16 @@ $router->get('/cart', static function () use ($renderView): void {
 $router->post('/cart/sync', [$cartController, 'sync']);
 $router->post('/cart/checkout', [$cartController, 'checkout']);
 $router->get('/admin/products', static function () use ($renderView): void {
-    $renderView('admin/products/index.php', 'SteamProject - Quản lý sản phẩm');
+    $renderView('admin/products/index.php', 'SteamProject - Quản lý sản phẩm', 'admin.php');
 });
 $router->post('/admin/products', static function () use ($renderView): void {
-    $renderView('admin/products/index.php', 'SteamProject - Quản lý sản phẩm');
+    $renderView('admin/products/index.php', 'SteamProject - Quản lý sản phẩm', 'admin.php');
 });
 $router->get('/admin/orders', static function () use ($renderView): void {
-    $renderView('admin/orders/index.php', 'SteamProject - Giỏ hàng và đơn hàng');
+    $renderView('admin/orders/index.php', 'SteamProject - Giỏ hàng và đơn hàng', 'admin.php');
 });
 $router->post('/admin/orders', static function () use ($renderView): void {
-    $renderView('admin/orders/index.php', 'SteamProject - Giỏ hàng và đơn hàng');
+    $renderView('admin/orders/index.php', 'SteamProject - Giỏ hàng và đơn hàng', 'admin.php');
 });
 
 $router->get('/admin/qa', static function () use ($renderView): void {
